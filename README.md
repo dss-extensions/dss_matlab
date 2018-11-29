@@ -1,6 +1,6 @@
 # DSS MATLAB: an unofficial MATLAB package for EPRI's OpenDSS
 
-** Currently in pre-release status! ** 
+**Currently in pre-release status!** 
 
 This is work-in-progress version of a set of MATLAB classes that expose the DSS C-API library with the same structure as the COM object. At the moment, this is the equivalent of DSS Python and DSS Sharp for MATLAB usage.
 

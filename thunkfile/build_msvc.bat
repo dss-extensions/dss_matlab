@@ -1,0 +1,1 @@
+cl.exe /D_USRDLL /D_WINDLL dss_capi_v7_thunk.c /I..\..\..\dss_capi\include /link /DLL /OUT:dss_capi_v7_thunk.dll

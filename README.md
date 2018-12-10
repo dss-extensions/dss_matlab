@@ -12,23 +12,17 @@ Related projects:
 
 ## Usage
 
-1. Clone or download this repository, then add the folder containing `+DSS_MATLAB` to your path.
+1. Download a package from the [releases page](https://github.com/PMeira/dss_matlab/releases).
 
-2. Download or build DSS C-API and place the resulting DLLs / shared libraries into `+DSS_MATLAB`.
+2. Add the folder containing `+DSS_MATLAB` to your MATLAB path.
 
-3. Until we get a release out, you first need to build the thunk DLL. You'll need a MATLAB-compatible compiler:
-
-```
-DSS_MATLAB.build
-```
-
-4. Instantiate `DSS_MATLAB.IDSS`. For example:
+3. Instantiate `DSS_MATLAB.IDSS`. For example:
 
 ```matlab
-Obj = DSS_MATLAB.IDSS;
+dss = DSS_MATLAB.IDSS;
 ```
 
-5. If you find issues or missing features, feel free to [open an issue ticket on GitHub](https://github.com/PMeira/dss_matlab/issues/new) or email me (pmeira at ieee.org).
+4. If you find issues or missing features, feel free to [open an issue ticket on GitHub](https://github.com/PMeira/dss_matlab/issues/new) or email me (pmeira at ieee.org).
 
 If you code is based on `DSSStartup.m` from the examples, in general you only need to replace the `Obj = actxserver('OpenDSSEngine.DSS');` line. That is, update `DSSStartup.m` to:
 

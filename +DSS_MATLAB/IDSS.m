@@ -63,7 +63,7 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
         function obj = IDSS(obj)
             MfilePath = fileparts(mfilename('fullpath'));
             DLLfilePath = fullfile(MfilePath, 'dss_capi_v7');
-            if libisloaded(DLLfilePath)
+            if libisloaded('dss_capi_v7')
                 return
             else
                 loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7_no_thunk);
@@ -71,9 +71,9 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
             end
         end
         function delete(obj)
-            if (obj.libraryWasLoaded ~= 0)
-                unloadlibrary('dss_capi_v7');
-            end
+            % if (obj.libraryWasLoaded ~= 0)
+                % unloadlibrary('dss_capi_v7');
+            % end
         end
 
         function obj = ClearAll(obj)

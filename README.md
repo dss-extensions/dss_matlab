@@ -5,9 +5,10 @@
 This is work-in-progress version of a set of MATLAB classes that expose the DSS C-API library with the same structure as the COM object. At the moment, this is the equivalent of DSS Python and DSS Sharp for MATLAB usage.
 
 Related projects: 
-- [`DSS C-API`](http://github.com/PMeira/dss_capi): Custom OpenDSS C-API library.
+- [`OpenDSS`](https://sourceforge.net/projects/electricdss/): The main OpenDSS project, maintained by EPRI.
+- [`DSS C-API`](http://github.com/PMeira/dss_capi): Custom OpenDSS C-API library, which also includes some patches.
 - [`DSS Python`](http://github.com/PMeira/dss_python): Python bindings that mimics the official COM interface.
-- [`OpenDSSDirect.py`](http://github.com/NREL/OpenDSSDirect.py): More pythonic bindings.
+- [`OpenDSSDirect.py`](http://github.com/NREL/OpenDSSDirect.py): More pythonic bindings and useful tools.
 - [`DSS Sharp`](http://github.com/PMeira/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
 ## Usage

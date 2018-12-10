@@ -1,11 +1,15 @@
 function [methodinfo,structs,enuminfo,ThunkLibName]=dss_capi_v7_no_thunk
 %DSS_CAPI_V7 Create structures to define interfaces found in 'dss_capi_v7'.
 
-computer_arch = computer('arch');
+% This file is a slightly modified version of the version generated 
+% automatically which uses the thunk DLL. Also using cdecl instead 
+% of thunk is officially unsupported, we only use simple pointers 
+% and values, without any complex structure. 
+% Tested on Windows, Linux and macOS.
+
 ival={cell(1,0)};
 structs=[];enuminfo=[];fcnNum=1;
 fcns=struct('name',ival,'calltype',ival,'LHS',ival,'RHS',ival,'alias',ival,'thunkname', ival);
-MfilePath=fileparts(mfilename('fullpath'));
 ThunkLibName = '';
 
 % void DSS_ResetStringBuffer ( void ); 

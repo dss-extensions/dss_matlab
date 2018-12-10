@@ -22,8 +22,6 @@ fcns.thunkname{fcnNum}='voidvoidPtrThunk';fcns.name{fcnNum}='DSS_Dispose_PDouble
 fcns.thunkname{fcnNum}='voidvoidPtrThunk';fcns.name{fcnNum}='DSS_Dispose_PInteger'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'int32PtrPtr'};fcnNum=fcnNum+1;
 % void DSS_Dispose_PPAnsiChar ( char *** p , int32_t cnt ); 
 fcns.thunkname{fcnNum}='voidvoidPtrint32Thunk';fcns.name{fcnNum}='DSS_Dispose_PPAnsiChar'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'voidPtr', 'int32'};fcnNum=fcnNum+1;
-% char ** DSS_Get_PPAnsiChar ( void * p ); 
-fcns.thunkname{fcnNum}='voidPtrvoidPtrThunk';fcns.name{fcnNum}='DSS_Get_PPAnsiChar'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='stringPtrPtr'; fcns.RHS{fcnNum}={'voidPtr'};fcnNum=fcnNum+1;
 % char * DSS_Get_PAnsiChar ( void * p , int32_t index ); 
 fcns.thunkname{fcnNum}='cstringvoidPtrint32Thunk';fcns.name{fcnNum}='DSS_Get_PAnsiChar'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='cstring'; fcns.RHS{fcnNum}={'voidPtr', 'int32'};fcnNum=fcnNum+1;
 % void DSS_DisposeGRData ( void ); 
@@ -1180,8 +1178,6 @@ fcns.thunkname{fcnNum}='int32voidThunk';fcns.name{fcnNum}='LoadShapes_Get_First'
 fcns.thunkname{fcnNum}='int32voidThunk';fcns.name{fcnNum}='LoadShapes_Get_Next'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
 % void LoadShapes_Get_AllNames ( char *** ResultPtr , int32_t * ResultCount ); 
 fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='LoadShapes_Get_AllNames'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'voidPtr', 'int32Ptr'};fcnNum=fcnNum+1;
-% char ** LoadShapes_Get_AllNames2 ( int32_t * ResultCount ); 
-fcns.thunkname{fcnNum}='voidPtrvoidPtrThunk';fcns.name{fcnNum}='LoadShapes_Get_AllNames2'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='stringPtrPtr'; fcns.RHS{fcnNum}={'int32Ptr'};fcnNum=fcnNum+1;
 % void LoadShapes_Get_AllNames_GR ( void ); 
 fcns.thunkname{fcnNum}='voidvoidThunk';fcns.name{fcnNum}='LoadShapes_Get_AllNames_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
 % int32_t LoadShapes_Get_Npts ( void ); 

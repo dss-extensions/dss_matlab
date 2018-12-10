@@ -43,3 +43,10 @@ function [Start,Obj,Text] = DSSStartup
 ```
 
 If you want some code to play with, you can use the MATLAB examples from the official OpenDSS distribution, from a local installation (e.g. `C:\OpenDSS\Examples\Matlab`) or from the [official SVN repository](https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/Distrib/Examples/Matlab/).
+
+## Credits / Acknowlegement
+
+This project is derived from EPRI's OpenDSS and the same style of license (BSD style) is used. As OpenDSS, the project also depends on KLUSolve and SuiteSparse, licensed under the LGPL.
+
+See the [DSS C-API](https://github.com/PMeira/dss_capi/) project for more details and source files.
+

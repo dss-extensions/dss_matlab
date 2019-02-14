@@ -6,14 +6,14 @@ This is work-in-progress version of a set of MATLAB classes that expose the DSS 
 
 Related projects: 
 - [`OpenDSS`](https://sourceforge.net/projects/electricdss/): The main OpenDSS project, maintained by EPRI.
-- [`DSS C-API`](http://github.com/PMeira/dss_capi): Custom OpenDSS C-API library, which also includes some patches.
-- [`DSS Python`](http://github.com/PMeira/dss_python): Python bindings that mimics the official COM interface.
-- [`OpenDSSDirect.py`](http://github.com/NREL/OpenDSSDirect.py): More pythonic bindings and useful tools.
-- [`DSS Sharp`](http://github.com/PMeira/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
+- [`DSS C-API`](http://github.com/dss-extensions/dss_capi): Custom OpenDSS C-API library, which also includes some patches.
+- [`DSS Python`](http://github.com/dss-extensions/dss_python): Python bindings that mimics the official COM interface.
+- [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): More pythonic bindings and useful tools.
+- [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
 ## Usage
 
-1. Download a package from the [releases page](https://github.com/PMeira/dss_matlab/releases).
+1. Download a package from the [releases page](https://github.com/dss-extensions/dss_matlab/releases).
 
 2. Add the folder containing `+DSS_MATLAB` to your MATLAB path.
 
@@ -23,7 +23,7 @@ Related projects:
 dss = DSS_MATLAB.IDSS;
 ```
 
-4. If you find issues or missing features, feel free to [open an issue ticket on GitHub](https://github.com/PMeira/dss_matlab/issues/new) or email me (pmeira at ieee.org).
+4. If you find issues or missing features, feel free to [open an issue ticket on GitHub](https://github.com/dss-extensions/dss_matlab/issues/new) or email me (pmeira at ieee.org).
 
 If you code is based on `DSSStartup.m` from the examples, in general you only need to replace the `Obj = actxserver('OpenDSSEngine.DSS');` line. That is, update `DSSStartup.m` to:
 
@@ -49,5 +49,5 @@ If you want some code to play with, you can use the MATLAB examples from the off
 
 This project is derived from EPRI's OpenDSS and the same style of license (BSD style) is used. As OpenDSS, the project also depends on KLUSolve and SuiteSparse, licensed under the LGPL.
 
-See the [DSS C-API](https://github.com/PMeira/dss_capi/) project for more details and source files.
+See the [DSS C-API](https://github.com/dss-extensions/dss_capi/) project for more details and source files.
 

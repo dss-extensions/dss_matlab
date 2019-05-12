@@ -1,4 +1,4 @@
-classdef Base < handle & matlab.mixin.CustomDisplay
+classdef Base < handle & matlab.mixin.CustomDisplay & matlab.mixin.SetGet
     methods (Access = protected)
         function propgrp = getPropertyGroups(obj)
             propgrp = matlab.mixin.util.PropertyGroup();

@@ -20,6 +20,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
     %    VoltageBases - Array of doubles defining the legal voltage bases in kV L-L
     %    ZoneLock - {True | False*}  Locks Zones on energy meters to prevent rebuilding if a circuit change occurs.
     %    AllocationFactors - (write-only) Sets all load allocation factors for all loads defined by XFKVA property to this value.
+    %    LoadsTerminalCheck - Controls whether the terminals are checked when updating the currents in Load component. Defaults to True.  If the loads are guaranteed to have their terminals closed throughout the simulation, this can be set to False to save some time.
 
     properties
         AllowDuplicates
@@ -40,8 +41,12 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
         VoltageBases
         ZoneLock
         AllocationFactors
+        LoadsTerminalCheck
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AllowDuplicates(obj)
@@ -204,6 +209,15 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
         function obj = set.AllocationFactors(obj, Value)
             calllib('dss_capi_v7', 'Settings_Set_AllocationFactors', Value);
             obj.CheckForError();
+        end
+
+        function result = get.LoadsTerminalCheck(obj)
+            % Controls whether the terminals are checked when updating the currents in Load component. Defaults to True.
+            % If the loads are guaranteed to have their terminals closed throughout the simulation, this can be set to False to save some time.
+            result = (calllib('dss_capi_v7', 'Settings_Get_LoadsTerminalCheck') ~= 0);
+        end
+        function obj = set.LoadsTerminalCheck(obj, Value)
+            result = calllib('dss_capi_v7', 'Settings_Set_LoadsTerminalCheck', Value);
         end
     end
 end

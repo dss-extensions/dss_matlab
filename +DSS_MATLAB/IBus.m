@@ -19,7 +19,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
     %    SeqVoltages - (read-only) Double Array of sequence voltages at this bus.
     %    TotalMiles - (read-only) Total length of line downline from this bus, in miles. For recloser siting algorithm.
     %    VLL - (read-only) For 2- and 3-phase buses, returns array of complex numbers represetin L-L voltages in volts. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only first 3.
-    %    VMagAngle - (read-only) Variant Array of doubles containing voltages in Magnitude (VLN), angle (deg) 
+    %    VMagAngle - (read-only) Variant Array of doubles containing voltages in Magnitude (VLN), angle (deg)
     %    Voc - (read-only) Open circuit voltage; Complex array.
     %    Voltages - (read-only) Complex array of voltages at this bus.
     %    YscMatrix - (read-only) Complex array of Ysc matrix at bus. Column by column.
@@ -70,7 +70,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
         y
     end
 
-    methods
+    methods (Access = public)
 
         function result = GetUniqueNodeNumber(obj, StartNumber)
             result = calllib('dss_capi_v7', 'Bus_GetUniqueNodeNumber', StartNumber);
@@ -79,6 +79,9 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
         function result = ZscRefresh(obj)
             result = (calllib('dss_capi_v7', 'Bus_ZscRefresh') ~= 0);
         end
+
+    end
+    methods
 
         function result = get.Coorddefined(obj)
             % (read-only) False=0 else True. Indicates whether a coordinate has been defined for this bus

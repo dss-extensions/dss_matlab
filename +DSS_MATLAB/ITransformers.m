@@ -2,14 +2,15 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
     % ITransformers: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of strings with all Transformer names in the active circuit.
-    %    Count - 
-    %    First - (read-only) Sets the first Transformer active. Returns 0 if no more.
+    %    AllNames - Array of strings with all Transformer names
+    %    Count - Number of Transformer objects
+    %    First - Set first object of Transformer; returns 0 if none.
+    %    Name - Get/sets the name of the current active Transformer
+    %    Next - Sets next Transformer active; returns 0 if no more.
+    %    idx - Sets next Transformer active; returns 0 if no more.
     %    IsDelta - Active Winding delta or wye connection?
     %    MaxTap - Active Winding maximum tap in per-unit.
     %    MinTap - Active Winding minimum tap in per-unit.
-    %    Name - Sets a Transformer active by Name.
-    %    Next - (read-only) Sets the next Transformer active. Returns 0 if no more.
     %    NumTaps - Active Winding number of tap steps betwein MinTap and MaxTap.
     %    NumWindings - Number of windings on this transformer. Allocates memory; set or change this property first.
     %    R - Active Winding resistance in %
@@ -28,16 +29,19 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
     %    strWdgCurrents - (read-only) All winding currents in CSV string form like the WdgCurrents property
     %    CoreType - Transformer Core Type: 0=shell;1 = 1-phase; 3= 3-leg; 5= 5-leg
     %    RdcOhms - dc Resistance of active winding in ohms for GIC analysis
+    %    LossesByType - Complex array with the losses by type (total losses, load losses, no-load losses), in VA
+    %    AllLossesByType - Complex array with the losses by type (total losses, load losses, no-load losses), in VA, concatenated for ALL transformers
 
     properties
         AllNames
         Count
         First
+        Name
+        Next
+        idx
         IsDelta
         MaxTap
         MinTap
-        Name
-        Next
         NumTaps
         NumWindings
         R
@@ -56,23 +60,53 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
         strWdgCurrents
         CoreType
         RdcOhms
+        LossesByType
+        AllLossesByType
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AllNames(obj)
-            % (read-only) Array of strings with all Transformer names in the active circuit.
+            % Array of strings with all Transformer names
             result = DSS_MATLAB.get_string_array('Transformers_Get_AllNames');
         end
 
         function result = get.Count(obj)
+            % Number of Transformer objects
             result = calllib('dss_capi_v7', 'Transformers_Get_Count');
         end
 
         function result = get.First(obj)
-            % (read-only) Sets the first Transformer active. Returns 0 if no more.
+            % Set first object of Transformer; returns 0 if none.
             result = calllib('dss_capi_v7', 'Transformers_Get_First');
         end
+
+        function result = get.Name(obj)
+            % Get/sets the name of the current active Transformer
+            result = calllib('dss_capi_v7', 'Transformers_Get_Name');
+        end
+        function obj = set.Name(obj, Value)
+            calllib('dss_capi_v7', 'Transformers_Set_Name', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next Transformer active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'Transformers_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active Transformer by index;  1..Count
+            result = calllib('dss_capi_v7', 'Transformers_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'Transformers_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.IsDelta(obj)
             % Active Winding delta or wye connection?
@@ -99,20 +133,6 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
         function obj = set.MinTap(obj, Value)
             calllib('dss_capi_v7', 'Transformers_Set_MinTap', Value);
             obj.CheckForError();
-        end
-
-        function result = get.Name(obj)
-            % Sets a Transformer active by Name.
-            result = calllib('dss_capi_v7', 'Transformers_Get_Name');
-        end
-        function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Transformers_Set_Name', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.Next(obj)
-            % (read-only) Sets the next Transformer active. Returns 0 if no more.
-            result = calllib('dss_capi_v7', 'Transformers_Get_Next');
         end
 
         function result = get.NumTaps(obj)
@@ -263,6 +283,16 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
         function obj = set.RdcOhms(obj, Value)
             calllib('dss_capi_v7', 'Transformers_Set_RdcOhms', Value);
             obj.CheckForError();
+        end
+
+        function result = get.LossesByType(obj)
+            % Complex array with the losses by type (total losses, load losses, no-load losses), in VA
+            result = DSS_MATLAB.get_float64_array('Transformers_Get_LossesByType');
+        end
+
+        function result = get.AllLossesByType(obj)
+            % Complex array with the losses by type (total losses, load losses, no-load losses), in VA, concatenated for ALL transformers
+            result = DSS_MATLAB.get_float64_array('Transformers_Get_AllLossesByType');
         end
     end
 end

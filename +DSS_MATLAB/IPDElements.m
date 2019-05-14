@@ -4,7 +4,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
     % Properties:
     %    AccumulatedL - (read-only) accummulated failure rate for this branch on downline
     %    Count - (read-only) Number of PD elements (including disabled elements)
-    %    FaultRate - Get/Set Number of failures per year. For LINE elements: Number of failures per unit length per year. 
+    %    FaultRate - Get/Set Number of failures per year. For LINE elements: Number of failures per unit length per year.
     %    First - (read-only) Set the first enabled PD element to be the active element.  Returns 0 if none found.
     %    FromTerminal - (read-only) Number of the terminal of active PD element that is on the "from" side. This is set after the meter zone is determined.
     %    IsShunt - (read-only) Variant boolean indicating of PD element should be treated as a shunt element rather than a series element. Applies to Capacitor and Reactor elements in particular.
@@ -38,6 +38,9 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
         pctPermanent
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AccumulatedL(obj)

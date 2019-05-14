@@ -17,7 +17,7 @@ classdef (CaseInsensitiveProperties) IDSS_Executive < DSS_MATLAB.Base
         NumOptions
     end
 
-    methods
+    methods (Access = public)
 
         function result = Command(obj, i)
             % (read-only) Get i-th command
@@ -43,6 +43,9 @@ classdef (CaseInsensitiveProperties) IDSS_Executive < DSS_MATLAB.Base
             % (read-only) Get present value of i-th option
             result = calllib('dss_capi_v7', 'DSS_Executive_Get_OptionValue', i);
         end
+
+    end
+    methods
 
         function result = get.NumCommands(obj)
             % (read-only) Number of DSS Executive Commands

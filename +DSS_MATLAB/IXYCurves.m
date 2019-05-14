@@ -2,25 +2,29 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
     % IXYCurves: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    Count - (read-only) Number of XYCurve Objects
-    %    First - (read-only) Sets first XYcurve object active; returns 0 if none.
-    %    Name -           (read) Name of active XYCurve Object          (write) Get Name of active XYCurve Object          
-    %    Next - (read-only) Advances to next XYCurve object; returns 0 if no more objects of this class
+    %    AllNames - Array of strings with all XYCurve names
+    %    Count - Number of XYCurve objects
+    %    First - Set first object of XYCurve; returns 0 if none.
+    %    Name - Get/sets the name of the current active XYCurve
+    %    Next - Sets next XYCurve active; returns 0 if no more.
+    %    idx - Sets next XYCurve active; returns 0 if no more.
     %    Npts - Get/Set Number of points in X-Y curve
     %    Xarray - Get/Set X values as a Array of doubles. Set Npts to max number expected if setting
     %    Xscale - Factor to scale X values from original curve
     %    Xshift - Amount to shift X value from original curve
     %    Yarray - Get/Set Y values in curve; Set Npts to max number expected if setting
-    %    Yscale -           (read) Factor to scale Y values from original curve          (write) Amount to scale Y values from original curve. Represents a curve shift.          
+    %    Yscale - (read) Factor to scale Y values from original curve  (write) Amount to scale Y values from original curve. Represents a curve shift.
     %    Yshift - amount to shift Y valiue from original curve
     %    x - Set X value or get interpolated value after setting Y
-    %    y -           (read) Y value for present X or set this value then get corresponding X          (write) Set Y value or get interpolated Y value after setting X          
+    %    y - (read) Y value for present X or set this value then get corresponding X  (write) Set Y value or get interpolated Y value after setting X
 
     properties
+        AllNames
         Count
         First
         Name
         Next
+        idx
         Npts
         Xarray
         Xscale
@@ -32,21 +36,28 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
         y
     end
 
+    methods (Access = public)
+
+    end
     methods
 
+        function result = get.AllNames(obj)
+            % Array of strings with all XYCurve names
+            result = DSS_MATLAB.get_string_array('XYCurves_Get_AllNames');
+        end
+
         function result = get.Count(obj)
-            % (read-only) Number of XYCurve Objects
+            % Number of XYCurve objects
             result = calllib('dss_capi_v7', 'XYCurves_Get_Count');
         end
 
         function result = get.First(obj)
-            % (read-only) Sets first XYcurve object active; returns 0 if none.
+            % Set first object of XYCurve; returns 0 if none.
             result = calllib('dss_capi_v7', 'XYCurves_Get_First');
         end
 
         function result = get.Name(obj)
-            % (read) Name of active XYCurve Object
-            % (write) Get Name of active XYCurve Object
+            % Get/sets the name of the current active XYCurve
             result = calllib('dss_capi_v7', 'XYCurves_Get_Name');
         end
         function obj = set.Name(obj, Value)
@@ -55,9 +66,19 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
         end
 
         function result = get.Next(obj)
-            % (read-only) Advances to next XYCurve object; returns 0 if no more objects of this class
+            % Sets next XYCurve active; returns 0 if no more.
             result = calllib('dss_capi_v7', 'XYCurves_Get_Next');
         end
+
+        function result = get.idx(obj)
+            % Get/set active XYCurve by index;  1..Count
+            result = calllib('dss_capi_v7', 'XYCurves_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'XYCurves_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.Npts(obj)
             % Get/Set Number of points in X-Y curve

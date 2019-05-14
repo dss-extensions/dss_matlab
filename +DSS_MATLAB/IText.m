@@ -10,6 +10,9 @@ classdef (CaseInsensitiveProperties) IText < DSS_MATLAB.Base
         Result
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.Command(obj)

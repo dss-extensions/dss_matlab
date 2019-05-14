@@ -3,7 +3,7 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
     % 
     % Properties:
     %    AutoIncrement - Default is FALSE. If TRUE parser automatically advances to next token after DblValue, IntValue, or StrValue. Simpler when you don't need to check for parameter names.
-    %    BeginQuote -           (read) Get String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.          (write) Set String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.          
+    %    BeginQuote - (read) Get String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.  (write) Set String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.
     %    CmdString - String to be parsed. Loading this string resets the Parser to the beginning of the line. Then parse off the tokens in sequence.
     %    DblValue - (read-only) Return next parameter as a double.
     %    Delimiters - String defining hard delimiters used to separate token on the command string. Default is , and =. The = separates token name from token value. These override whitesspace to separate tokens.
@@ -11,7 +11,7 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
     %    IntValue - (read-only) Return next parameter as a long integer.
     %    NextParam - (read-only) Get next token and return tag name (before = sign) if any. See AutoIncrement.
     %    StrValue - (read-only) Return next parameter as a string
-    %    WhiteSpace -           (read) Get the characters used for White space in the command string.  Default is blank and Tab.          (write) Set the characters used for White space in the command string.  Default is blank and Tab.          
+    %    WhiteSpace - (read) Get the characters used for White space in the command string.  Default is blank and Tab.  (write) Set the characters used for White space in the command string.  Default is blank and Tab.
     % 
     % Methods:
     %    Matrix - (read-only) Use this property to parse a Matrix token in OpenDSS format.  Returns square matrix of order specified. Order same as default Fortran order: column by column.
@@ -32,7 +32,7 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
         WhiteSpace
     end
 
-    methods
+    methods (Access = public)
 
         function result = Matrix(obj, ExpectedOrder)
             % (read-only) Use this property to parse a Matrix token in OpenDSS format.  Returns square matrix of order specified. Order same as default Fortran order: column by column.
@@ -52,6 +52,9 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
         function obj = ResetDelimiters(obj)
             calllib('dss_capi_v7', 'Parser_ResetDelimiters');
         end
+
+    end
+    methods
 
         function result = get.AutoIncrement(obj)
             % Default is FALSE. If TRUE parser automatically advances to next token after DblValue, IntValue, or StrValue. Simpler when you don't need to check for parameter names.

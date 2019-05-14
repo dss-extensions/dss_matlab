@@ -2,15 +2,16 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
     % ISensors: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of Sensor names.
-    %    Count - (read-only) Number of Sensors in Active Circuit.
+    %    AllNames - Array of strings with all Sensor names
+    %    Count - Number of Sensor objects
+    %    First - Set first object of Sensor; returns 0 if none.
+    %    Name - Get/sets the name of the current active Sensor
+    %    Next - Sets next Sensor active; returns 0 if no more.
+    %    idx - Sets next Sensor active; returns 0 if no more.
     %    Currents - Array of doubles for the line current measurements; don't use with kWS and kVARS.
-    %    First - (read-only) Sets the first sensor active. Returns 0 if none.
     %    IsDelta - True if measured voltages are line-line. Currents are always line currents.
     %    MeteredElement - Full Name of the measured element
     %    MeteredTerminal - Number of the measured terminal in the measured element.
-    %    Name -           (read) Name of the active sensor.          (write) Set the active Sensor by name.          
-    %    Next - (read-only) Sets the next Sensor active. Returns 0 if no more.
     %    PctError - Assumed percent error in the Sensor measurement. Default is 1.
     %    ReverseDelta - True if voltage measurements are 1-3, 3-2, 2-1.
     %    Weight - Weighting factor for this Sensor measurement with respect to other Sensors. Default is 1.
@@ -26,13 +27,14 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
     properties
         AllNames
         Count
-        Currents
         First
+        Name
+        Next
+        idx
+        Currents
         IsDelta
         MeteredElement
         MeteredTerminal
-        Name
-        Next
         PctError
         ReverseDelta
         Weight
@@ -42,7 +44,7 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
         kWS
     end
 
-    methods
+    methods (Access = public)
 
         function obj = Reset(obj)
             calllib('dss_capi_v7', 'Sensors_Reset');
@@ -52,15 +54,47 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
             calllib('dss_capi_v7', 'Sensors_ResetAll');
         end
 
+    end
+    methods
+
         function result = get.AllNames(obj)
-            % (read-only) Array of Sensor names.
+            % Array of strings with all Sensor names
             result = DSS_MATLAB.get_string_array('Sensors_Get_AllNames');
         end
 
         function result = get.Count(obj)
-            % (read-only) Number of Sensors in Active Circuit.
+            % Number of Sensor objects
             result = calllib('dss_capi_v7', 'Sensors_Get_Count');
         end
+
+        function result = get.First(obj)
+            % Set first object of Sensor; returns 0 if none.
+            result = calllib('dss_capi_v7', 'Sensors_Get_First');
+        end
+
+        function result = get.Name(obj)
+            % Get/sets the name of the current active Sensor
+            result = calllib('dss_capi_v7', 'Sensors_Get_Name');
+        end
+        function obj = set.Name(obj, Value)
+            calllib('dss_capi_v7', 'Sensors_Set_Name', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next Sensor active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'Sensors_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active Sensor by index;  1..Count
+            result = calllib('dss_capi_v7', 'Sensors_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'Sensors_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.Currents(obj)
             % Array of doubles for the line current measurements; don't use with kWS and kVARS.
@@ -69,11 +103,6 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
         function obj = set.Currents(obj, Value)
             calllib('dss_capi_v7', 'Sensors_Set_Currents', Value, numel(Value));
             obj.CheckForError();
-        end
-
-        function result = get.First(obj)
-            % (read-only) Sets the first sensor active. Returns 0 if none.
-            result = calllib('dss_capi_v7', 'Sensors_Get_First');
         end
 
         function result = get.IsDelta(obj)
@@ -101,21 +130,6 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
         function obj = set.MeteredTerminal(obj, Value)
             calllib('dss_capi_v7', 'Sensors_Set_MeteredTerminal', Value);
             obj.CheckForError();
-        end
-
-        function result = get.Name(obj)
-            % (read) Name of the active sensor.
-            % (write) Set the active Sensor by name.
-            result = calllib('dss_capi_v7', 'Sensors_Get_Name');
-        end
-        function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_Name', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.Next(obj)
-            % (read-only) Sets the next Sensor active. Returns 0 if no more.
-            result = calllib('dss_capi_v7', 'Sensors_Get_Next');
         end
 
         function result = get.PctError(obj)

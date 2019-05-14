@@ -16,6 +16,7 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
     %    Delete - 
     %    DoAllQueue - 
     %    Show - 
+    %    Push - Push a control action onto the DSS control queue by time, action code, and device handle (user defined). Returns Control Queue handle.
 
     properties
         ActionCode
@@ -27,7 +28,7 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
         Action
     end
 
-    methods
+    methods (Access = public)
 
         function obj = ClearActions(obj)
             calllib('dss_capi_v7', 'CtrlQueue_ClearActions');
@@ -48,6 +49,15 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
         function obj = Show(obj)
             calllib('dss_capi_v7', 'CtrlQueue_Show');
         end
+
+        function result = Push(obj, Hour, Seconds, ActionCode, DeviceHandle)
+            % Push a control action onto the DSS control queue by time, action code, and device handle (user defined). Returns Control Queue handle.
+            result = calllib('dss_capi_v7', 'CtrlQueue_Push', Hour, Seconds, ActionCode, DeviceHandle);
+            obj.CheckForError();
+        end
+
+    end
+    methods
 
         function result = get.ActionCode(obj)
             % (read-only) Code for the active action. Long integer code to tell the control device what to do

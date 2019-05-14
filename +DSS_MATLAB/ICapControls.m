@@ -2,19 +2,20 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
     % ICapControls: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of strings with all CapControl names.
+    %    AllNames - Array of strings with all CapControl names
+    %    Count - Number of CapControl objects
+    %    First - Set first object of CapControl; returns 0 if none.
+    %    Name - Get/sets the name of the current active CapControl
+    %    Next - Sets next CapControl active; returns 0 if no more.
+    %    idx - Sets next CapControl active; returns 0 if no more.
     %    CTratio - Transducer ratio from pirmary current to control current.
     %    Capacitor - Name of the Capacitor that is controlled.
-    %    Count - (read-only) Number of CapControls in Active Circuit
     %    DeadTime - 
     %    Delay - Time delay [s] to switch on after arming.  Control may reset before actually switching.
     %    DelayOff - Time delay [s] before swithcing off a step. Control may reset before actually switching.
-    %    First - (read-only) Sets the first CapControl as active. Return 0 if none.
     %    Mode - Type of automatic controller.
     %    MonitoredObj - Full name of the element that PT and CT are connected to.
     %    MonitoredTerm - Terminal number on the element that PT and CT are connected to.
-    %    Name - Sets a CapControl active by name.
-    %    Next - (read-only) Gets the next CapControl in the circut. Returns 0 if none.
     %    OFFSetting - Threshold to switch off a step. See Mode for units.
     %    ONSetting - Threshold to arm or switch on a step.  See Mode for units.
     %    PTratio - Transducer ratio from primary feeder to control voltage.
@@ -27,18 +28,19 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
 
     properties
         AllNames
+        Count
+        First
+        Name
+        Next
+        idx
         CTratio
         Capacitor
-        Count
         DeadTime
         Delay
         DelayOff
-        First
         Mode
         MonitoredObj
         MonitoredTerm
-        Name
-        Next
         OFFSetting
         ONSetting
         PTratio
@@ -47,16 +49,53 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
         Vmin
     end
 
-    methods
+    methods (Access = public)
 
         function obj = Reset(obj)
             calllib('dss_capi_v7', 'CapControls_Reset');
         end
 
+    end
+    methods
+
         function result = get.AllNames(obj)
-            % (read-only) Array of strings with all CapControl names.
+            % Array of strings with all CapControl names
             result = DSS_MATLAB.get_string_array('CapControls_Get_AllNames');
         end
+
+        function result = get.Count(obj)
+            % Number of CapControl objects
+            result = calllib('dss_capi_v7', 'CapControls_Get_Count');
+        end
+
+        function result = get.First(obj)
+            % Set first object of CapControl; returns 0 if none.
+            result = calllib('dss_capi_v7', 'CapControls_Get_First');
+        end
+
+        function result = get.Name(obj)
+            % Get/sets the name of the current active CapControl
+            result = calllib('dss_capi_v7', 'CapControls_Get_Name');
+        end
+        function obj = set.Name(obj, Value)
+            calllib('dss_capi_v7', 'CapControls_Set_Name', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next CapControl active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'CapControls_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active CapControl by index;  1..Count
+            result = calllib('dss_capi_v7', 'CapControls_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'CapControls_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.CTratio(obj)
             % Transducer ratio from pirmary current to control current.
@@ -74,11 +113,6 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
         function obj = set.Capacitor(obj, Value)
             calllib('dss_capi_v7', 'CapControls_Set_Capacitor', Value);
             obj.CheckForError();
-        end
-
-        function result = get.Count(obj)
-            % (read-only) Number of CapControls in Active Circuit
-            result = calllib('dss_capi_v7', 'CapControls_Get_Count');
         end
 
         function result = get.DeadTime(obj)
@@ -107,11 +141,6 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
-        function result = get.First(obj)
-            % (read-only) Sets the first CapControl as active. Return 0 if none.
-            result = calllib('dss_capi_v7', 'CapControls_Get_First');
-        end
-
         function result = get.Mode(obj)
             % Type of automatic controller.
             result = calllib('dss_capi_v7', 'CapControls_Get_Mode');
@@ -137,20 +166,6 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
         function obj = set.MonitoredTerm(obj, Value)
             calllib('dss_capi_v7', 'CapControls_Set_MonitoredTerm', Value);
             obj.CheckForError();
-        end
-
-        function result = get.Name(obj)
-            % Sets a CapControl active by name.
-            result = calllib('dss_capi_v7', 'CapControls_Get_Name');
-        end
-        function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_Name', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.Next(obj)
-            % (read-only) Gets the next CapControl in the circut. Returns 0 if none.
-            result = calllib('dss_capi_v7', 'CapControls_Get_Next');
         end
 
         function result = get.OFFSetting(obj)

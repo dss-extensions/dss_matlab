@@ -23,7 +23,7 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
         UseAuxCurrents
     end
 
-    methods
+    methods (Access = public)
 
         function result = GetCompressedYMatrix(obj, factor)
             % Returns the circuit's YMatrix as a sparse MATLAB matrix
@@ -101,25 +101,9 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
  
         function result = SolveSystem(obj, NodeV)
             result = calllib('dss_capi_v7', 'YMatrix_SolveSystem', NodeV);
-            DSS_MATLAB.CheckForError();
+            obj.CheckForError();
         end
 
-        function result = get.SystemYChanged(obj)
-            result = calllib('dss_capi_v7', 'YMatrix_Get_SystemYChanged') ~= 0;
-        end
-        function obj = set.SystemYChanged(obj, value)
-            calllib('dss_capi_v7', 'YMatrix_Set_SystemYChanged', value);
-            DSS_MATLAB.CheckForError();
-        end
-
-        function result = get.UseAuxCurrents(obj)
-            result = calllib('dss_capi_v7', 'YMatrix_Get_UseAuxCurrents') ~= 0;
-        end
-        function obj = set.UseAuxCurrents(obj, value)
-            calllib('dss_capi_v7', 'YMatrix_Set_UseAuxCurrents', value);
-            DSS_MATLAB.CheckForError();
-        end
-        
         function result = getYSparse(obj)
             result = obj.GetCompressedYMatrix;
         end
@@ -133,5 +117,25 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
             % Get the data from the internal Voltage pointer
             result = obj.VPointer.Value;
         end
+    end
+    
+    methods
+        
+        function result = get.SystemYChanged(obj)
+            result = calllib('dss_capi_v7', 'YMatrix_Get_SystemYChanged') ~= 0;
+        end
+        function obj = set.SystemYChanged(obj, value)
+            calllib('dss_capi_v7', 'YMatrix_Set_SystemYChanged', value);
+            obj.CheckForError();
+        end
+
+        function result = get.UseAuxCurrents(obj)
+            result = calllib('dss_capi_v7', 'YMatrix_Get_UseAuxCurrents') ~= 0;
+        end
+        function obj = set.UseAuxCurrents(obj, value)
+            calllib('dss_capi_v7', 'YMatrix_Set_UseAuxCurrents', value);
+            obj.CheckForError();
+        end
+        
     end
 end

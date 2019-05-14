@@ -10,7 +10,7 @@ classdef (CaseInsensitiveProperties) ICmathLib < DSS_MATLAB.Base
     %    ctopolardeg - (read-only) Convert complex number to magnitude and angle, degrees. Returns array of two doubles.
     %    pdegtocomplex - (read-only) Convert magnitude, angle in degrees to a complex number. Returns Array of two doubles.
 
-    methods
+    methods (Access = public)
 
         function result = cabs(obj, realpart, imagpart)
             % (read-only) Return abs value of complex number given in real and imag doubles
@@ -46,5 +46,8 @@ classdef (CaseInsensitiveProperties) ICmathLib < DSS_MATLAB.Base
             % (read-only) Convert magnitude, angle in degrees to a complex number. Returns Array of two doubles.
             result = DSS_MATLAB.get_float64_array('CmathLib_Get_pdegtocomplex', magnitude, angle);
         end
+    end
+    methods
+
     end
 end

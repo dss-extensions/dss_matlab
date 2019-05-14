@@ -2,16 +2,17 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
     % ISwtControls: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
+    %    AllNames - Array of strings with all SwtControl names
+    %    Count - Number of SwtControl objects
+    %    First - Set first object of SwtControl; returns 0 if none.
+    %    Name - Get/sets the name of the current active SwtControl
+    %    Next - Sets next SwtControl active; returns 0 if no more.
+    %    idx - Sets next SwtControl active; returns 0 if no more.
     %    Action - Open or Close the switch. No effect if switch is locked.  However, Reset removes any lock and then closes the switch (shelf state).
-    %    AllNames - (read-only) Array of strings with all SwtControl names in the active circuit.
-    %    Count - 
     %    Delay - Time delay [s] betwen arming and opening or closing the switch.  Control may reset before actually operating the switch.
-    %    First - (read-only) Sets the first SwtControl active. Returns 0 if no more.
     %    IsLocked - The lock prevents both manual and automatic switch operation.
-    %    Name - Sets a SwtControl active by Name.
-    %    Next - (read-only) Sets the next SwtControl active. Returns 0 if no more.
-    %    NormalState -           (read) Get Normal state of switch          (write) set Normal state of switch  (see actioncodes) dssActionOpen or dssActionClose          
-    %    State -           (read) Force switch to specified state          (write) Get Present state of switch          
+    %    NormalState - (read) Get Normal state of switch  (write) set Normal state of switch  (see actioncodes) dssActionOpen or dssActionClose
+    %    State - (read) Force switch to specified state  (write) Get Present state of switch
     %    SwitchedObj - Full name of the switched element.
     %    SwitchedTerm - Terminal number where the switch is located on the SwitchedObj
     % 
@@ -19,25 +20,68 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
     %    Reset - 
 
     properties
-        Action
         AllNames
         Count
-        Delay
         First
-        IsLocked
         Name
         Next
+        idx
+        Action
+        Delay
+        IsLocked
         NormalState
         State
         SwitchedObj
         SwitchedTerm
     end
 
-    methods
+    methods (Access = public)
 
         function obj = Reset(obj)
             calllib('dss_capi_v7', 'SwtControls_Reset');
         end
+
+    end
+    methods
+
+        function result = get.AllNames(obj)
+            % Array of strings with all SwtControl names
+            result = DSS_MATLAB.get_string_array('SwtControls_Get_AllNames');
+        end
+
+        function result = get.Count(obj)
+            % Number of SwtControl objects
+            result = calllib('dss_capi_v7', 'SwtControls_Get_Count');
+        end
+
+        function result = get.First(obj)
+            % Set first object of SwtControl; returns 0 if none.
+            result = calllib('dss_capi_v7', 'SwtControls_Get_First');
+        end
+
+        function result = get.Name(obj)
+            % Get/sets the name of the current active SwtControl
+            result = calllib('dss_capi_v7', 'SwtControls_Get_Name');
+        end
+        function obj = set.Name(obj, Value)
+            calllib('dss_capi_v7', 'SwtControls_Set_Name', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next SwtControl active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'SwtControls_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active SwtControl by index;  1..Count
+            result = calllib('dss_capi_v7', 'SwtControls_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'SwtControls_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.Action(obj)
             % Open or Close the switch. No effect if switch is locked.  However, Reset removes any lock and then closes the switch (shelf state).
@@ -46,15 +90,6 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
         function obj = set.Action(obj, Value)
             calllib('dss_capi_v7', 'SwtControls_Set_Action', Value);
             obj.CheckForError();
-        end
-
-        function result = get.AllNames(obj)
-            % (read-only) Array of strings with all SwtControl names in the active circuit.
-            result = DSS_MATLAB.get_string_array('SwtControls_Get_AllNames');
-        end
-
-        function result = get.Count(obj)
-            result = calllib('dss_capi_v7', 'SwtControls_Get_Count');
         end
 
         function result = get.Delay(obj)
@@ -66,11 +101,6 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
-        function result = get.First(obj)
-            % (read-only) Sets the first SwtControl active. Returns 0 if no more.
-            result = calllib('dss_capi_v7', 'SwtControls_Get_First');
-        end
-
         function result = get.IsLocked(obj)
             % The lock prevents both manual and automatic switch operation.
             result = (calllib('dss_capi_v7', 'SwtControls_Get_IsLocked') ~= 0);
@@ -78,20 +108,6 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
         function obj = set.IsLocked(obj, Value)
             calllib('dss_capi_v7', 'SwtControls_Set_IsLocked', Value);
             obj.CheckForError();
-        end
-
-        function result = get.Name(obj)
-            % Sets a SwtControl active by Name.
-            result = calllib('dss_capi_v7', 'SwtControls_Get_Name');
-        end
-        function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'SwtControls_Set_Name', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.Next(obj)
-            % (read-only) Sets the next SwtControl active. Returns 0 if no more.
-            result = calllib('dss_capi_v7', 'SwtControls_Get_Next');
         end
 
         function result = get.NormalState(obj)

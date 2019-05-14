@@ -23,6 +23,7 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
     %    UserClasses - (read-only) List of user-defined classes
     %    Version - (read-only) Get version string for the DSS.
     %    AllowForms - Gets/sets whether text output is allowed
+    %    AllowEditor - Gets/sets whether running the external editor for "Show" is allowed.
     % 
     % Methods:
     %    ClearAll - 
@@ -57,9 +58,10 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
         UserClasses
         Version
         AllowForms
+        AllowEditor
     end
 
-    methods
+    methods (Access = public)
         function obj = IDSS(obj)
             MfilePath = fileparts(mfilename('fullpath'));
             DLLfilePath = fullfile(MfilePath, 'dss_capi_v7');
@@ -92,6 +94,19 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
             result = (calllib('dss_capi_v7', 'DSS_Start', code) ~= 0);
         end
 
+        function obj = ShowPanel(obj)
+            warnings.warn('ShowPanel is not implemented.');
+        end
+
+        function result = NewCircuit(obj, name)
+            calllib('dss_capi_v7', 'DSS_NewCircuit', name);
+            obj.CheckForError();
+            result = obj.ActiveCircuit;
+        end
+    end
+    
+    methods
+        
         function result = get.Classes(obj)
             % (read-only) List of DSS intrinsic classes (names of the classes)
             result = DSS_MATLAB.get_string_array('DSS_Get_Classes');
@@ -141,18 +156,26 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
             result = (calllib('dss_capi_v7', 'DSS_Get_AllowForms') ~= 0);
         end
         function obj = set.AllowForms(obj, value)
-            calllib('dss_capi_v7', 'DSS_Set_AllowForms', value);
+            try
+                calllib('dss_capi_v7', 'DSS_Set_AllowForms', value);
+                obj.CheckForError();
+            catch
+                warning('AllowForms cannot be set. A console needs to be available.');
+            end
+        end
+
+        function result = get.AllowEditor(obj)
+            % Gets/sets whether running the external editor for "Show" is allowed
+            % 
+            %         AllowEditor controls whether the external editor is used in commands like "Show".
+            %         If you set to 0 (false), the editor is not executed. Note that other side effects,
+            %         such as the creation of files, are not affected.
+            result = (calllib('dss_capi_v7', 'DSS_Get_AllowEditor') ~= 0);
+        end
+        function obj = set.AllowEditor(obj, value)
+            calllib('dss_capi_v7', 'DSS_Set_AllowEditor', value);
             obj.CheckForError();
         end
 
-        function obj = ShowPanel(obj)
-            warnings.warn('ShowPanel is not implemented.');
-        end
-
-        function result = NewCircuit(obj, name)
-            calllib('dss_capi_v7', 'DSS_NewCircuit', name);
-            obj.CheckForError();
-            result = obj.ActiveCircuit;
-        end
     end
 end

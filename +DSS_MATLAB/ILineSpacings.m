@@ -2,12 +2,13 @@ classdef (CaseInsensitiveProperties) ILineSpacings < DSS_MATLAB.Base
     % ILineSpacings: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of strings with names of all devices
+    %    AllNames - Array of strings with all LineSpacing names
+    %    Count - Number of LineSpacing objects
+    %    First - Set first object of LineSpacing; returns 0 if none.
+    %    Name - Get/sets the name of the current active LineSpacing
+    %    Next - Sets next LineSpacing active; returns 0 if no more.
+    %    idx - Sets next LineSpacing active; returns 0 if no more.
     %    Conductors - (read-only) Array of strings with names of all conductors in the active LineSpacing object
-    %    Count - (read-only) Number of LineSpacings
-    %    First - 
-    %    Next - 
-    %    Name - Name of active LineSpacing
     %    Phases - Number of Phases
     %    Nconds - 
     %    Units - 
@@ -16,11 +17,12 @@ classdef (CaseInsensitiveProperties) ILineSpacings < DSS_MATLAB.Base
 
     properties
         AllNames
-        Conductors
         Count
         First
-        Next
         Name
+        Next
+        idx
+        Conductors
         Phases
         Nconds
         Units
@@ -28,38 +30,53 @@ classdef (CaseInsensitiveProperties) ILineSpacings < DSS_MATLAB.Base
         Ycoords
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AllNames(obj)
-            % (read-only) Array of strings with names of all devices
+            % Array of strings with all LineSpacing names
             result = DSS_MATLAB.get_string_array('LineSpacings_Get_AllNames');
         end
 
-        function result = get.Conductors(obj)
-            % (read-only) Array of strings with names of all conductors in the active LineSpacing object
-            result = DSS_MATLAB.get_string_array('LineSpacings_Get_Conductors');
-        end
-
         function result = get.Count(obj)
-            % (read-only) Number of LineSpacings
+            % Number of LineSpacing objects
             result = calllib('dss_capi_v7', 'LineSpacings_Get_Count');
         end
 
         function result = get.First(obj)
+            % Set first object of LineSpacing; returns 0 if none.
             result = calllib('dss_capi_v7', 'LineSpacings_Get_First');
         end
 
-        function result = get.Next(obj)
-            result = calllib('dss_capi_v7', 'LineSpacings_Get_Next');
-        end
-
         function result = get.Name(obj)
-            % Name of active LineSpacing
+            % Get/sets the name of the current active LineSpacing
             result = calllib('dss_capi_v7', 'LineSpacings_Get_Name');
         end
         function obj = set.Name(obj, Value)
             calllib('dss_capi_v7', 'LineSpacings_Set_Name', Value);
             obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next LineSpacing active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'LineSpacings_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active LineSpacing by index;  1..Count
+            result = calllib('dss_capi_v7', 'LineSpacings_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'LineSpacings_Set_idx', Value);
+            obj.CheckForError();
+        end
+
+
+        function result = get.Conductors(obj)
+            % (read-only) Array of strings with names of all conductors in the active LineSpacing object
+            result = DSS_MATLAB.get_string_array('LineSpacings_Get_Conductors');
         end
 
         function result = get.Phases(obj)

@@ -14,7 +14,13 @@ classdef Base < handle & matlab.mixin.CustomDisplay & matlab.mixin.SetGet
             end
         end
     end
+
+    methods (Access = public)
+
+    end
+
     methods
+
         function obj = CheckForError(obj)
             error = calllib('dss_capi_v7', 'Error_Get_Number');
             if error ~= 0

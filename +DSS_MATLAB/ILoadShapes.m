@@ -2,16 +2,17 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
     % ILoadShapes: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of strings containing names of all Loadshape objects currently defined.
-    %    Count - (read-only) Number of Loadshape objects currently defined in Loadshape collection
-    %    First - (read-only) Set the first loadshape active and return integer index of the loadshape. Returns 0 if none.
+    %    AllNames - Array of strings with all LoadShape names
+    %    Count - Number of LoadShape objects
+    %    First - Set first object of LoadShape; returns 0 if none.
+    %    Name - Get/sets the name of the current active LoadShape
+    %    Next - Sets next LoadShape active; returns 0 if no more.
+    %    idx - Sets next LoadShape active; returns 0 if no more.
     %    HrInterval - Fixed interval time value, hours.
     %    MinInterval - Fixed Interval time value, in minutes
-    %    Name -           (read) Get the Name of the active Loadshape          (write) Set the active Loadshape by name          
-    %    Next - (read-only) Advance active Loadshape to the next on in the collection. Returns 0 if no more loadshapes.
-    %    Npts -           (read) Get Number of points in active Loadshape.          (write) Set number of points to allocate for active Loadshape.          
+    %    Npts - (read) Get Number of points in active Loadshape.  (write) Set number of points to allocate for active Loadshape.
     %    PBase - 
-    %    Pmult -           (read) Array of Doubles for the P multiplier in the Loadshape.          (write) Array of doubles containing the P array for the Loadshape.          
+    %    Pmult - Array of doubles for the P multiplier in the Loadshape.
     %    QBase - Base for normalizing Q curve. If left at zero, the peak value is used.
     %    Qmult - Array of doubles containing the Q multipliers.
     %    TimeArray - Time array in hours correscponding to P and Q multipliers when the Interval=0.
@@ -26,10 +27,11 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
         AllNames
         Count
         First
-        HrInterval
-        MinInterval
         Name
         Next
+        idx
+        HrInterval
+        MinInterval
         Npts
         PBase
         Pmult
@@ -40,7 +42,7 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
         sInterval
     end
 
-    methods
+    methods (Access = public)
 
         function result = New(obj, Name)
             result = calllib('dss_capi_v7', 'LoadShapes_New', Name);
@@ -50,20 +52,47 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
             calllib('dss_capi_v7', 'LoadShapes_Normalize');
         end
 
+    end
+    methods
+
         function result = get.AllNames(obj)
-            % (read-only) Array of strings containing names of all Loadshape objects currently defined.
+            % Array of strings with all LoadShape names
             result = DSS_MATLAB.get_string_array('LoadShapes_Get_AllNames');
         end
 
         function result = get.Count(obj)
-            % (read-only) Number of Loadshape objects currently defined in Loadshape collection
+            % Number of LoadShape objects
             result = calllib('dss_capi_v7', 'LoadShapes_Get_Count');
         end
 
         function result = get.First(obj)
-            % (read-only) Set the first loadshape active and return integer index of the loadshape. Returns 0 if none.
+            % Set first object of LoadShape; returns 0 if none.
             result = calllib('dss_capi_v7', 'LoadShapes_Get_First');
         end
+
+        function result = get.Name(obj)
+            % Get/sets the name of the current active LoadShape
+            result = calllib('dss_capi_v7', 'LoadShapes_Get_Name');
+        end
+        function obj = set.Name(obj, Value)
+            calllib('dss_capi_v7', 'LoadShapes_Set_Name', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next LoadShape active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'LoadShapes_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active LoadShape by index;  1..Count
+            result = calllib('dss_capi_v7', 'LoadShapes_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'LoadShapes_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.HrInterval(obj)
             % Fixed interval time value, hours.
@@ -81,21 +110,6 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
         function obj = set.MinInterval(obj, Value)
             calllib('dss_capi_v7', 'LoadShapes_Set_MinInterval', Value);
             obj.CheckForError();
-        end
-
-        function result = get.Name(obj)
-            % (read) Get the Name of the active Loadshape
-            % (write) Set the active Loadshape by name
-            result = calllib('dss_capi_v7', 'LoadShapes_Get_Name');
-        end
-        function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'LoadShapes_Set_Name', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.Next(obj)
-            % (read-only) Advance active Loadshape to the next on in the collection. Returns 0 if no more loadshapes.
-            result = calllib('dss_capi_v7', 'LoadShapes_Get_Next');
         end
 
         function result = get.Npts(obj)
@@ -117,8 +131,7 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
         end
 
         function result = get.Pmult(obj)
-            % (read) Array of Doubles for the P multiplier in the Loadshape.
-            % (write) Array of doubles containing the P array for the Loadshape.
+            % Array of doubles for the P multiplier in the Loadshape.
             result = DSS_MATLAB.get_float64_array('LoadShapes_Get_Pmult');
         end
         function obj = set.Pmult(obj, Value)

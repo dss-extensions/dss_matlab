@@ -17,14 +17,14 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
     %    GenPF - PF for generators in AutoAdd mode
     %    GenkW - Generator kW for AutoAdd mode
     %    Hour - Set Hour for time series solutions.
-    %    IntervalHrs -           (read) Get/Set the Solution.IntervalHrs variable used for devices that integrate          (write) Get/Set the Solution.IntervalHrs variable for custom solution algorithms          
+    %    IntervalHrs - (read) Get/Set the Solution.IntervalHrs variable used for devices that integrate  (write) Get/Set the Solution.IntervalHrs variable for custom solution algorithms
     %    Iterations - (read-only) Number of iterations taken for last solution. (Same as TotalIterations)
     %    LDCurve - Load-Duration Curve name for LD modes
     %    LoadModel - Load Model: {dssPowerFlow (default) | dssAdmittance}
     %    LoadMult - Default load multiplier applied to all non-fixed loads
     %    MaxControlIterations - Maximum allowable control iterations
     %    MaxIterations - Max allowable iterations.
-    %    MinIterations -           (read) Minimum number of iterations required for a power flow solution.          (write) Mininum number of iterations required for a power flow solution.          
+    %    MinIterations - (read) Minimum number of iterations required for a power flow solution.  (write) Mininum number of iterations required for a power flow solution.
     %    Mode - Set present solution mode (by a text code - see DSS Help)
     %    ModeID - (read-only) ID (text) of the present solution mode
     %    MostIterationsDone - (read-only) Max number of iterations required to converge at any control iteration of the most recent solution.
@@ -36,7 +36,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
     %    SystemYChanged - (read-only) Flag that indicates if elements of the System Y have been changed by recent activity.
     %    Time_of_Step - (read-only) Get the solution process time + sample time for time step
     %    Tolerance - Solution convergence tolerance.
-    %    Total_Time -           (read) Gets the accumulated time of the simulation          (write) Sets the Accumulated time of the simulation          
+    %    Total_Time - (read) Gets the accumulated time of the simulation  (write) Sets the Accumulated time of the simulation
     %    Totaliterations - (read-only) Total iterations including control iterations for most recent solution.
     %    Year - Set year for planning studies
     %    dblHour - Hour as a double, including fractional part
@@ -116,7 +116,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         Laplacian
     end
 
-    methods
+    methods (Access = public)
 
         function obj = BuildYMatrix(obj, BuildOption, AllocateVI)
             calllib('dss_capi_v7', 'Solution_BuildYMatrix', BuildOption, AllocateVI);
@@ -192,6 +192,13 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
             calllib('dss_capi_v7', 'Solution_SolveSnap');
             obj.CheckForError();
         end
+
+        function obj = SolveAll(obj)
+            calllib('dss_capi_v7', 'Solution_SolveAll');
+            obj.CheckForError();
+        end
+    end
+    methods
 
         function result = get.AddType(obj)
             % Type of device to add in AutoAdd Mode: {dssGen (Default) | dssCap}
@@ -551,10 +558,6 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
 
         function result = get.Laplacian(obj)
             result = DSS_MATLAB.get_int32_array('Solution_Get_Laplacian');
-        end
-        function obj = SolveAll(obj)
-            calllib('dss_capi_v7', 'Solution_SolveAll');
-            obj.CheckForError();
         end
     end
 end

@@ -3,13 +3,18 @@ classdef (CaseInsensitiveProperties) IError < DSS_MATLAB.Base
     % 
     % Properties:
     %    Description - (read-only) Description of error for last operation
-    %    Number - (read-only) Error Number
+    %    Number - (read-only) Error Number (returns current value and then resets to zero)
+    %    EarlyAbort - EarlyAbort controls whether all errors halts the DSS script processing (Compile/Redirect), defaults to True.
 
     properties
         Description
         Number
+        EarlyAbort
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.Description(obj)
@@ -18,8 +23,16 @@ classdef (CaseInsensitiveProperties) IError < DSS_MATLAB.Base
         end
 
         function result = get.Number(obj)
-            % (read-only) Error Number
+            % (read-only) Error Number (returns current value and then resets to zero)
             result = calllib('dss_capi_v7', 'Error_Get_Number');
+        end
+
+        function result = get.EarlyAbort(obj)
+            % EarlyAbort controls whether all errors halts the DSS script processing (Compile/Redirect), defaults to True.
+            result = (calllib('dss_capi_v7', 'Error_Get_EarlyAbort') ~= 0);
+        end
+        function obj = set.EarlyAbort(obj, Value)
+            calllib('dss_capi_v7', 'Error_Set_EarlyAbort', Value);
         end
     end
 end

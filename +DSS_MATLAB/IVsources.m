@@ -2,36 +2,75 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
     % IVsources: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Names of all Vsource objects in the circuit
-    %    AngleDeg -           (read) Phase angle of first phase in degrees          (write) phase angle in degrees          
+    %    AllNames - Array of strings with all Vsource names
+    %    Count - Number of Vsource objects
+    %    First - Set first object of Vsource; returns 0 if none.
+    %    Name - Get/sets the name of the current active Vsource
+    %    Next - Sets next Vsource active; returns 0 if no more.
+    %    idx - Sets next Vsource active; returns 0 if no more.
+    %    AngleDeg - (read) Phase angle of first phase in degrees  (write) phase angle in degrees
     %    BasekV - Source voltage in kV
-    %    Count - (read-only) Number of Vsource Object
-    %    First - (read-only) Sets the first VSOURCE to be active; Returns 0 if none
     %    Frequency - Source frequency in Hz
-    %    Name -           (read) Get Active VSOURCE name          (write) Set Active VSOURCE by Name          
-    %    Next - (read-only) Sets the next VSOURCE object to be active; returns zero if no more
     %    Phases - Number of phases
-    %    pu -           (read) Source pu voltage.          (write) Per-unit value of source voltage based on kV          
+    %    pu - (read) Source pu voltage.  (write) Per-unit value of source voltage based on kV
 
     properties
         AllNames
-        AngleDeg
-        BasekV
         Count
         First
-        Frequency
         Name
         Next
+        idx
+        AngleDeg
+        BasekV
+        Frequency
         Phases
         pu
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AllNames(obj)
-            % (read-only) Names of all Vsource objects in the circuit
+            % Array of strings with all Vsource names
             result = DSS_MATLAB.get_string_array('Vsources_Get_AllNames');
         end
+
+        function result = get.Count(obj)
+            % Number of Vsource objects
+            result = calllib('dss_capi_v7', 'Vsources_Get_Count');
+        end
+
+        function result = get.First(obj)
+            % Set first object of Vsource; returns 0 if none.
+            result = calllib('dss_capi_v7', 'Vsources_Get_First');
+        end
+
+        function result = get.Name(obj)
+            % Get/sets the name of the current active Vsource
+            result = calllib('dss_capi_v7', 'Vsources_Get_Name');
+        end
+        function obj = set.Name(obj, Value)
+            calllib('dss_capi_v7', 'Vsources_Set_Name', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next Vsource active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'Vsources_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active Vsource by index;  1..Count
+            result = calllib('dss_capi_v7', 'Vsources_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'Vsources_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.AngleDeg(obj)
             % (read) Phase angle of first phase in degrees
@@ -52,16 +91,6 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
-        function result = get.Count(obj)
-            % (read-only) Number of Vsource Object
-            result = calllib('dss_capi_v7', 'Vsources_Get_Count');
-        end
-
-        function result = get.First(obj)
-            % (read-only) Sets the first VSOURCE to be active; Returns 0 if none
-            result = calllib('dss_capi_v7', 'Vsources_Get_First');
-        end
-
         function result = get.Frequency(obj)
             % Source frequency in Hz
             result = calllib('dss_capi_v7', 'Vsources_Get_Frequency');
@@ -69,21 +98,6 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
         function obj = set.Frequency(obj, Value)
             calllib('dss_capi_v7', 'Vsources_Set_Frequency', Value);
             obj.CheckForError();
-        end
-
-        function result = get.Name(obj)
-            % (read) Get Active VSOURCE name
-            % (write) Set Active VSOURCE by Name
-            result = calllib('dss_capi_v7', 'Vsources_Get_Name');
-        end
-        function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Vsources_Set_Name', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.Next(obj)
-            % (read-only) Sets the next VSOURCE object to be active; returns zero if no more
-            result = calllib('dss_capi_v7', 'Vsources_Get_Next');
         end
 
         function result = get.Phases(obj)

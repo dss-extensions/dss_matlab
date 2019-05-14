@@ -20,6 +20,9 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
         NumElements
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.ActiveClassName(obj)

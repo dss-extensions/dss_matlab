@@ -2,22 +2,23 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
     % ILoads: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of strings containing all Load names
+    %    AllNames - Array of strings with all Load names
+    %    Count - Number of Load objects
+    %    First - Set first object of Load; returns 0 if none.
+    %    Name - Get/sets the name of the current active Load
+    %    Next - Sets next Load active; returns 0 if no more.
+    %    idx - Sets next Load active; returns 0 if no more.
     %    AllocationFactor - Factor for allocating loads by connected xfkva
     %    CVRcurve - Name of a loadshape with both Mult and Qmult, for CVR factors as a function of time.
     %    CVRvars - Percent reduction in Q for percent reduction in V. Must be used with dssLoadModelCVR.
     %    CVRwatts - Percent reduction in P for percent reduction in V. Must be used with dssLoadModelCVR.
     %    Cfactor - Factor relates average to peak kw.  Used for allocation with kwh and kwhdays/
     %    Class - 
-    %    Count - (read-only) Number of Load objects in active circuit.
-    %    First - (read-only) Set first Load element to be active; returns 0 if none.
     %    Growth - Name of the growthshape curve for yearly load growth factors.
     %    IsDelta - Delta loads are connected line-to-line.
     %    Model - The Load Model defines variation of P and Q with voltage.
-    %    Name - Set active load by name.
-    %    Next - (read-only) Sets next Load element to be active; returns 0 of none else index of active load.
     %    NumCust - Number of customers in this load, defaults to one.
-    %    PF -           (read) Set Power Factor for Active Load. Specify leading PF as negative. Updates kvar based on kW value          (write) Set Power Factor for Active Load. Specify leading PF as negative. Updates kvar based on present value of kW.          
+    %    PF - Get or set Power Factor for Active Load. Specify leading PF as negative. Updates kvar based on present value of kW
     %    PctMean - Average percent of nominal load in Monte Carlo studies; only if no loadshape defined for this load.
     %    PctStdDev - Percent standard deviation for Monte Carlo load studies; if there is no loadshape assigned to this load.
     %    RelWeight - Relative Weighting factor for the active LOAD
@@ -33,7 +34,6 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
     %    ZIPV - Array of 7  doubles with values for ZIPV property of the LOAD object
     %    daily - Name of the loadshape for a daily load profile.
     %    duty - Name of the loadshape for a duty cycle simulation.
-    %    idx - 
     %    kV - Set kV rating for active Load. For 2 or more phases set Line-Line kV. Else actual kV across terminals.
     %    kW - Set kW for active Load. Updates kvar based on present PF.
     %    kva - Base load kva. Also defined kw and kvar or pf input, or load allocation by kwh or xfkva.
@@ -46,19 +46,20 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
 
     properties
         AllNames
+        Count
+        First
+        Name
+        Next
+        idx
         AllocationFactor
         CVRcurve
         CVRvars
         CVRwatts
         Cfactor
         Class
-        Count
-        First
         Growth
         IsDelta
         Model
-        Name
-        Next
         NumCust
         PF
         PctMean
@@ -76,7 +77,6 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
         ZIPV
         daily
         duty
-        idx
         kV
         kW
         kva
@@ -88,12 +88,49 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
         Phases
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AllNames(obj)
-            % (read-only) Array of strings containing all Load names
+            % Array of strings with all Load names
             result = DSS_MATLAB.get_string_array('Loads_Get_AllNames');
         end
+
+        function result = get.Count(obj)
+            % Number of Load objects
+            result = calllib('dss_capi_v7', 'Loads_Get_Count');
+        end
+
+        function result = get.First(obj)
+            % Set first object of Load; returns 0 if none.
+            result = calllib('dss_capi_v7', 'Loads_Get_First');
+        end
+
+        function result = get.Name(obj)
+            % Get/sets the name of the current active Load
+            result = calllib('dss_capi_v7', 'Loads_Get_Name');
+        end
+        function obj = set.Name(obj, Value)
+            calllib('dss_capi_v7', 'Loads_Set_Name', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next Load active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'Loads_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active Load by index;  1..Count
+            result = calllib('dss_capi_v7', 'Loads_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'Loads_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.AllocationFactor(obj)
             % Factor for allocating loads by connected xfkva
@@ -147,16 +184,6 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
-        function result = get.Count(obj)
-            % (read-only) Number of Load objects in active circuit.
-            result = calllib('dss_capi_v7', 'Loads_Get_Count');
-        end
-
-        function result = get.First(obj)
-            % (read-only) Set first Load element to be active; returns 0 if none.
-            result = calllib('dss_capi_v7', 'Loads_Get_First');
-        end
-
         function result = get.Growth(obj)
             % Name of the growthshape curve for yearly load growth factors.
             result = calllib('dss_capi_v7', 'Loads_Get_Growth');
@@ -184,20 +211,6 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
-        function result = get.Name(obj)
-            % Set active load by name.
-            result = calllib('dss_capi_v7', 'Loads_Get_Name');
-        end
-        function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Loads_Set_Name', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.Next(obj)
-            % (read-only) Sets next Load element to be active; returns 0 of none else index of active load.
-            result = calllib('dss_capi_v7', 'Loads_Get_Next');
-        end
-
         function result = get.NumCust(obj)
             % Number of customers in this load, defaults to one.
             result = calllib('dss_capi_v7', 'Loads_Get_NumCust');
@@ -208,8 +221,7 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
         end
 
         function result = get.PF(obj)
-            % (read) Set Power Factor for Active Load. Specify leading PF as negative. Updates kvar based on kW value
-            % (write) Set Power Factor for Active Load. Specify leading PF as negative. Updates kvar based on present value of kW.
+            % Get or set Power Factor for Active Load. Specify leading PF as negative. Updates kvar based on present value of kW
             result = calllib('dss_capi_v7', 'Loads_Get_PF');
         end
         function obj = set.PF(obj, Value)
@@ -349,14 +361,6 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
         end
         function obj = set.duty(obj, Value)
             calllib('dss_capi_v7', 'Loads_Set_duty', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.idx(obj)
-            result = calllib('dss_capi_v7', 'Loads_Get_idx');
-        end
-        function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'Loads_Set_idx', Value);
             obj.CheckForError();
         end
 

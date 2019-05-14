@@ -14,7 +14,7 @@ classdef (CaseInsensitiveProperties) IDSSProgress < DSS_MATLAB.Base
         PctProgress
     end
 
-    methods
+    methods (Access = public)
 
         function obj = Close(obj)
             calllib('dss_capi_v7', 'DSSProgress_Close');
@@ -23,6 +23,9 @@ classdef (CaseInsensitiveProperties) IDSSProgress < DSS_MATLAB.Base
         function obj = Show(obj)
             calllib('dss_capi_v7', 'DSSProgress_Show');
         end
+
+    end
+    methods
 
         function result = get.Caption(obj)
             % (write-only) Caption to appear on the bottom of the DSS Progress form.

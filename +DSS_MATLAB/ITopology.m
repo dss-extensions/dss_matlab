@@ -42,6 +42,9 @@ classdef (CaseInsensitiveProperties) ITopology < DSS_MATLAB.Base
         ParallelBranch
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.ActiveBranch(obj)

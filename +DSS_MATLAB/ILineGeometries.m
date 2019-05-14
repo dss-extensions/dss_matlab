@@ -2,12 +2,13 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
     % ILineGeometries: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of strings with names of all devices
+    %    AllNames - Array of strings with all LineGeometrie names
+    %    Count - Number of LineGeometrie objects
+    %    First - Set first object of LineGeometrie; returns 0 if none.
+    %    Name - Get/sets the name of the current active LineGeometrie
+    %    Next - Sets next LineGeometrie active; returns 0 if no more.
+    %    idx - Sets next LineGeometrie active; returns 0 if no more.
     %    Conductors - (read-only) Array of strings with names of all conductors in the active LineGeometry object
-    %    Count - (read-only) Number of LineGeometries
-    %    First - 
-    %    Next - 
-    %    Name - Name of active LineGeometry
     %    EmergAmps - Emergency ampere rating
     %    NormAmps - Normal Ampere rating
     %    RhoEarth - 
@@ -25,11 +26,12 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
 
     properties
         AllNames
-        Conductors
         Count
         First
-        Next
         Name
+        Next
+        idx
+        Conductors
         EmergAmps
         NormAmps
         RhoEarth
@@ -40,38 +42,73 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
         Ycoords
     end
 
+    methods (Access = public)
+
+        function result = Rmatrix(obj, Frequency, Length, Units)
+            % (read-only) Resistance matrix, ohms
+            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Rmatrix', Frequency, Length, Units);
+        end
+
+        function result = Xmatrix(obj, Frequency, Length, Units)
+            % (read-only) Reactance matrix, ohms
+            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Xmatrix', Frequency, Length, Units);
+        end
+
+        function result = Zmatrix(obj, Frequency, Length, Units)
+            % (read-only) Complex impedance matrix, ohms
+            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Zmatrix', Frequency, Length, Units);
+        end
+
+        function result = Cmatrix(obj, Frequency, Length, Units)
+            % (read-only) Capacitance matrix, nF
+            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Cmatrix', Frequency, Length, Units);
+        end
+
+    end
     methods
 
         function result = get.AllNames(obj)
-            % (read-only) Array of strings with names of all devices
+            % Array of strings with all LineGeometrie names
             result = DSS_MATLAB.get_string_array('LineGeometries_Get_AllNames');
         end
 
-        function result = get.Conductors(obj)
-            % (read-only) Array of strings with names of all conductors in the active LineGeometry object
-            result = DSS_MATLAB.get_string_array('LineGeometries_Get_Conductors');
-        end
-
         function result = get.Count(obj)
-            % (read-only) Number of LineGeometries
+            % Number of LineGeometrie objects
             result = calllib('dss_capi_v7', 'LineGeometries_Get_Count');
         end
 
         function result = get.First(obj)
+            % Set first object of LineGeometrie; returns 0 if none.
             result = calllib('dss_capi_v7', 'LineGeometries_Get_First');
         end
 
-        function result = get.Next(obj)
-            result = calllib('dss_capi_v7', 'LineGeometries_Get_Next');
-        end
-
         function result = get.Name(obj)
-            % Name of active LineGeometry
+            % Get/sets the name of the current active LineGeometrie
             result = calllib('dss_capi_v7', 'LineGeometries_Get_Name');
         end
         function obj = set.Name(obj, Value)
             calllib('dss_capi_v7', 'LineGeometries_Set_Name', Value);
             obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next LineGeometrie active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'LineGeometries_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active LineGeometrie by index;  1..Count
+            result = calllib('dss_capi_v7', 'LineGeometries_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'LineGeometries_Set_idx', Value);
+            obj.CheckForError();
+        end
+
+
+        function result = get.Conductors(obj)
+            % (read-only) Array of strings with names of all conductors in the active LineGeometry object
+            result = DSS_MATLAB.get_string_array('LineGeometries_Get_Conductors');
         end
 
         function result = get.EmergAmps(obj)
@@ -115,26 +152,6 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
         function obj = set.Phases(obj, Value)
             calllib('dss_capi_v7', 'LineGeometries_Set_Phases', Value);
             obj.CheckForError();
-        end
-
-        function result = Rmatrix(obj, Frequency, Length, Units)
-            % (read-only) Resistance matrix, ohms
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Rmatrix', Frequency, Length, Units);
-        end
-
-        function result = Xmatrix(obj, Frequency, Length, Units)
-            % (read-only) Reactance matrix, ohms
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Xmatrix', Frequency, Length, Units);
-        end
-
-        function result = Zmatrix(obj, Frequency, Length, Units)
-            % (read-only) Complex impedance matrix, ohms
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Zmatrix', Frequency, Length, Units);
-        end
-
-        function result = Cmatrix(obj, Frequency, Length, Units)
-            % (read-only) Capacitance matrix, nF
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Cmatrix', Frequency, Length, Units);
         end
 
         function result = get.Units(obj)

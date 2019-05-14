@@ -1,7 +1,7 @@
-function result = get_string_array(funcname)
+function result = get_string_array(funcname, varargin)
     dataPointer = libpointer('voidPtr', 0);
     countPointer = libpointer('int32Ptr', [0, 0]);
-    calllib('dss_capi_v7', funcname, dataPointer, countPointer);
+    calllib('dss_capi_v7', funcname, dataPointer, countPointer, varargin{:});
     result = cell(countPointer.Value(1), 1);
     for i=1:countPointer.Value(1)
         result(i) = cellstr(calllib('dss_capi_v7', 'DSS_Get_PAnsiChar', dataPointer, i - 1));

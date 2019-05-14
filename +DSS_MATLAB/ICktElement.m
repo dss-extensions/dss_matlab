@@ -2,28 +2,27 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     % ICktElement: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    Properties - 
     %    AllPropertyNames - (read-only) Array containing all property names of the active device.
     %    AllVariableNames - (read-only) Array of strings listing all the published variable names, if a PCElement. Otherwise, null string.
     %    AllVariableValues - (read-only) Array of doubles. Values of state variables of active element if PC element.
-    %    BusNames -           (read) Array of strings. Get  Bus definitions to which each terminal is connected. 0-based array.          (write) Array of strings. Set Bus definitions for each terminal is connected.          
+    %    BusNames - (read) Array of strings. Get  Bus definitions to which each terminal is connected. 0-based array.  (write) Array of strings. Set Bus definitions for each terminal is connected.
     %    CplxSeqCurrents - (read-only) Complex double array of Sequence Currents for all conductors of all terminals of active circuit element.
     %    CplxSeqVoltages - (read-only) Complex double array of Sequence Voltage for all terminals of active circuit element.
     %    Currents - (read-only) Complex array of currents into each conductor of each terminal
     %    CurrentsMagAng - (read-only) Currents in magnitude, angle format as a array of doubles.
     %    DisplayName - Display name of the object (not necessarily unique)
-    %    EmergAmps -           (read) Emergency Ampere Rating for PD elements          (write) Emergency Ampere Rating          
+    %    EmergAmps - (read) Emergency Ampere Rating for PD elements  (write) Emergency Ampere Rating
     %    Enabled - Boolean indicating that element is currently in the circuit.
     %    EnergyMeter - (read-only) Name of the Energy Meter this element is assigned to.
     %    GUID - (read-only) globally unique identifier for this object
     %    Handle - (read-only) Pointer to this object
-    %    HasOCPDevice - (read-only) True if a recloser, relay, or fuse controlling this ckt element. OCP = Overcurrent Protection 
+    %    HasOCPDevice - (read-only) True if a recloser, relay, or fuse controlling this ckt element. OCP = Overcurrent Protection
     %    HasSwitchControl - (read-only) This element has a SwtControl attached.
     %    HasVoltControl - (read-only) This element has a CapControl or RegControl attached.
     %    Losses - (read-only) Total losses in the element: two-element complex array
     %    Name - (read-only) Full Name of Active Circuit Element
-    %    NodeOrder - (read-only) Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal. 
-    %    NormalAmps -           (read) Normal ampere rating for PD Elements          (write) Normal ampere rating          
+    %    NodeOrder - (read-only) Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal.
+    %    NormalAmps - (read) Normal ampere rating for PD Elements  (write) Normal ampere rating
     %    NumConductors - (read-only) Number of Conductors per Terminal
     %    NumControls - (read-only) Number of controls connected to this device. Use to determine valid range for index into Controller array.
     %    NumPhases - (read-only) Number of Phases
@@ -44,13 +43,17 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     % Methods:
     %    Close - 
     %    Controller - (read-only) Full name of the i-th controller attached to this element. Ex: str = Controller(2).  See NumControls to determine valid index range
-    %    Variable - (read-only) For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
-    %    Variablei - (read-only) For PCElement, get the value of a variable by integer index.
+    %    Variable - (read-only) Returns (value, Code). For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
+    %    Variablei - (read-only) Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
     %    IsOpen - 
     %    Open - 
+    %    Properties - 
+
+    properties (Access = private)
+        PropertiesRef = DSS_MATLAB.IDSSProperty
+    end
 
     properties
-        Properties = DSS_MATLAB.IDSSProperty
         AllPropertyNames
         AllVariableNames
         AllVariableValues
@@ -90,34 +93,59 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         Yprim
     end
 
-    methods
+    methods (Access = public)
 
         function obj = Close(obj, Term, Phs)
             calllib('dss_capi_v7', 'CktElement_Close', Term, Phs);
+            obj.CheckForError();
         end
 
         function result = Controller(obj, idx)
             % (read-only) Full name of the i-th controller attached to this element. Ex: str = Controller(2).  See NumControls to determine valid index range
             result = calllib('dss_capi_v7', 'CktElement_Get_Controller', idx);
+            obj.CheckForError();
         end
 
-        function result = Variable(obj, MyVarName, Code)
-            % (read-only) For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
-            result = calllib('dss_capi_v7', 'CktElement_Get_Variable', MyVarName, Code);
+        function result = Variable(obj, MyVarName)
+            % (read-only) Returns (value, Code). For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
+            CodePtr = libpointer('int32Ptr', [0]);
+            result = calllib('dss_capi_v7', 'CktElement_Get_Variable', MyVarName, CodePtr);
+            obj.CheckForError();
+            result = [result, CodePtr.Value(1)];
         end
 
-        function result = Variablei(obj, Idx, Code)
-            % (read-only) For PCElement, get the value of a variable by integer index.
-            result = calllib('dss_capi_v7', 'CktElement_Get_Variablei', Idx, Code);
+        function result = Variablei(obj, Idx)
+            % (read-only) Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
+            CodePtr = libpointer('int32Ptr', [0]);
+            result = calllib('dss_capi_v7', 'CktElement_Get_Variablei', Idx, CodePtr);
+            obj.CheckForError();
+            result = [result, CodePtr.Value(1)];
         end
 
         function result = IsOpen(obj, Term, Phs)
             result = (calllib('dss_capi_v7', 'CktElement_IsOpen', Term, Phs) ~= 0);
+            obj.CheckForError();
         end
 
         function obj = Open(obj, Term, Phs)
             calllib('dss_capi_v7', 'CktElement_Open', Term, Phs);
+            obj.CheckForError();
         end
+
+        function result = Properties(obj, NameOrIdx)
+            if ischar(NameOrIdx) | isstring(NameOrIdx)
+                calllib('dss_capi_v7', 'DSSProperty_Set_Name', NameOrIdx);
+            elseif isinteger(NameOrIdx)
+                calllib('dss_capi_v7', 'DSSProperty_Set_Index', NameOrIdx);
+            else
+                ME = MException(['DSS_MATLAB:Error'], 'Expected char, string or integer');
+                throw(ME);
+            end
+            obj.CheckForError();
+            result = obj.PropertiesRef;
+        end
+    end
+    methods
 
         function result = get.AllPropertyNames(obj)
             % (read-only) Array containing all property names of the active device.

@@ -5,7 +5,7 @@ classdef (CaseInsensitiveProperties) IDSSimComs < DSS_MATLAB.Base
     %    BusVoltage - 
     %    BusVoltagepu - 
 
-    methods
+    methods (Access = public)
 
         function result = BusVoltage(obj, Index)
             result = DSS_MATLAB.get_float64_array('DSSimComs_BusVoltage', Index);
@@ -14,5 +14,8 @@ classdef (CaseInsensitiveProperties) IDSSimComs < DSS_MATLAB.Base
         function result = BusVoltagepu(obj, Index)
             result = DSS_MATLAB.get_float64_array('DSSimComs_BusVoltagepu', Index);
         end
+    end
+    methods
+
     end
 end

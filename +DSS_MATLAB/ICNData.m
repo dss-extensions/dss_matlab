@@ -2,12 +2,13 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
     % ICNData: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of strings with names of all devices
+    %    AllNames - Array of strings with all CNData names
+    %    Count - Number of CNData objects
+    %    First - Set first object of CNData; returns 0 if none.
+    %    Name - Get/sets the name of the current active CNData
+    %    Next - Sets next CNData active; returns 0 if no more.
+    %    idx - Sets next CNData active; returns 0 if no more.
     %    Conductors - (read-only) Array of strings with names of all conductors in the active CNData object
-    %    Count - (read-only) Number of CNData
-    %    First - 
-    %    Next - 
-    %    Name - Name of active CNData
     %    EmergAmps - Emergency ampere rating
     %    NormAmps - Normal Ampere rating
     %    Rdc - 
@@ -29,11 +30,12 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
 
     properties
         AllNames
-        Conductors
         Count
         First
-        Next
         Name
+        Next
+        idx
+        Conductors
         EmergAmps
         NormAmps
         Rdc
@@ -54,38 +56,53 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
         RStrand
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AllNames(obj)
-            % (read-only) Array of strings with names of all devices
+            % Array of strings with all CNData names
             result = DSS_MATLAB.get_string_array('CNData_Get_AllNames');
         end
 
-        function result = get.Conductors(obj)
-            % (read-only) Array of strings with names of all conductors in the active CNData object
-            result = DSS_MATLAB.get_string_array('CNData_Get_Conductors');
-        end
-
         function result = get.Count(obj)
-            % (read-only) Number of CNData
+            % Number of CNData objects
             result = calllib('dss_capi_v7', 'CNData_Get_Count');
         end
 
         function result = get.First(obj)
+            % Set first object of CNData; returns 0 if none.
             result = calllib('dss_capi_v7', 'CNData_Get_First');
         end
 
-        function result = get.Next(obj)
-            result = calllib('dss_capi_v7', 'CNData_Get_Next');
-        end
-
         function result = get.Name(obj)
-            % Name of active CNData
+            % Get/sets the name of the current active CNData
             result = calllib('dss_capi_v7', 'CNData_Get_Name');
         end
         function obj = set.Name(obj, Value)
             calllib('dss_capi_v7', 'CNData_Set_Name', Value);
             obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next CNData active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'CNData_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active CNData by index;  1..Count
+            result = calllib('dss_capi_v7', 'CNData_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'CNData_Set_idx', Value);
+            obj.CheckForError();
+        end
+
+
+        function result = get.Conductors(obj)
+            % (read-only) Array of strings with names of all conductors in the active CNData object
+            result = DSS_MATLAB.get_string_array('CNData_Get_Conductors');
         end
 
         function result = get.EmergAmps(obj)

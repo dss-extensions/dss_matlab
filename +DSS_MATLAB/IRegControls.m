@@ -2,11 +2,14 @@ classdef (CaseInsensitiveProperties) IRegControls < DSS_MATLAB.Base
     % IRegControls: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of strings containing all RegControl names
+    %    AllNames - Array of strings with all RegControl names
+    %    Count - Number of RegControl objects
+    %    First - Set first object of RegControl; returns 0 if none.
+    %    Name - Get/sets the name of the current active RegControl
+    %    Next - Sets next RegControl active; returns 0 if no more.
+    %    idx - Sets next RegControl active; returns 0 if no more.
     %    CTPrimary - CT primary ampere rating (secondary is 0.2 amperes)
-    %    Count - (read-only) Number of RegControl objects in Active Circuit
     %    Delay - Time delay [s] after arming before the first tap change. Control may reset before actually changing taps.
-    %    First - (read-only) Sets the first RegControl active. Returns 0 if none.
     %    ForwardBand - Regulation bandwidth in forward direciton, centered on Vreg
     %    ForwardR - LDC R setting in Volts
     %    ForwardVreg - Target voltage in the forward direction, on PT secondary base.
@@ -15,8 +18,6 @@ classdef (CaseInsensitiveProperties) IRegControls < DSS_MATLAB.Base
     %    IsReversible - Regulator can use different settings in the reverse direction.  Usually not applicable to substation transformers.
     %    MaxTapChange - Maximum tap change per iteration in STATIC solution mode. 1 is more realistic, 16 is the default for a faster soluiton.
     %    MonitoredBus - Name of a remote regulated bus, in lieu of LDC settings
-    %    Name -           (read) Get/set Active RegControl  name          (write) Sets a RegControl active by name          
-    %    Next - (read-only) Sets the next RegControl active. Returns 0 if none.
     %    PTratio - PT ratio for voltage control settings
     %    ReverseBand - Bandwidth in reverse direction, centered on reverse Vreg.
     %    ReverseR - Reverse LDC R setting in Volts.
@@ -34,10 +35,13 @@ classdef (CaseInsensitiveProperties) IRegControls < DSS_MATLAB.Base
 
     properties
         AllNames
-        CTPrimary
         Count
-        Delay
         First
+        Name
+        Next
+        idx
+        CTPrimary
+        Delay
         ForwardBand
         ForwardR
         ForwardVreg
@@ -46,8 +50,6 @@ classdef (CaseInsensitiveProperties) IRegControls < DSS_MATLAB.Base
         IsReversible
         MaxTapChange
         MonitoredBus
-        Name
-        Next
         PTratio
         ReverseBand
         ReverseR
@@ -61,16 +63,53 @@ classdef (CaseInsensitiveProperties) IRegControls < DSS_MATLAB.Base
         Winding
     end
 
-    methods
+    methods (Access = public)
 
         function obj = Reset(obj)
             calllib('dss_capi_v7', 'RegControls_Reset');
         end
 
+    end
+    methods
+
         function result = get.AllNames(obj)
-            % (read-only) Array of strings containing all RegControl names
+            % Array of strings with all RegControl names
             result = DSS_MATLAB.get_string_array('RegControls_Get_AllNames');
         end
+
+        function result = get.Count(obj)
+            % Number of RegControl objects
+            result = calllib('dss_capi_v7', 'RegControls_Get_Count');
+        end
+
+        function result = get.First(obj)
+            % Set first object of RegControl; returns 0 if none.
+            result = calllib('dss_capi_v7', 'RegControls_Get_First');
+        end
+
+        function result = get.Name(obj)
+            % Get/sets the name of the current active RegControl
+            result = calllib('dss_capi_v7', 'RegControls_Get_Name');
+        end
+        function obj = set.Name(obj, Value)
+            calllib('dss_capi_v7', 'RegControls_Set_Name', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next RegControl active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'RegControls_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active RegControl by index;  1..Count
+            result = calllib('dss_capi_v7', 'RegControls_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'RegControls_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.CTPrimary(obj)
             % CT primary ampere rating (secondary is 0.2 amperes)
@@ -81,11 +120,6 @@ classdef (CaseInsensitiveProperties) IRegControls < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
-        function result = get.Count(obj)
-            % (read-only) Number of RegControl objects in Active Circuit
-            result = calllib('dss_capi_v7', 'RegControls_Get_Count');
-        end
-
         function result = get.Delay(obj)
             % Time delay [s] after arming before the first tap change. Control may reset before actually changing taps.
             result = calllib('dss_capi_v7', 'RegControls_Get_Delay');
@@ -93,11 +127,6 @@ classdef (CaseInsensitiveProperties) IRegControls < DSS_MATLAB.Base
         function obj = set.Delay(obj, Value)
             calllib('dss_capi_v7', 'RegControls_Set_Delay', Value);
             obj.CheckForError();
-        end
-
-        function result = get.First(obj)
-            % (read-only) Sets the first RegControl active. Returns 0 if none.
-            result = calllib('dss_capi_v7', 'RegControls_Get_First');
         end
 
         function result = get.ForwardBand(obj)
@@ -170,21 +199,6 @@ classdef (CaseInsensitiveProperties) IRegControls < DSS_MATLAB.Base
         function obj = set.MonitoredBus(obj, Value)
             calllib('dss_capi_v7', 'RegControls_Set_MonitoredBus', Value);
             obj.CheckForError();
-        end
-
-        function result = get.Name(obj)
-            % (read) Get/set Active RegControl  name
-            % (write) Sets a RegControl active by name
-            result = calllib('dss_capi_v7', 'RegControls_Get_Name');
-        end
-        function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'RegControls_Set_Name', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.Next(obj)
-            % (read-only) Sets the next RegControl active. Returns 0 if none.
-            result = calllib('dss_capi_v7', 'RegControls_Get_Next');
         end
 
         function result = get.PTratio(obj)

@@ -14,6 +14,9 @@ classdef (CaseInsensitiveProperties) IDSSElement < DSS_MATLAB.Base
         NumProperties
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AllPropertyNames(obj)

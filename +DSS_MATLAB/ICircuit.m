@@ -2,7 +2,6 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     % ICircuit: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    Buses - 
     %    CktElements - 
     %    ActiveElement - 
     %    Solution - 
@@ -41,6 +40,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    CNData - 
     %    TSData - 
     %    Reactors - 
+    %    ReduceCkt - 
     %    Parallel - 
     %    AllBusDistances - (read-only) Returns distance from each bus to parent EnergyMeter. Corresponds to sequence in AllBusNames.
     %    AllBusNames - (read-only) Array of strings containing names of all buses in circuit (see AllNodeNames).
@@ -66,6 +66,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    YNodeVarray - (read-only) Complex array of actual node voltages in same order as SystemY matrix.
     % 
     % Methods:
+    %    Buses - 
     %    Capacity - 
     %    Disable - 
     %    Enable - 
@@ -89,8 +90,6 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    UpdateStorage - 
 
     properties
-        Buses = DSS_MATLAB.IBus
-        CktElements = DSS_MATLAB.ICktElement
         ActiveElement = DSS_MATLAB.ICktElement
         Solution = DSS_MATLAB.ISolution
         ActiveBus = DSS_MATLAB.IBus
@@ -128,6 +127,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
         CNData = DSS_MATLAB.ICNData
         TSData = DSS_MATLAB.ITSData
         Reactors = DSS_MATLAB.IReactors
+        ReduceCkt = DSS_MATLAB.IReduceCkt
         AllBusDistances
         AllBusNames
         AllBusVmag
@@ -152,7 +152,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
         YNodeVarray
     end
 
-    methods
+    methods (Access = public)
 
         function result = Capacity(obj, Start, Increment)
             result = calllib('dss_capi_v7', 'Circuit_Capacity', Start, Increment);
@@ -224,6 +224,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = SetActiveBus(obj, BusName)
             result = calllib('dss_capi_v7', 'Circuit_SetActiveBus', BusName);
+            obj.CheckForError();
         end
 
         function result = SetActiveBusi(obj, BusIndex)
@@ -232,15 +233,45 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = SetActiveClass(obj, ClassName)
             result = calllib('dss_capi_v7', 'Circuit_SetActiveClass', ClassName);
+            obj.CheckForError();
         end
 
         function result = SetActiveElement(obj, FullName)
             result = calllib('dss_capi_v7', 'Circuit_SetActiveElement', FullName);
+            obj.CheckForError();
         end
 
         function obj = UpdateStorage(obj)
             calllib('dss_capi_v7', 'Circuit_UpdateStorage');
         end
+
+        function result = CktElements(obj, NameOrIdx)
+            if ischar(NameOrIdx) | isstring(NameOrIdx)
+                obj.SetActiveElement(NameOrIdx);
+            elseif isinteger(NameOrIdx)
+                calllib('dss_capi_v7', 'Circuit_SetCktElementIndex', FullName);
+                obj.CheckForError();
+            else
+                ME = MException(['DSS_MATLAB:Error'], 'Expected char, string or integer');
+                throw(ME);
+            end
+            result = obj.ActiveCktElement;
+        end
+
+        function result = Buses(obj, NameOrIdx)
+            if ischar(NameOrIdx) | isstring(NameOrIdx)
+                obj.SetActiveBus(NameOrIdx);
+            elseif isinteger(NameOrIdx)
+                obj.SetActiveBusi(NameOrIdx);
+            else
+                ME = MException(['DSS_MATLAB:Error'], 'Expected char, string or integer');
+                throw(ME);
+            end
+            result = obj.ActiveBus;
+        end
+
+    end
+    methods
 
         function result = get.AllBusDistances(obj)
             % (read-only) Returns distance from each bus to parent EnergyMeter. Corresponds to sequence in AllBusNames.

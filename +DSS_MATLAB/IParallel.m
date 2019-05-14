@@ -2,12 +2,12 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
     % IParallel: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    ActiveActor -           (read) Gets the ID of the Active Actor          (write) Sets the Active Actor          
-    %    ActiveParallel -           (read) Sets ON/OFF (1/0) Parallel features of the Engine          (write) Delivers if the Parallel features of the Engine are Active          
-    %    ActorCPU -           (read) Gets the CPU of the Active Actor          (write) Sets the CPU for the Active Actor          
+    %    ActiveActor - (read) Gets the ID of the Active Actor  (write) Sets the Active Actor
+    %    ActiveParallel - (read) Sets ON/OFF (1/0) Parallel features of the Engine  (write) Delivers if the Parallel features of the Engine are Active
+    %    ActorCPU - (read) Gets the CPU of the Active Actor  (write) Sets the CPU for the Active Actor
     %    ActorProgress - (read-only) Gets the progress of all existing actors in pct
     %    ActorStatus - (read-only) Gets the status of each actor
-    %    ConcatenateReports -           (read) Reads the values of the ConcatenateReports option (1=enabled, 0=disabled)          (write) Enable/Disable (1/0) the ConcatenateReports option for extracting monitors data          
+    %    ConcatenateReports - (read) Reads the values of the ConcatenateReports option (1=enabled, 0=disabled)  (write) Enable/Disable (1/0) the ConcatenateReports option for extracting monitors data
     %    NumCPUs - (read-only) Delivers the number of CPUs on the current PC
     %    NumCores - (read-only) Delivers the number of Cores of the local PC
     %    NumOfActors - (read-only) Gets the number of Actors created
@@ -28,7 +28,7 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
         NumOfActors
     end
 
-    methods
+    methods (Access = public)
 
         function obj = CreateActor(obj)
             calllib('dss_capi_v7', 'Parallel_CreateActor');
@@ -37,6 +37,9 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
         function obj = Wait(obj)
             calllib('dss_capi_v7', 'Parallel_Wait');
         end
+
+    end
+    methods
 
         function result = get.ActiveActor(obj)
             % (read) Gets the ID of the Active Actor

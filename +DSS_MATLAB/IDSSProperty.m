@@ -12,6 +12,9 @@ classdef (CaseInsensitiveProperties) IDSSProperty < DSS_MATLAB.Base
         Val
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.Description(obj)

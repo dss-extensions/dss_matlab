@@ -2,12 +2,13 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
     % ITSData: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of strings with names of all devices
+    %    AllNames - Array of strings with all TSData names
+    %    Count - Number of TSData objects
+    %    First - Set first object of TSData; returns 0 if none.
+    %    Name - Get/sets the name of the current active TSData
+    %    Next - Sets next TSData active; returns 0 if no more.
+    %    idx - Sets next TSData active; returns 0 if no more.
     %    Conductors - (read-only) Array of strings with names of all conductors in the active TSData object
-    %    Count - (read-only) Number of TSData
-    %    First - 
-    %    Next - 
-    %    Name - Name of active TSData
     %    EmergAmps - Emergency ampere rating
     %    NormAmps - Normal Ampere rating
     %    Rdc - 
@@ -28,11 +29,12 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
 
     properties
         AllNames
-        Conductors
         Count
         First
-        Next
         Name
+        Next
+        idx
+        Conductors
         EmergAmps
         NormAmps
         Rdc
@@ -52,38 +54,53 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
         TapeLap
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AllNames(obj)
-            % (read-only) Array of strings with names of all devices
+            % Array of strings with all TSData names
             result = DSS_MATLAB.get_string_array('TSData_Get_AllNames');
         end
 
-        function result = get.Conductors(obj)
-            % (read-only) Array of strings with names of all conductors in the active TSData object
-            result = DSS_MATLAB.get_string_array('TSData_Get_Conductors');
-        end
-
         function result = get.Count(obj)
-            % (read-only) Number of TSData
+            % Number of TSData objects
             result = calllib('dss_capi_v7', 'TSData_Get_Count');
         end
 
         function result = get.First(obj)
+            % Set first object of TSData; returns 0 if none.
             result = calllib('dss_capi_v7', 'TSData_Get_First');
         end
 
-        function result = get.Next(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_Next');
-        end
-
         function result = get.Name(obj)
-            % Name of active TSData
+            % Get/sets the name of the current active TSData
             result = calllib('dss_capi_v7', 'TSData_Get_Name');
         end
         function obj = set.Name(obj, Value)
             calllib('dss_capi_v7', 'TSData_Set_Name', Value);
             obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next TSData active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'TSData_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active TSData by index;  1..Count
+            result = calllib('dss_capi_v7', 'TSData_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'TSData_Set_idx', Value);
+            obj.CheckForError();
+        end
+
+
+        function result = get.Conductors(obj)
+            % (read-only) Array of strings with names of all conductors in the active TSData object
+            result = DSS_MATLAB.get_string_array('TSData_Get_Conductors');
         end
 
         function result = get.EmergAmps(obj)

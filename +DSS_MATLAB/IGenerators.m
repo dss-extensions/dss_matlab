@@ -2,20 +2,20 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
     % IGenerators: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllNames - (read-only) Array of names of all Generator objects.
-    %    Count - (read-only) Number of Generator Objects in Active Circuit
-    %    First - (read-only) Sets first Generator to be active.  Returns 0 if none.
+    %    AllNames - Array of strings with all Generator names
+    %    Count - Number of Generator objects
+    %    First - Set first object of Generator; returns 0 if none.
+    %    Name - Get/sets the name of the current active Generator
+    %    Next - Sets next Generator active; returns 0 if no more.
+    %    idx - Sets next Generator active; returns 0 if no more.
     %    ForcedON - Indicates whether the generator is forced ON regardles of other dispatch criteria.
     %    Model - Generator Model
-    %    Name - Sets a generator active by name.
-    %    Next - (read-only) Sets next Generator to be active.  Returns 0 if no more.
     %    PF - Power factor (pos. = producing vars). Updates kvar based on present kW value.
     %    Phases - Number of phases
     %    RegisterNames - (read-only) Array of Names of all generator energy meter registers
     %    RegisterValues - (read-only) Array of valus in generator energy meter registers.
     %    Vmaxpu - Vmaxpu for generator model
     %    Vminpu - Vminpu for Generator model
-    %    idx - Get/Set active Generator by index into generators list.  1..Count
     %    kV - Voltage base for the active generator, kV
     %    kVArated - kVA rating of the generator
     %    kW - kW output for the active generator. kvar is updated for current power factor.
@@ -25,39 +25,66 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
         AllNames
         Count
         First
-        ForcedON
-        Model
         Name
         Next
+        idx
+        ForcedON
+        Model
         PF
         Phases
         RegisterNames
         RegisterValues
         Vmaxpu
         Vminpu
-        idx
         kV
         kVArated
         kW
         kvar
     end
 
+    methods (Access = public)
+
+    end
     methods
 
         function result = get.AllNames(obj)
-            % (read-only) Array of names of all Generator objects.
+            % Array of strings with all Generator names
             result = DSS_MATLAB.get_string_array('Generators_Get_AllNames');
         end
 
         function result = get.Count(obj)
-            % (read-only) Number of Generator Objects in Active Circuit
+            % Number of Generator objects
             result = calllib('dss_capi_v7', 'Generators_Get_Count');
         end
 
         function result = get.First(obj)
-            % (read-only) Sets first Generator to be active.  Returns 0 if none.
+            % Set first object of Generator; returns 0 if none.
             result = calllib('dss_capi_v7', 'Generators_Get_First');
         end
+
+        function result = get.Name(obj)
+            % Get/sets the name of the current active Generator
+            result = calllib('dss_capi_v7', 'Generators_Get_Name');
+        end
+        function obj = set.Name(obj, Value)
+            calllib('dss_capi_v7', 'Generators_Set_Name', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Next(obj)
+            % Sets next Generator active; returns 0 if no more.
+            result = calllib('dss_capi_v7', 'Generators_Get_Next');
+        end
+
+        function result = get.idx(obj)
+            % Get/set active Generator by index;  1..Count
+            result = calllib('dss_capi_v7', 'Generators_Get_idx');
+        end
+        function obj = set.idx(obj, Value)
+            calllib('dss_capi_v7', 'Generators_Set_idx', Value);
+            obj.CheckForError();
+        end
+
 
         function result = get.ForcedON(obj)
             % Indicates whether the generator is forced ON regardles of other dispatch criteria.
@@ -75,20 +102,6 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
         function obj = set.Model(obj, Value)
             calllib('dss_capi_v7', 'Generators_Set_Model', Value);
             obj.CheckForError();
-        end
-
-        function result = get.Name(obj)
-            % Sets a generator active by name.
-            result = calllib('dss_capi_v7', 'Generators_Get_Name');
-        end
-        function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_Name', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.Next(obj)
-            % (read-only) Sets next Generator to be active.  Returns 0 if no more.
-            result = calllib('dss_capi_v7', 'Generators_Get_Next');
         end
 
         function result = get.PF(obj)
@@ -134,15 +147,6 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
         end
         function obj = set.Vminpu(obj, Value)
             calllib('dss_capi_v7', 'Generators_Set_Vminpu', Value);
-            obj.CheckForError();
-        end
-
-        function result = get.idx(obj)
-            % Get/Set active Generator by index into generators list.  1..Count
-            result = calllib('dss_capi_v7', 'Generators_Get_idx');
-        end
-        function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_idx', Value);
             obj.CheckForError();
         end
 

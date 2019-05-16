@@ -2,40 +2,44 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
     % IBus: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    Coorddefined - (read-only) False=0 else True. Indicates whether a coordinate has been defined for this bus
-    %    CplxSeqVoltages - (read-only) Complex Double array of Sequence Voltages (0, 1, 2) at this Bus.
-    %    Cust_Duration - (read-only) Accumulated customer outage durations
-    %    Cust_Interrupts - (read-only) Annual number of customer-interruptions from this bus
-    %    Distance - (read-only) Distance from energymeter (if non-zero)
-    %    Int_Duration - (read-only) Average interruption duration, hr.
-    %    Isc - (read-only) Short circuit currents at bus; Complex Array.
-    %    Lambda - (read-only) Accumulated failure rate downstream from this bus; faults per year
-    %    N_Customers - (read-only) Total numbers of customers served downline from this bus
-    %    N_interrupts - (read-only) Number of interruptions this bus per year
-    %    Name - (read-only) Name of Bus
-    %    Nodes - (read-only) Integer Array of Node Numbers defined at the bus in same order as the voltages.
-    %    NumNodes - (read-only) Number of Nodes this bus.
-    %    SectionID - (read-only) Integer ID of the feeder section in which this bus is located.
-    %    SeqVoltages - (read-only) Double Array of sequence voltages at this bus.
-    %    TotalMiles - (read-only) Total length of line downline from this bus, in miles. For recloser siting algorithm.
-    %    VLL - (read-only) For 2- and 3-phase buses, returns array of complex numbers represetin L-L voltages in volts. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only first 3.
-    %    VMagAngle - (read-only) Variant Array of doubles containing voltages in Magnitude (VLN), angle (deg)
-    %    Voc - (read-only) Open circuit voltage; Complex array.
-    %    Voltages - (read-only) Complex array of voltages at this bus.
-    %    YscMatrix - (read-only) Complex array of Ysc matrix at bus. Column by column.
-    %    Zsc0 - (read-only) Complex Zero-Sequence short circuit impedance at bus.
-    %    Zsc1 - (read-only) Complex Positive-Sequence short circuit impedance at bus..
-    %    ZscMatrix - (read-only) Complex array of Zsc matrix at bus. Column by column.
-    %    kVBase - (read-only) Base voltage at bus in kV
-    %    puVLL - (read-only) Returns Complex array of pu L-L voltages for 2- and 3-phase buses. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only 3 phases.
-    %    puVmagAngle - (read-only) Array of doubles containig voltage magnitude, angle pairs in per unit
-    %    puVoltages - (read-only) Complex Array of pu voltages at the bus.
+    %    Coorddefined - False=0 else True. Indicates whether a coordinate has been defined for this bus
+    %    CplxSeqVoltages - Complex Double array of Sequence Voltages (0, 1, 2) at this Bus.
+    %    Cust_Duration - Accumulated customer outage durations
+    %    Cust_Interrupts - Annual number of customer-interruptions from this bus
+    %    Distance - Distance from energymeter (if non-zero)
+    %    Int_Duration - Average interruption duration, hr.
+    %    Isc - Short circuit currents at bus; Complex Array.
+    %    Lambda - Accumulated failure rate downstream from this bus; faults per year
+    %    N_Customers - Total numbers of customers served downline from this bus
+    %    N_interrupts - Number of interruptions this bus per year
+    %    Name - Name of Bus
+    %    Nodes - Integer Array of Node Numbers defined at the bus in same order as the voltages.
+    %    NumNodes - Number of Nodes this bus.
+    %    SectionID - Integer ID of the feeder section in which this bus is located.
+    %    SeqVoltages - Double Array of sequence voltages at this bus.
+    %    TotalMiles - Total length of line downline from this bus, in miles. For recloser siting algorithm.
+    %    VLL - For 2- and 3-phase buses, returns array of complex numbers represetin L-L voltages in volts. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only first 3.
+    %    VMagAngle - Variant Array of doubles containing voltages in Magnitude (VLN), angle (deg)
+    %    Voc - Open circuit voltage; Complex array.
+    %    Voltages - Complex array of voltages at this bus.
+    %    YscMatrix - Complex array of Ysc matrix at bus. Column by column.
+    %    Zsc0 - Complex Zero-Sequence short circuit impedance at bus.
+    %    Zsc1 - Complex Positive-Sequence short circuit impedance at bus..
+    %    ZscMatrix - Complex array of Zsc matrix at bus. Column by column.
+    %    kVBase - Base voltage at bus in kV
+    %    puVLL - Returns Complex array of pu L-L voltages for 2- and 3-phase buses. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only 3 phases.
+    %    puVmagAngle - Array of doubles containig voltage magnitude, angle pairs in per unit
+    %    puVoltages - Complex Array of pu voltages at the bus.
     %    x - X Coordinate for bus (double)
     %    y - Y coordinate for bus(double)
     % 
     % Methods:
     %    GetUniqueNodeNumber - 
     %    ZscRefresh - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         Coorddefined
@@ -71,6 +75,9 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IBus(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function result = GetUniqueNodeNumber(obj, StartNumber)
             result = calllib('dss_capi_v7', 'Bus_GetUniqueNodeNumber', StartNumber);
@@ -90,7 +97,8 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
 
         function result = get.CplxSeqVoltages(obj)
             % (read-only) Complex Double array of Sequence Voltages (0, 1, 2) at this Bus.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_CplxSeqVoltages');
+            calllib('dss_capi_v7', 'Bus_Get_CplxSeqVoltages_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Cust_Duration(obj)
@@ -115,7 +123,8 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
 
         function result = get.Isc(obj)
             % (read-only) Short circuit currents at bus; Complex Array.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_Isc');
+            calllib('dss_capi_v7', 'Bus_Get_Isc_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Lambda(obj)
@@ -140,7 +149,8 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
 
         function result = get.Nodes(obj)
             % (read-only) Integer Array of Node Numbers defined at the bus in same order as the voltages.
-            result = DSS_MATLAB.get_int32_array('Bus_Get_Nodes');
+            calllib('dss_capi_v7', 'Bus_Get_Nodes_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
 
         function result = get.NumNodes(obj)
@@ -155,7 +165,8 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
 
         function result = get.SeqVoltages(obj)
             % (read-only) Double Array of sequence voltages at this bus.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_SeqVoltages');
+            calllib('dss_capi_v7', 'Bus_Get_SeqVoltages_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.TotalMiles(obj)
@@ -165,42 +176,50 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
 
         function result = get.VLL(obj)
             % (read-only) For 2- and 3-phase buses, returns array of complex numbers represetin L-L voltages in volts. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only first 3.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_VLL');
+            calllib('dss_capi_v7', 'Bus_Get_VLL_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.VMagAngle(obj)
             % (read-only) Variant Array of doubles containing voltages in Magnitude (VLN), angle (deg)
-            result = DSS_MATLAB.get_float64_array('Bus_Get_VMagAngle');
+            calllib('dss_capi_v7', 'Bus_Get_VMagAngle_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Voc(obj)
             % (read-only) Open circuit voltage; Complex array.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_Voc');
+            calllib('dss_capi_v7', 'Bus_Get_Voc_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Voltages(obj)
             % (read-only) Complex array of voltages at this bus.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_Voltages');
+            calllib('dss_capi_v7', 'Bus_Get_Voltages_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.YscMatrix(obj)
             % (read-only) Complex array of Ysc matrix at bus. Column by column.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_YscMatrix');
+            calllib('dss_capi_v7', 'Bus_Get_YscMatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Zsc0(obj)
             % (read-only) Complex Zero-Sequence short circuit impedance at bus.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_Zsc0');
+            calllib('dss_capi_v7', 'Bus_Get_Zsc0_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Zsc1(obj)
             % (read-only) Complex Positive-Sequence short circuit impedance at bus..
-            result = DSS_MATLAB.get_float64_array('Bus_Get_Zsc1');
+            calllib('dss_capi_v7', 'Bus_Get_Zsc1_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.ZscMatrix(obj)
             % (read-only) Complex array of Zsc matrix at bus. Column by column.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_ZscMatrix');
+            calllib('dss_capi_v7', 'Bus_Get_ZscMatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.kVBase(obj)
@@ -210,17 +229,20 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
 
         function result = get.puVLL(obj)
             % (read-only) Returns Complex array of pu L-L voltages for 2- and 3-phase buses. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only 3 phases.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_puVLL');
+            calllib('dss_capi_v7', 'Bus_Get_puVLL_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.puVmagAngle(obj)
             % (read-only) Array of doubles containig voltage magnitude, angle pairs in per unit
-            result = DSS_MATLAB.get_float64_array('Bus_Get_puVmagAngle');
+            calllib('dss_capi_v7', 'Bus_Get_puVmagAngle_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.puVoltages(obj)
             % (read-only) Complex Array of pu voltages at the bus.
-            result = DSS_MATLAB.get_float64_array('Bus_Get_puVoltages');
+            calllib('dss_capi_v7', 'Bus_Get_puVoltages_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.x(obj)

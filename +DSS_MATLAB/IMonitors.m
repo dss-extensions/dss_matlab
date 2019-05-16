@@ -34,6 +34,10 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
     %    SaveAll - 
     %    Show - 
 
+    properties (Access = protected)
+        apiutil
+    end
+    
     properties
         AllNames
         ByteStream
@@ -120,7 +124,9 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
 
     end
     methods
-
+        function obj = IMonitors(apiutil)
+            obj.apiutil = apiutil;
+        end
         function result = get.AllNames(obj)
             % Array of strings with all Monitor names
             result = DSS_MATLAB.get_string_array('Monitors_Get_AllNames');

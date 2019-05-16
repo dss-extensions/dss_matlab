@@ -5,16 +5,20 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
     %    ActiveActor - (read) Gets the ID of the Active Actor  (write) Sets the Active Actor
     %    ActiveParallel - (read) Sets ON/OFF (1/0) Parallel features of the Engine  (write) Delivers if the Parallel features of the Engine are Active
     %    ActorCPU - (read) Gets the CPU of the Active Actor  (write) Sets the CPU for the Active Actor
-    %    ActorProgress - (read-only) Gets the progress of all existing actors in pct
-    %    ActorStatus - (read-only) Gets the status of each actor
+    %    ActorProgress - Gets the progress of all existing actors in pct
+    %    ActorStatus - Gets the status of each actor
     %    ConcatenateReports - (read) Reads the values of the ConcatenateReports option (1=enabled, 0=disabled)  (write) Enable/Disable (1/0) the ConcatenateReports option for extracting monitors data
-    %    NumCPUs - (read-only) Delivers the number of CPUs on the current PC
-    %    NumCores - (read-only) Delivers the number of Cores of the local PC
-    %    NumOfActors - (read-only) Gets the number of Actors created
+    %    NumCPUs - Delivers the number of CPUs on the current PC
+    %    NumCores - Delivers the number of Cores of the local PC
+    %    NumOfActors - Gets the number of Actors created
     % 
     % Methods:
     %    CreateActor - 
     %    Wait - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         ActiveActor
@@ -29,6 +33,9 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IParallel(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = CreateActor(obj)
             calllib('dss_capi_v7', 'Parallel_CreateActor');
@@ -73,12 +80,14 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
 
         function result = get.ActorProgress(obj)
             % (read-only) Gets the progress of all existing actors in pct
-            result = DSS_MATLAB.get_int32_array('Parallel_Get_ActorProgress');
+            calllib('dss_capi_v7', 'Parallel_Get_ActorProgress_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
 
         function result = get.ActorStatus(obj)
             % (read-only) Gets the status of each actor
-            result = DSS_MATLAB.get_int32_array('Parallel_Get_ActorStatus');
+            calllib('dss_capi_v7', 'Parallel_Get_ActorStatus_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
 
         function result = get.ConcatenateReports(obj)

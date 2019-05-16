@@ -13,6 +13,10 @@ classdef (CaseInsensitiveProperties) IRelays < DSS_MATLAB.Base
     %    SwitchedObj - Full name of element that will be switched when relay trips.
     %    SwitchedTerm - Terminal number of the switched object that will be opened when the relay trips.
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -27,6 +31,9 @@ classdef (CaseInsensitiveProperties) IRelays < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IRelays(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

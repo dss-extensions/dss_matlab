@@ -44,6 +44,10 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
     %    xfkVA - Rated service transformer kVA for load allocation, using AllocationFactor. Affects kW, kvar, and pf.
     %    Phases - Number of phases
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -89,6 +93,9 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ILoads(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -339,7 +346,8 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
 
         function result = get.ZIPV(obj)
             % Array of 7  doubles with values for ZIPV property of the LOAD object
-            result = DSS_MATLAB.get_float64_array('Loads_Get_ZIPV');
+            calllib('dss_capi_v7', 'Loads_Get_ZIPV_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.ZIPV(obj, Value)
             calllib('dss_capi_v7', 'Loads_Set_ZIPV', Value, numel(Value));

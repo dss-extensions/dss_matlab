@@ -8,35 +8,35 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active Meter
     %    Next - Sets next Meter active; returns 0 if no more.
     %    idx - Sets next Meter active; returns 0 if no more.
-    %    AllBranchesInZone - (read-only) Wide string list of all branches in zone of the active energymeter object.
-    %    AllEndElements - (read-only) Array of names of all zone end elements.
+    %    AllBranchesInZone - Wide string list of all branches in zone of the active energymeter object.
+    %    AllEndElements - Array of names of all zone end elements.
     %    AllocFactors - Array of doubles: set the phase allocation factors for the active meter.
-    %    AvgRepairTime - (read-only) Average Repair time in this section of the meter zone
+    %    AvgRepairTime - Average Repair time in this section of the meter zone
     %    CalcCurrent - Set the magnitude of the real part of the Calculated Current (normally determined by solution) for the Meter to force some behavior on Load Allocation
-    %    CountBranches - (read-only) Number of branches in Active energymeter zone. (Same as sequencelist size)
-    %    CountEndElements - (read-only) Number of zone end elements in the active meter zone.
-    %    CustInterrupts - (read-only) Total customer interruptions for this Meter zone based on reliability calcs.
-    %    DIFilesAreOpen - (read-only) Global Flag in the DSS to indicate if Demand Interval (DI) files have been properly opened.
-    %    FaultRateXRepairHrs - (read-only) Sum of Fault Rate time Repair Hrs in this section of the meter zone
+    %    CountBranches - Number of branches in Active energymeter zone. (Same as sequencelist size)
+    %    CountEndElements - Number of zone end elements in the active meter zone.
+    %    CustInterrupts - Total customer interruptions for this Meter zone based on reliability calcs.
+    %    DIFilesAreOpen - Global Flag in the DSS to indicate if Demand Interval (DI) files have been properly opened.
+    %    FaultRateXRepairHrs - Sum of Fault Rate time Repair Hrs in this section of the meter zone
     %    MeteredElement - Set Name of metered element
     %    MeteredTerminal - set Number of Metered Terminal
-    %    NumSectionBranches - (read-only) Number of branches (lines) in this section
-    %    NumSectionCustomers - (read-only) Number of Customers in the active section.
-    %    NumSections - (read-only) Number of feeder sections in this meter's zone
-    %    OCPDeviceType - (read-only) Type of OCP device. 1=Fuse; 2=Recloser; 3=Relay
+    %    NumSectionBranches - Number of branches (lines) in this section
+    %    NumSectionCustomers - Number of Customers in the active section.
+    %    NumSections - Number of feeder sections in this meter's zone
+    %    OCPDeviceType - Type of OCP device. 1=Fuse; 2=Recloser; 3=Relay
     %    Peakcurrent - Array of doubles to set values of Peak Current property
-    %    RegisterNames - (read-only) Array of strings containing the names of the registers.
-    %    RegisterValues - (read-only) Array of all the values contained in the Meter registers for the active Meter.
-    %    SAIDI - (read-only) SAIDI for this meter's zone. Execute DoReliabilityCalc first.
-    %    SAIFI - (read-only) Returns SAIFI for this meter's Zone. Execute Reliability Calc method first.
-    %    SAIFIKW - (read-only) SAIFI based on kW rather than number of customers. Get after reliability calcs.
-    %    SectSeqIdx - (read-only) SequenceIndex of the branch at the head of this section
-    %    SectTotalCust - (read-only) Total Customers downline from this section
-    %    SeqListSize - (read-only) Size of Sequence List
+    %    RegisterNames - Array of strings containing the names of the registers.
+    %    RegisterValues - Array of all the values contained in the Meter registers for the active Meter.
+    %    SAIDI - SAIDI for this meter's zone. Execute DoReliabilityCalc first.
+    %    SAIFI - Returns SAIFI for this meter's Zone. Execute Reliability Calc method first.
+    %    SAIFIKW - SAIFI based on kW rather than number of customers. Get after reliability calcs.
+    %    SectSeqIdx - SequenceIndex of the branch at the head of this section
+    %    SectTotalCust - Total Customers downline from this section
+    %    SeqListSize - Size of Sequence List
     %    SequenceIndex - Get/set Index into Meter's SequenceList that contains branch pointers in lexical order. Earlier index guaranteed to be upline from later index. Sets PDelement active.
-    %    SumBranchFltRates - (read-only) Sum of the branch fault rates in this section of the meter's zone
-    %    TotalCustomers - (read-only) Total Number of customers in this zone (downline from the EnergyMeter)
-    %    Totals - (read-only) Totals of all registers of all meters
+    %    SumBranchFltRates - Sum of the branch fault rates in this section of the meter's zone
+    %    TotalCustomers - Total Number of customers in this zone (downline from the EnergyMeter)
+    %    Totals - Totals of all registers of all meters
     % 
     % Methods:
     %    CloseAllDIFiles - 
@@ -49,6 +49,10 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
     %    Save - 
     %    SaveAll - 
     %    SetActiveSection - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -89,6 +93,9 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IMeters(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = CloseAllDIFiles(obj)
             calllib('dss_capi_v7', 'Meters_CloseAllDIFiles');
@@ -184,21 +191,20 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.AllBranchesInZone(obj)
             % (read-only) String list of all branches in zone of the active energymeter object.
-            tmp = calllib('dss_capi_v7', 'Meters_Get_AllBranchesInZone');
+            result = DSS_MATLAB.get_string_array('Meters_Get_AllBranchesInZone');
             obj.CheckForError();
-            result = DSS_MATLAB.get_string_array(tmp);
         end
 
         function result = get.AllEndElements(obj)
             % (read-only) Array of names of all zone end elements.
-            tmp = calllib('dss_capi_v7', 'Meters_Get_AllEndElements');
+            result = DSS_MATLAB.get_string_array('Meters_Get_AllEndElements');
             obj.CheckForError();
-            result = DSS_MATLAB.get_string_array(tmp);
         end
 
         function result = get.AllocFactors(obj)
             % Array of doubles: set the phase allocation factors for the active meter.
-            result = DSS_MATLAB.get_float64_array('Meters_Get_AllocFactors');
+            calllib('dss_capi_v7', 'Meters_Get_AllocFactors_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.AllocFactors(obj, Value)
             calllib('dss_capi_v7', 'Meters_Set_AllocFactors', Value, numel(Value));
@@ -213,7 +219,8 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.CalcCurrent(obj)
             % Set the magnitude of the real part of the Calculated Current (normally determined by solution) for the Meter to force some behavior on Load Allocation
-            result = DSS_MATLAB.get_float64_array('Meters_Get_CalcCurrent');
+            calllib('dss_capi_v7', 'Meters_Get_CalcCurrent_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.CalcCurrent(obj, Value)
             calllib('dss_capi_v7', 'Meters_Set_CalcCurrent', Value, numel(Value));
@@ -287,7 +294,8 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.Peakcurrent(obj)
             % Array of doubles to set values of Peak Current property
-            result = DSS_MATLAB.get_float64_array('Meters_Get_Peakcurrent');
+            calllib('dss_capi_v7', 'Meters_Get_Peakcurrent_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Peakcurrent(obj, Value)
             calllib('dss_capi_v7', 'Meters_Set_Peakcurrent', Value, numel(Value));
@@ -301,7 +309,8 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.RegisterValues(obj)
             % (read-only) Array of all the values contained in the Meter registers for the active Meter.
-            result = DSS_MATLAB.get_float64_array('Meters_Get_RegisterValues');
+            calllib('dss_capi_v7', 'Meters_Get_RegisterValues_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SAIDI(obj)
@@ -355,7 +364,8 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.Totals(obj)
             % (read-only) Totals of all registers of all meters
-            result = DSS_MATLAB.get_float64_array('Meters_Get_Totals');
+            calllib('dss_capi_v7', 'Meters_Get_Totals_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
     end
 end

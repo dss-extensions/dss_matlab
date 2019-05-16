@@ -12,6 +12,10 @@ classdef (CaseInsensitiveProperties) IISources < DSS_MATLAB.Base
     %    AngleDeg - Phase angle for ISource, degrees
     %    Frequency - The present frequency of the ISource, Hz
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -25,6 +29,9 @@ classdef (CaseInsensitiveProperties) IISources < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IISources(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

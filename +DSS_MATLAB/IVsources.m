@@ -14,6 +14,10 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
     %    Phases - Number of phases
     %    pu - (read) Source pu voltage.  (write) Per-unit value of source voltage based on kV
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -29,6 +33,9 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IVsources(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

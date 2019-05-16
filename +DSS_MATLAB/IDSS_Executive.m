@@ -2,15 +2,19 @@ classdef (CaseInsensitiveProperties) IDSS_Executive < DSS_MATLAB.Base
     % IDSS_Executive: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    NumCommands - (read-only) Number of DSS Executive Commands
-    %    NumOptions - (read-only) Number of DSS Executive Options
+    %    NumCommands - Number of DSS Executive Commands
+    %    NumOptions - Number of DSS Executive Options
     % 
     % Methods:
-    %    Command - (read-only) Get i-th command
-    %    CommandHelp - (read-only) Get help string for i-th command
-    %    Option - (read-only) Get i-th option
-    %    OptionHelp - (read-only) Get help string for i-th option
-    %    OptionValue - (read-only) Get present value of i-th option
+    %    Command - Get i-th command
+    %    CommandHelp - Get help string for i-th command
+    %    Option - Get i-th option
+    %    OptionHelp - Get help string for i-th option
+    %    OptionValue - Get present value of i-th option
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         NumCommands
@@ -18,6 +22,9 @@ classdef (CaseInsensitiveProperties) IDSS_Executive < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IDSS_Executive(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function result = Command(obj, i)
             % (read-only) Get i-th command

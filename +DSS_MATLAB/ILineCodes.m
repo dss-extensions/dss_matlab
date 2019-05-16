@@ -12,7 +12,7 @@ classdef (CaseInsensitiveProperties) ILineCodes < DSS_MATLAB.Base
     %    C1 - Positive-sequence capacitance, nF per unit length
     %    Cmatrix - Capacitance matrix, nF per unit length
     %    EmergAmps - Emergency ampere rating
-    %    IsZ1Z0 - (read-only) Flag denoting whether impedance data were entered in symmetrical components
+    %    IsZ1Z0 - Flag denoting whether impedance data were entered in symmetrical components
     %    NormAmps - Normal Ampere rating
     %    Phases - Number of Phases
     %    R0 - Zero-Sequence Resistance, ohms per unit length
@@ -22,6 +22,10 @@ classdef (CaseInsensitiveProperties) ILineCodes < DSS_MATLAB.Base
     %    X0 - Zero Sequence Reactance, Ohms per unit length
     %    X1 - Posiive-sequence reactance, ohms per unit length
     %    Xmatrix - Reactance matrix, ohms per unit length
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -47,6 +51,9 @@ classdef (CaseInsensitiveProperties) ILineCodes < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ILineCodes(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -110,7 +117,8 @@ classdef (CaseInsensitiveProperties) ILineCodes < DSS_MATLAB.Base
 
         function result = get.Cmatrix(obj)
             % Capacitance matrix, nF per unit length
-            result = DSS_MATLAB.get_float64_array('LineCodes_Get_Cmatrix');
+            calllib('dss_capi_v7', 'LineCodes_Get_Cmatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Cmatrix(obj, Value)
             calllib('dss_capi_v7', 'LineCodes_Set_Cmatrix', Value, numel(Value));
@@ -169,7 +177,8 @@ classdef (CaseInsensitiveProperties) ILineCodes < DSS_MATLAB.Base
 
         function result = get.Rmatrix(obj)
             % Resistance matrix, ohms per unit length
-            result = DSS_MATLAB.get_float64_array('LineCodes_Get_Rmatrix');
+            calllib('dss_capi_v7', 'LineCodes_Get_Rmatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Rmatrix(obj, Value)
             calllib('dss_capi_v7', 'LineCodes_Set_Rmatrix', Value, numel(Value));
@@ -204,7 +213,8 @@ classdef (CaseInsensitiveProperties) ILineCodes < DSS_MATLAB.Base
 
         function result = get.Xmatrix(obj)
             % Reactance matrix, ohms per unit length
-            result = DSS_MATLAB.get_float64_array('LineCodes_Get_Xmatrix');
+            calllib('dss_capi_v7', 'LineCodes_Get_Xmatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Xmatrix(obj, Value)
             calllib('dss_capi_v7', 'LineCodes_Set_Xmatrix', Value, numel(Value));

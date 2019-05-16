@@ -23,6 +23,10 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
     %    New - 
     %    Normalize - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -43,6 +47,9 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ILoadShapes(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function result = New(obj, Name)
             result = calllib('dss_capi_v7', 'LoadShapes_New', Name);
@@ -132,7 +139,8 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
 
         function result = get.Pmult(obj)
             % Array of doubles for the P multiplier in the Loadshape.
-            result = DSS_MATLAB.get_float64_array('LoadShapes_Get_Pmult');
+            calllib('dss_capi_v7', 'LoadShapes_Get_Pmult_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Pmult(obj, Value)
             calllib('dss_capi_v7', 'LoadShapes_Set_Pmult', Value, numel(Value));
@@ -150,7 +158,8 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
 
         function result = get.Qmult(obj)
             % Array of doubles containing the Q multipliers.
-            result = DSS_MATLAB.get_float64_array('LoadShapes_Get_Qmult');
+            calllib('dss_capi_v7', 'LoadShapes_Get_Qmult_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Qmult(obj, Value)
             calllib('dss_capi_v7', 'LoadShapes_Set_Qmult', Value, numel(Value));
@@ -159,7 +168,8 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
 
         function result = get.TimeArray(obj)
             % Time array in hours correscponding to P and Q multipliers when the Interval=0.
-            result = DSS_MATLAB.get_float64_array('LoadShapes_Get_TimeArray');
+            calllib('dss_capi_v7', 'LoadShapes_Get_TimeArray_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.TimeArray(obj, Value)
             calllib('dss_capi_v7', 'LoadShapes_Set_TimeArray', Value, numel(Value));

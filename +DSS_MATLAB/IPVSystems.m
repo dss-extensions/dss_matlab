@@ -10,11 +10,15 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
     %    idx - Sets next PVSystem active; returns 0 if no more.
     %    Irradiance - (read) Get the present value of the Irradiance property in W/sq-m  (write) Set the present Irradiance value in W/sq-m
     %    PF - (read) Get Power factor  (write) Set PF
-    %    RegisterNames - (read-only) Variant Array of PVSYSTEM energy meter register names
-    %    RegisterValues - (read-only) Array of doubles containing values in PVSystem registers.
+    %    RegisterNames - Variant Array of PVSYSTEM energy meter register names
+    %    RegisterValues - Array of doubles containing values in PVSystem registers.
     %    kVArated - (read) Get Rated kVA of the PVSystem  (write) Set kva rated
-    %    kW - (read-only) get kW output
+    %    kW - get kW output
     %    kvar - (read) Get kvar value  (write) Set kvar output value
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -33,6 +37,9 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IPVSystems(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -103,7 +110,8 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
 
         function result = get.RegisterValues(obj)
             % (read-only) Array of doubles containing values in PVSystem registers.
-            result = DSS_MATLAB.get_float64_array('PVSystems_Get_RegisterValues');
+            calllib('dss_capi_v7', 'PVSystems_Get_RegisterValues_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.kVArated(obj)

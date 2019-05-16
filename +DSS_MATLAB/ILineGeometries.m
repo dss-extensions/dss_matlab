@@ -8,7 +8,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active LineGeometrie
     %    Next - Sets next LineGeometrie active; returns 0 if no more.
     %    idx - Sets next LineGeometrie active; returns 0 if no more.
-    %    Conductors - (read-only) Array of strings with names of all conductors in the active LineGeometry object
+    %    Conductors - Array of strings with names of all conductors in the active LineGeometry object
     %    EmergAmps - Emergency ampere rating
     %    NormAmps - Normal Ampere rating
     %    RhoEarth - 
@@ -19,10 +19,14 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
     %    Ycoords - Get/Set the Y (vertical/height) coordinates of the conductors
     % 
     % Methods:
-    %    Rmatrix - (read-only) Resistance matrix, ohms
-    %    Xmatrix - (read-only) Reactance matrix, ohms
-    %    Zmatrix - (read-only) Complex impedance matrix, ohms
-    %    Cmatrix - (read-only) Capacitance matrix, nF
+    %    Rmatrix - Resistance matrix, ohms
+    %    Xmatrix - Reactance matrix, ohms
+    %    Zmatrix - Complex impedance matrix, ohms
+    %    Cmatrix - Capacitance matrix, nF
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -43,25 +47,32 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ILineGeometries(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function result = Rmatrix(obj, Frequency, Length, Units)
             % (read-only) Resistance matrix, ohms
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Rmatrix', Frequency, Length, Units);
+            calllib('dss_capi_v7', 'LineGeometries_Get_Rmatrix_GR', Frequency, Length, Units);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = Xmatrix(obj, Frequency, Length, Units)
             % (read-only) Reactance matrix, ohms
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Xmatrix', Frequency, Length, Units);
+            calllib('dss_capi_v7', 'LineGeometries_Get_Xmatrix_GR', Frequency, Length, Units);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = Zmatrix(obj, Frequency, Length, Units)
             % (read-only) Complex impedance matrix, ohms
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Zmatrix', Frequency, Length, Units);
+            calllib('dss_capi_v7', 'LineGeometries_Get_Zmatrix_GR', Frequency, Length, Units);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = Cmatrix(obj, Frequency, Length, Units)
             % (read-only) Capacitance matrix, nF
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Cmatrix', Frequency, Length, Units);
+            calllib('dss_capi_v7', 'LineGeometries_Get_Cmatrix_GR', Frequency, Length, Units);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
     end
@@ -155,7 +166,8 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
         end
 
         function result = get.Units(obj)
-            result = DSS_MATLAB.get_int32_array('LineGeometries_Get_Units');
+            calllib('dss_capi_v7', 'LineGeometries_Get_Units_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
         function obj = set.Units(obj, Value)
             calllib('dss_capi_v7', 'LineGeometries_Set_Units', Value, numel(Value));
@@ -164,7 +176,8 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
 
         function result = get.Xcoords(obj)
             % Get/Set the X (horizontal) coordinates of the conductors
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Xcoords');
+            calllib('dss_capi_v7', 'LineGeometries_Get_Xcoords_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Xcoords(obj, Value)
             calllib('dss_capi_v7', 'LineGeometries_Set_Xcoords', Value, numel(Value));
@@ -173,7 +186,8 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
 
         function result = get.Ycoords(obj)
             % Get/Set the Y (vertical/height) coordinates of the conductors
-            result = DSS_MATLAB.get_float64_array('LineGeometries_Get_Ycoords');
+            calllib('dss_capi_v7', 'LineGeometries_Get_Ycoords_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Ycoords(obj, Value)
             calllib('dss_capi_v7', 'LineGeometries_Set_Ycoords', Value, numel(Value));

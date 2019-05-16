@@ -8,7 +8,6 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active CNData
     %    Next - Sets next CNData active; returns 0 if no more.
     %    idx - Sets next CNData active; returns 0 if no more.
-    %    Conductors - (read-only) Array of strings with names of all conductors in the active CNData object
     %    EmergAmps - Emergency ampere rating
     %    NormAmps - Normal Ampere rating
     %    Rdc - 
@@ -28,6 +27,10 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
     %    GmrStrand - 
     %    RStrand - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -35,7 +38,6 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
         Name
         Next
         idx
-        Conductors
         EmergAmps
         NormAmps
         Rdc
@@ -57,6 +59,9 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ICNData(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -97,12 +102,6 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
         function obj = set.idx(obj, Value)
             calllib('dss_capi_v7', 'CNData_Set_idx', Value);
             obj.CheckForError();
-        end
-
-
-        function result = get.Conductors(obj)
-            % (read-only) Array of strings with names of all conductors in the active CNData object
-            result = DSS_MATLAB.get_string_array('CNData_Get_Conductors');
         end
 
         function result = get.EmergAmps(obj)

@@ -8,7 +8,6 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active TSData
     %    Next - Sets next TSData active; returns 0 if no more.
     %    idx - Sets next TSData active; returns 0 if no more.
-    %    Conductors - (read-only) Array of strings with names of all conductors in the active TSData object
     %    EmergAmps - Emergency ampere rating
     %    NormAmps - Normal Ampere rating
     %    Rdc - 
@@ -27,6 +26,10 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
     %    TapeLayer - 
     %    TapeLap - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -34,7 +37,6 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
         Name
         Next
         idx
-        Conductors
         EmergAmps
         NormAmps
         Rdc
@@ -55,6 +57,9 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ITSData(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -97,11 +102,6 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
-
-        function result = get.Conductors(obj)
-            % (read-only) Array of strings with names of all conductors in the active TSData object
-            result = DSS_MATLAB.get_string_array('TSData_Get_Conductors');
-        end
 
         function result = get.EmergAmps(obj)
             % Emergency ampere rating

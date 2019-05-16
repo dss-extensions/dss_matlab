@@ -19,6 +19,10 @@ classdef (CaseInsensitiveProperties) IReduceCkt < DSS_MATLAB.Base
     %    Do1phLaterals - 
     %    DoBranchRemove - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         Zmag
         KeepLoad
@@ -28,6 +32,9 @@ classdef (CaseInsensitiveProperties) IReduceCkt < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IReduceCkt(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = SaveCircuit(obj, CktName)
             % Save present (reduced) circuit

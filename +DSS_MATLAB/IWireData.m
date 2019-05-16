@@ -19,6 +19,10 @@ classdef (CaseInsensitiveProperties) IWireData < DSS_MATLAB.Base
     %    ResistanceUnits - 
     %    Diameter - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -39,6 +43,9 @@ classdef (CaseInsensitiveProperties) IWireData < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IWireData(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

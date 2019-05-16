@@ -19,6 +19,10 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
     % Methods:
     %    Reset - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -36,6 +40,9 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ISwtControls(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = Reset(obj)
             calllib('dss_capi_v7', 'SwtControls_Reset');

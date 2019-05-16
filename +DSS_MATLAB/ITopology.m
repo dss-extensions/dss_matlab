@@ -2,24 +2,28 @@ classdef (CaseInsensitiveProperties) ITopology < DSS_MATLAB.Base
     % ITopology: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    ActiveBranch - (read-only) Returns index of the active branch
-    %    ActiveLevel - (read-only) Topological depth of the active branch
-    %    AllIsolatedBranches - (read-only) Array of all isolated branch names.
-    %    AllIsolatedLoads - (read-only) Array of all isolated load names.
-    %    AllLoopedPairs - (read-only) Array of all looped element names, by pairs.
-    %    BackwardBranch - (read-only) MOve back toward the source, return index of new active branch, or 0 if no more.
+    %    ActiveBranch - Returns index of the active branch
+    %    ActiveLevel - Topological depth of the active branch
+    %    AllIsolatedBranches - Array of all isolated branch names.
+    %    AllIsolatedLoads - Array of all isolated load names.
+    %    AllLoopedPairs - Array of all looped element names, by pairs.
+    %    BackwardBranch - MOve back toward the source, return index of new active branch, or 0 if no more.
     %    BranchName - Name of the active branch.
     %    BusName - Set the active branch to one containing this bus, return index or 0 if not found
-    %    First - (read-only) Sets the first branch active, returns 0 if none.
-    %    FirstLoad - (read-only) First load at the active branch, return index or 0 if none.
-    %    ForwardBranch - (read-only) Move forward in the tree, return index of new active branch or 0 if no more
-    %    LoopedBranch - (read-only) Move to looped branch, return index or 0 if none.
-    %    Next - (read-only) Sets the next branch active, returns 0 if no more.
-    %    NextLoad - (read-only) Next load at the active branch, return index or 0 if no more.
-    %    NumIsolatedBranches - (read-only) Number of isolated branches (PD elements and capacitors).
-    %    NumIsolatedLoads - (read-only) Number of isolated loads
-    %    NumLoops - (read-only) Number of loops
-    %    ParallelBranch - (read-only) Move to directly parallel branch, return index or 0 if none.
+    %    First - Sets the first branch active, returns 0 if none.
+    %    FirstLoad - First load at the active branch, return index or 0 if none.
+    %    ForwardBranch - Move forward in the tree, return index of new active branch or 0 if no more
+    %    LoopedBranch - Move to looped branch, return index or 0 if none.
+    %    Next - Sets the next branch active, returns 0 if no more.
+    %    NextLoad - Next load at the active branch, return index or 0 if no more.
+    %    NumIsolatedBranches - Number of isolated branches (PD elements and capacitors).
+    %    NumIsolatedLoads - Number of isolated loads
+    %    NumLoops - Number of loops
+    %    ParallelBranch - Move to directly parallel branch, return index or 0 if none.
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         ActiveBranch
@@ -43,6 +47,9 @@ classdef (CaseInsensitiveProperties) ITopology < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ITopology(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

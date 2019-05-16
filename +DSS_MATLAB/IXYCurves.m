@@ -18,6 +18,10 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
     %    x - Set X value or get interpolated value after setting Y
     %    y - (read) Y value for present X or set this value then get corresponding X  (write) Set Y value or get interpolated Y value after setting X
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -37,6 +41,9 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IXYCurves(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -91,7 +98,8 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
 
         function result = get.Xarray(obj)
             % Get/Set X values as a Array of doubles. Set Npts to max number expected if setting
-            result = DSS_MATLAB.get_float64_array('XYCurves_Get_Xarray');
+            calllib('dss_capi_v7', 'XYCurves_Get_Xarray_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Xarray(obj, Value)
             calllib('dss_capi_v7', 'XYCurves_Set_Xarray', Value, numel(Value));
@@ -118,7 +126,8 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
 
         function result = get.Yarray(obj)
             % Get/Set Y values in curve; Set Npts to max number expected if setting
-            result = DSS_MATLAB.get_float64_array('XYCurves_Get_Yarray');
+            calllib('dss_capi_v7', 'XYCurves_Get_Yarray_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Yarray(obj, Value)
             calllib('dss_capi_v7', 'XYCurves_Set_Yarray', Value, numel(Value));

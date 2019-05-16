@@ -18,12 +18,19 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
     %    getI - Get the data from the internal Current pointer
     %    getV - Get the data from the internal Voltage pointer
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         SystemYChanged
         UseAuxCurrents
     end
 
     methods (Access = public)
+        function obj = IYMatrix(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function result = GetCompressedYMatrix(obj, factor)
             % Returns the circuit's YMatrix as a sparse MATLAB matrix

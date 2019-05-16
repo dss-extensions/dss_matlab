@@ -5,19 +5,23 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
     %    AutoIncrement - Default is FALSE. If TRUE parser automatically advances to next token after DblValue, IntValue, or StrValue. Simpler when you don't need to check for parameter names.
     %    BeginQuote - (read) Get String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.  (write) Set String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.
     %    CmdString - String to be parsed. Loading this string resets the Parser to the beginning of the line. Then parse off the tokens in sequence.
-    %    DblValue - (read-only) Return next parameter as a double.
+    %    DblValue - Return next parameter as a double.
     %    Delimiters - String defining hard delimiters used to separate token on the command string. Default is , and =. The = separates token name from token value. These override whitesspace to separate tokens.
     %    EndQuote - String containing characters, in order, that match the beginning quote characters in BeginQuote. Default is "')]}
-    %    IntValue - (read-only) Return next parameter as a long integer.
-    %    NextParam - (read-only) Get next token and return tag name (before = sign) if any. See AutoIncrement.
-    %    StrValue - (read-only) Return next parameter as a string
+    %    IntValue - Return next parameter as a long integer.
+    %    NextParam - Get next token and return tag name (before = sign) if any. See AutoIncrement.
+    %    StrValue - Return next parameter as a string
     %    WhiteSpace - (read) Get the characters used for White space in the command string.  Default is blank and Tab.  (write) Set the characters used for White space in the command string.  Default is blank and Tab.
     % 
     % Methods:
-    %    Matrix - (read-only) Use this property to parse a Matrix token in OpenDSS format.  Returns square matrix of order specified. Order same as default Fortran order: column by column.
-    %    SymMatrix - (read-only) Use this property to parse a matrix token specified in lower triangle form. Symmetry is forced.
-    %    Vector - (read-only) Returns token as array of doubles. For parsing quoted array syntax.
+    %    Matrix - Use this property to parse a Matrix token in OpenDSS format.  Returns square matrix of order specified. Order same as default Fortran order: column by column.
+    %    SymMatrix - Use this property to parse a matrix token specified in lower triangle form. Symmetry is forced.
+    %    Vector - Returns token as array of doubles. For parsing quoted array syntax.
     %    ResetDelimiters - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AutoIncrement
@@ -33,20 +37,26 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IParser(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function result = Matrix(obj, ExpectedOrder)
             % (read-only) Use this property to parse a Matrix token in OpenDSS format.  Returns square matrix of order specified. Order same as default Fortran order: column by column.
-            result = DSS_MATLAB.get_float64_array('Parser_Get_Matrix', ExpectedOrder);
+            calllib('dss_capi_v7', 'Parser_Get_Matrix_GR', ExpectedOrder);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = SymMatrix(obj, ExpectedOrder)
             % (read-only) Use this property to parse a matrix token specified in lower triangle form. Symmetry is forced.
-            result = DSS_MATLAB.get_float64_array('Parser_Get_SymMatrix', ExpectedOrder);
+            calllib('dss_capi_v7', 'Parser_Get_SymMatrix_GR', ExpectedOrder);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = Vector(obj, ExpectedSize)
             % (read-only) Returns token as array of doubles. For parsing quoted array syntax.
-            result = DSS_MATLAB.get_float64_array('Parser_Get_Vector', ExpectedSize);
+            calllib('dss_capi_v7', 'Parser_Get_Vector_GR', ExpectedSize);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function obj = ResetDelimiters(obj)

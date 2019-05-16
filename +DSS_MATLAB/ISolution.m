@@ -11,14 +11,14 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
     %    Converged - Flag to indicate whether the circuit solution converged
     %    DefaultDaily - Default daily load shape (defaults to "Default")
     %    DefaultYearly - Default Yearly load shape (defaults to "Default")
-    %    EventLog - (read-only) Array of strings containing the Event Log
+    %    EventLog - Array of strings containing the Event Log
     %    Frequency - Set the Frequency for next solution
     %    GenMult - Default Multiplier applied to generators (like LoadMult)
     %    GenPF - PF for generators in AutoAdd mode
     %    GenkW - Generator kW for AutoAdd mode
     %    Hour - Set Hour for time series solutions.
     %    IntervalHrs - (read) Get/Set the Solution.IntervalHrs variable used for devices that integrate  (write) Get/Set the Solution.IntervalHrs variable for custom solution algorithms
-    %    Iterations - (read-only) Number of iterations taken for last solution. (Same as TotalIterations)
+    %    Iterations - Number of iterations taken for last solution. (Same as TotalIterations)
     %    LDCurve - Load-Duration Curve name for LD modes
     %    LoadModel - Load Model: {dssPowerFlow (default) | dssAdmittance}
     %    LoadMult - Default load multiplier applied to all non-fixed loads
@@ -26,18 +26,18 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
     %    MaxIterations - Max allowable iterations.
     %    MinIterations - (read) Minimum number of iterations required for a power flow solution.  (write) Mininum number of iterations required for a power flow solution.
     %    Mode - Set present solution mode (by a text code - see DSS Help)
-    %    ModeID - (read-only) ID (text) of the present solution mode
-    %    MostIterationsDone - (read-only) Max number of iterations required to converge at any control iteration of the most recent solution.
+    %    ModeID - ID (text) of the present solution mode
+    %    MostIterationsDone - Max number of iterations required to converge at any control iteration of the most recent solution.
     %    Number - Number of solutions to perform for Monte Carlo and time series simulations
-    %    Process_Time - (read-only) Gets the time required to perform the latest solution (Read only)
+    %    Process_Time - Gets the time required to perform the latest solution (Read only)
     %    Random - Randomization mode for random variables "Gaussian" or "Uniform"
     %    Seconds - Seconds from top of the hour.
     %    StepSize - Time step size in sec
-    %    SystemYChanged - (read-only) Flag that indicates if elements of the System Y have been changed by recent activity.
-    %    Time_of_Step - (read-only) Get the solution process time + sample time for time step
+    %    SystemYChanged - Flag that indicates if elements of the System Y have been changed by recent activity.
+    %    Time_of_Step - Get the solution process time + sample time for time step
     %    Tolerance - Solution convergence tolerance.
     %    Total_Time - (read) Gets the accumulated time of the simulation  (write) Sets the Accumulated time of the simulation
-    %    Totaliterations - (read-only) Total iterations including control iterations for most recent solution.
+    %    Totaliterations - Total iterations including control iterations for most recent solution.
     %    Year - Set year for planning studies
     %    dblHour - Hour as a double, including fractional part
     %    pctGrowth - Percent default  annual load growth rate
@@ -66,6 +66,10 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
     %    SolvePlusControl - 
     %    SolveSnap - 
     %    SolveAll - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AddType
@@ -117,6 +121,9 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ISolution(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = BuildYMatrix(obj, BuildOption, AllocateVI)
             calllib('dss_capi_v7', 'Solution_BuildYMatrix', BuildOption, AllocateVI);
@@ -524,7 +531,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
 
         function result = get.StepsizeHr(obj)
             % (write-only) Set Stepsize in Hr
-            raise AttributeError('This property is write-only!')
+            result = NaN;
         end
         function obj = set.StepsizeHr(obj, Value)
             calllib('dss_capi_v7', 'Solution_Set_StepsizeHr', Value);
@@ -533,7 +540,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
 
         function result = get.StepsizeMin(obj)
             % (write-only) Set Stepsize in minutes
-            raise AttributeError('This property is write-only!')
+            result = NaN;
         end
         function obj = set.StepsizeMin(obj, Value)
             calllib('dss_capi_v7', 'Solution_Set_StepsizeMin', Value);
@@ -541,11 +548,13 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.BusLevels(obj)
-            result = DSS_MATLAB.get_int32_array('Solution_Get_BusLevels');
+            calllib('dss_capi_v7', 'Solution_Get_BusLevels_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
 
         function result = get.IncMatrix(obj)
-            result = DSS_MATLAB.get_int32_array('Solution_Get_IncMatrix');
+            calllib('dss_capi_v7', 'Solution_Get_IncMatrix_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
 
         function result = get.IncMatrixCols(obj)
@@ -557,7 +566,8 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.Laplacian(obj)
-            result = DSS_MATLAB.get_int32_array('Solution_Get_Laplacian');
+            calllib('dss_capi_v7', 'Solution_Get_Laplacian_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
     end
 end

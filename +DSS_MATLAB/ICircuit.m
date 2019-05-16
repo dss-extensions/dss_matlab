@@ -2,7 +2,6 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     % ICircuit: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    CktElements - 
     %    ActiveElement - 
     %    Solution - 
     %    ActiveBus - 
@@ -42,42 +41,43 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    Reactors - 
     %    ReduceCkt - 
     %    Parallel - 
-    %    AllBusDistances - (read-only) Returns distance from each bus to parent EnergyMeter. Corresponds to sequence in AllBusNames.
-    %    AllBusNames - (read-only) Array of strings containing names of all buses in circuit (see AllNodeNames).
-    %    AllBusVmag - (read-only) Array of magnitudes (doubles) of voltages at all buses
-    %    AllBusVmagPu - (read-only) Double Array of all bus voltages (each node) magnitudes in Per unit
-    %    AllBusVolts - (read-only) Complex array of all bus, node voltages from most recent solution
-    %    AllElementLosses - (read-only) Array of total losses (complex) in each circuit element
-    %    AllElementNames - (read-only) Array of strings containing Full Name of all elements.
-    %    AllNodeDistances - (read-only) Returns an array of distances from parent EnergyMeter for each Node. Corresponds to AllBusVMag sequence.
-    %    AllNodeNames - (read-only) Array of strings containing full name of each node in system in same order as returned by AllBusVolts, etc.
-    %    LineLosses - (read-only) Complex total line losses in the circuit
-    %    Losses - (read-only) Total losses in active circuit, complex number (two-element array of double).
-    %    Name - (read-only) Name of the active circuit.
-    %    NumBuses - (read-only) Total number of Buses in the circuit.
-    %    NumCktElements - (read-only) Number of CktElements in the circuit.
-    %    NumNodes - (read-only) Total number of nodes in the circuit.
-    %    ParentPDElement - (read-only) Sets Parent PD element, if any, to be the active circuit element and returns index>0; Returns 0 if it fails or not applicable.
-    %    SubstationLosses - (read-only) Complex losses in all transformers designated to substations.
-    %    SystemY - (read-only) System Y matrix (after a solution has been performed)
-    %    TotalPower - (read-only) Total power, watts delivered to the circuit
-    %    YCurrents - (read-only) Array of doubles containing complex injection currents for the present solution. Is is the "I" vector of I=YV
-    %    YNodeOrder - (read-only) Array of strings containing the names of the nodes in the same order as the Y matrix
-    %    YNodeVarray - (read-only) Complex array of actual node voltages in same order as SystemY matrix.
+    %    AllBusDistances - Returns distance from each bus to parent EnergyMeter. Corresponds to sequence in AllBusNames.
+    %    AllBusNames - Array of strings containing names of all buses in circuit (see AllNodeNames).
+    %    AllBusVmag - Array of magnitudes (doubles) of voltages at all buses
+    %    AllBusVmagPu - Double Array of all bus voltages (each node) magnitudes in Per unit
+    %    AllBusVolts - Complex array of all bus, node voltages from most recent solution
+    %    AllElementLosses - Array of total losses (complex) in each circuit element
+    %    AllElementNames - Array of strings containing Full Name of all elements.
+    %    AllNodeDistances - Returns an array of distances from parent EnergyMeter for each Node. Corresponds to AllBusVMag sequence.
+    %    AllNodeNames - Array of strings containing full name of each node in system in same order as returned by AllBusVolts, etc.
+    %    LineLosses - Complex total line losses in the circuit
+    %    Losses - Total losses in active circuit, complex number (two-element array of double).
+    %    Name - Name of the active circuit.
+    %    NumBuses - Total number of Buses in the circuit.
+    %    NumCktElements - Number of CktElements in the circuit.
+    %    NumNodes - Total number of nodes in the circuit.
+    %    ParentPDElement - Sets Parent PD element, if any, to be the active circuit element and returns index>0; Returns 0 if it fails or not applicable.
+    %    SubstationLosses - Complex losses in all transformers designated to substations.
+    %    SystemY - System Y matrix (after a solution has been performed)
+    %    TotalPower - Total power, watts delivered to the circuit
+    %    YCurrents - Array of doubles containing complex injection currents for the present solution. Is is the "I" vector of I=YV
+    %    YNodeOrder - Array of strings containing the names of the nodes in the same order as the Y matrix
+    %    YNodeVarray - Complex array of actual node voltages in same order as SystemY matrix.
     % 
     % Methods:
     %    Buses - 
     %    Capacity - 
+    %    CktElements - 
     %    Disable - 
     %    Enable - 
     %    EndOfTimeStepUpdate - 
     %    FirstElement - 
     %    FirstPCElement - 
     %    FirstPDElement - 
-    %    AllNodeDistancesByPhase - (read-only) Returns an array of doubles representing the distances to parent EnergyMeter. Sequence of array corresponds to other node ByPhase properties.
-    %    AllNodeNamesByPhase - (read-only) Return array of strings of the node names for the By Phase criteria. Sequence corresponds to other ByPhase properties.
-    %    AllNodeVmagByPhase - (read-only) Returns Array of doubles represent voltage magnitudes for nodes on the specified phase.
-    %    AllNodeVmagPUByPhase - (read-only) Returns array of per unit voltage magnitudes for each node by phase
+    %    AllNodeDistancesByPhase - Returns an array of doubles representing the distances to parent EnergyMeter. Sequence of array corresponds to other node ByPhase properties.
+    %    AllNodeNamesByPhase - Return array of strings of the node names for the By Phase criteria. Sequence corresponds to other ByPhase properties.
+    %    AllNodeVmagByPhase - Returns Array of doubles represent voltage magnitudes for nodes on the specified phase.
+    %    AllNodeVmagPUByPhase - Returns array of per unit voltage magnitudes for each node by phase
     %    NextElement - 
     %    NextPCElement - 
     %    NextPDElement - 
@@ -89,45 +89,49 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    SetActiveElement - 
     %    UpdateStorage - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
-        ActiveElement = DSS_MATLAB.ICktElement
-        Solution = DSS_MATLAB.ISolution
-        ActiveBus = DSS_MATLAB.IBus
-        Generators = DSS_MATLAB.IGenerators
-        Meters = DSS_MATLAB.IMeters
-        Monitors = DSS_MATLAB.IMonitors
-        Settings = DSS_MATLAB.ISettings
-        Lines = DSS_MATLAB.ILines
-        CtrlQueue = DSS_MATLAB.ICtrlQueue
-        Loads = DSS_MATLAB.ILoads
-        ActiveCktElement = DSS_MATLAB.ICktElement
-        ActiveDSSElement = DSS_MATLAB.IDSSElement
-        ActiveClass = DSS_MATLAB.IActiveClass
-        CapControls = DSS_MATLAB.ICapControls
-        RegControls = DSS_MATLAB.IRegControls
-        SwtControls = DSS_MATLAB.ISwtControls
-        Transformers = DSS_MATLAB.ITransformers
-        Capacitors = DSS_MATLAB.ICapacitors
-        Topology = DSS_MATLAB.ITopology
-        Sensors = DSS_MATLAB.ISensors
-        XYCurves = DSS_MATLAB.IXYCurves
-        PDElements = DSS_MATLAB.IPDElements
-        Reclosers = DSS_MATLAB.IReclosers
-        Relays = DSS_MATLAB.IRelays
-        LoadShapes = DSS_MATLAB.ILoadShapes
-        Fuses = DSS_MATLAB.IFuses
-        Isources = DSS_MATLAB.IISources
-        DSSim_Coms = DSS_MATLAB.IDSSimComs
-        PVSystems = DSS_MATLAB.IPVSystems
-        Vsources = DSS_MATLAB.IVsources
-        LineCodes = DSS_MATLAB.ILineCodes
-        LineGeometries = DSS_MATLAB.ILineGeometries
-        LineSpacings = DSS_MATLAB.ILineSpacings
-        WireData = DSS_MATLAB.IWireData
-        CNData = DSS_MATLAB.ICNData
-        TSData = DSS_MATLAB.ITSData
-        Reactors = DSS_MATLAB.IReactors
-        ReduceCkt = DSS_MATLAB.IReduceCkt
+        ActiveElement
+        Solution
+        ActiveBus
+        Generators
+        Meters
+        Monitors
+        Settings
+        Lines
+        CtrlQueue
+        Loads
+        ActiveCktElement
+        ActiveDSSElement
+        ActiveClass
+        CapControls
+        RegControls
+        SwtControls
+        Transformers
+        Capacitors
+        Topology
+        Sensors
+        XYCurves
+        PDElements
+        Reclosers
+        Relays
+        LoadShapes
+        Fuses
+        Isources
+        DSSim_Coms
+        PVSystems
+        Vsources
+        LineCodes
+        LineGeometries
+        LineSpacings
+        WireData
+        CNData
+        TSData
+        Reactors
+        ReduceCkt
         AllBusDistances
         AllBusNames
         AllBusVmag
@@ -153,6 +157,47 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ICircuit(apiutil)
+            obj.apiutil = apiutil;
+            obj.ActiveElement = DSS_MATLAB.ICktElement(obj.apiutil);
+            obj.Solution = DSS_MATLAB.ISolution(obj.apiutil);
+            obj.ActiveBus = DSS_MATLAB.IBus(obj.apiutil);
+            obj.Generators = DSS_MATLAB.IGenerators(obj.apiutil);
+            obj.Meters = DSS_MATLAB.IMeters(obj.apiutil);
+            obj.Monitors = DSS_MATLAB.IMonitors(obj.apiutil);
+            obj.Settings = DSS_MATLAB.ISettings(obj.apiutil);
+            obj.Lines = DSS_MATLAB.ILines(obj.apiutil);
+            obj.CtrlQueue = DSS_MATLAB.ICtrlQueue(obj.apiutil);
+            obj.Loads = DSS_MATLAB.ILoads(obj.apiutil);
+            obj.ActiveCktElement = DSS_MATLAB.ICktElement(obj.apiutil);
+            obj.ActiveDSSElement = DSS_MATLAB.IDSSElement(obj.apiutil);
+            obj.ActiveClass = DSS_MATLAB.IActiveClass(obj.apiutil);
+            obj.CapControls = DSS_MATLAB.ICapControls(obj.apiutil);
+            obj.RegControls = DSS_MATLAB.IRegControls(obj.apiutil);
+            obj.SwtControls = DSS_MATLAB.ISwtControls(obj.apiutil);
+            obj.Transformers = DSS_MATLAB.ITransformers(obj.apiutil);
+            obj.Capacitors = DSS_MATLAB.ICapacitors(obj.apiutil);
+            obj.Topology = DSS_MATLAB.ITopology(obj.apiutil);
+            obj.Sensors = DSS_MATLAB.ISensors(obj.apiutil);
+            obj.XYCurves = DSS_MATLAB.IXYCurves(obj.apiutil);
+            obj.PDElements = DSS_MATLAB.IPDElements(obj.apiutil);
+            obj.Reclosers = DSS_MATLAB.IReclosers(obj.apiutil);
+            obj.Relays = DSS_MATLAB.IRelays(obj.apiutil);
+            obj.LoadShapes = DSS_MATLAB.ILoadShapes(obj.apiutil);
+            obj.Fuses = DSS_MATLAB.IFuses(obj.apiutil);
+            obj.Isources = DSS_MATLAB.IISources(obj.apiutil);
+            obj.DSSim_Coms = DSS_MATLAB.IDSSimComs(obj.apiutil);
+            obj.PVSystems = DSS_MATLAB.IPVSystems(obj.apiutil);
+            obj.Vsources = DSS_MATLAB.IVsources(obj.apiutil);
+            obj.LineCodes = DSS_MATLAB.ILineCodes(obj.apiutil);
+            obj.LineGeometries = DSS_MATLAB.ILineGeometries(obj.apiutil);
+            obj.LineSpacings = DSS_MATLAB.ILineSpacings(obj.apiutil);
+            obj.WireData = DSS_MATLAB.IWireData(obj.apiutil);
+            obj.CNData = DSS_MATLAB.ICNData(obj.apiutil);
+            obj.TSData = DSS_MATLAB.ITSData(obj.apiutil);
+            obj.Reactors = DSS_MATLAB.IReactors(obj.apiutil);
+            obj.ReduceCkt = DSS_MATLAB.IReduceCkt(obj.apiutil);
+        end
 
         function result = Capacity(obj, Start, Increment)
             result = calllib('dss_capi_v7', 'Circuit_Capacity', Start, Increment);
@@ -184,7 +229,8 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = AllNodeDistancesByPhase(obj, Phase)
             % (read-only) Returns an array of doubles representing the distances to parent EnergyMeter. Sequence of array corresponds to other node ByPhase properties.
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_AllNodeDistancesByPhase', Phase);
+            calllib('dss_capi_v7', 'Circuit_Get_AllNodeDistancesByPhase_GR', Phase);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = AllNodeNamesByPhase(obj, Phase)
@@ -194,12 +240,14 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = AllNodeVmagByPhase(obj, Phase)
             % (read-only) Returns Array of doubles represent voltage magnitudes for nodes on the specified phase.
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_AllNodeVmagByPhase', Phase);
+            calllib('dss_capi_v7', 'Circuit_Get_AllNodeVmagByPhase_GR', Phase);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = AllNodeVmagPUByPhase(obj, Phase)
             % (read-only) Returns array of per unit voltage magnitudes for each node by phase
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_AllNodeVmagPUByPhase', Phase);
+            calllib('dss_capi_v7', 'Circuit_Get_AllNodeVmagPUByPhase_GR', Phase);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = NextElement(obj)
@@ -275,7 +323,8 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.AllBusDistances(obj)
             % (read-only) Returns distance from each bus to parent EnergyMeter. Corresponds to sequence in AllBusNames.
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_AllBusDistances');
+            calllib('dss_capi_v7', 'Circuit_Get_AllBusDistances_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllBusNames(obj)
@@ -285,22 +334,26 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.AllBusVmag(obj)
             % (read-only) Array of magnitudes (doubles) of voltages at all buses
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_AllBusVmag');
+            calllib('dss_capi_v7', 'Circuit_Get_AllBusVmag_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllBusVmagPu(obj)
             % (read-only) Double Array of all bus voltages (each node) magnitudes in Per unit
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_AllBusVmagPu');
+            calllib('dss_capi_v7', 'Circuit_Get_AllBusVmagPu_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllBusVolts(obj)
             % (read-only) Complex array of all bus, node voltages from most recent solution
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_AllBusVolts');
+            calllib('dss_capi_v7', 'Circuit_Get_AllBusVolts_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllElementLosses(obj)
             % (read-only) Array of total losses (complex) in each circuit element
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_AllElementLosses');
+            calllib('dss_capi_v7', 'Circuit_Get_AllElementLosses_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllElementNames(obj)
@@ -310,7 +363,8 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.AllNodeDistances(obj)
             % (read-only) Returns an array of distances from parent EnergyMeter for each Node. Corresponds to AllBusVMag sequence.
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_AllNodeDistances');
+            calllib('dss_capi_v7', 'Circuit_Get_AllNodeDistances_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllNodeNames(obj)
@@ -320,12 +374,14 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.LineLosses(obj)
             % (read-only) Complex total line losses in the circuit
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_LineLosses');
+            calllib('dss_capi_v7', 'Circuit_Get_LineLosses_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Losses(obj)
             % (read-only) Total losses in active circuit, complex number (two-element array of double).
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_Losses');
+            calllib('dss_capi_v7', 'Circuit_Get_Losses_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Name(obj)
@@ -355,7 +411,8 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.SubstationLosses(obj)
             % (read-only) Complex losses in all transformers designated to substations.
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_SubstationLosses');
+            calllib('dss_capi_v7', 'Circuit_Get_SubstationLosses_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SystemY(obj)
@@ -365,12 +422,14 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.TotalPower(obj)
             % (read-only) Total power, watts delivered to the circuit
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_TotalPower');
+            calllib('dss_capi_v7', 'Circuit_Get_TotalPower_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.YCurrents(obj)
             % (read-only) Array of doubles containing complex injection currents for the present solution. Is is the "I" vector of I=YV
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_YCurrents');
+            calllib('dss_capi_v7', 'Circuit_Get_YCurrents_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.YNodeOrder(obj)
@@ -380,7 +439,8 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.YNodeVarray(obj)
             % (read-only) Complex array of actual node voltages in same order as SystemY matrix.
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_YNodeVarray');
+            calllib('dss_capi_v7', 'Circuit_Get_YNodeVarray_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
     end
 end

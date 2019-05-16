@@ -3,7 +3,11 @@ classdef (CaseInsensitiveProperties) IText < DSS_MATLAB.Base
     % 
     % Properties:
     %    Command - Input command string for the DSS.
-    %    Result - (read-only) Result string for the last command.
+    %    Result - Result string for the last command.
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         Command
@@ -11,6 +15,9 @@ classdef (CaseInsensitiveProperties) IText < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IText(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

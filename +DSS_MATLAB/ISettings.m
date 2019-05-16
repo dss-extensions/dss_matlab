@@ -22,6 +22,10 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
     %    AllocationFactors - (write-only) Sets all load allocation factors for all loads defined by XFKVA property to this value.
     %    LoadsTerminalCheck - Controls whether the terminals are checked when updating the currents in Load component. Defaults to True.  If the loads are guaranteed to have their terminals closed throughout the simulation, this can be set to False to save some time.
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllowDuplicates
         AutoBusList
@@ -45,6 +49,9 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ISettings(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -105,7 +112,8 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
 
         function result = get.LossRegs(obj)
             % Integer array defining which energy meter registers to use for computing losses
-            result = DSS_MATLAB.get_int32_array('Settings_Get_LossRegs');
+            calllib('dss_capi_v7', 'Settings_Get_LossRegs_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
         function obj = set.LossRegs(obj, Value)
             calllib('dss_capi_v7', 'Settings_Set_LossRegs', Value, numel(Value));
@@ -168,7 +176,8 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
 
         function result = get.UEregs(obj)
             % Array of Integers defining energy meter registers to use for computing UE
-            result = DSS_MATLAB.get_int32_array('Settings_Get_UEregs');
+            calllib('dss_capi_v7', 'Settings_Get_UEregs_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
         function obj = set.UEregs(obj, Value)
             calllib('dss_capi_v7', 'Settings_Set_UEregs', Value, numel(Value));
@@ -186,7 +195,8 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
 
         function result = get.VoltageBases(obj)
             % Array of doubles defining the legal voltage bases in kV L-L
-            result = DSS_MATLAB.get_float64_array('Settings_Get_VoltageBases');
+            calllib('dss_capi_v7', 'Settings_Get_VoltageBases_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.VoltageBases(obj, Value)
             calllib('dss_capi_v7', 'Settings_Set_VoltageBases', Value, numel(Value));
@@ -204,7 +214,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
 
         function result = get.AllocationFactors(obj)
             % (write-only) Sets all load allocation factors for all loads defined by XFKVA property to this value.
-            raise AttributeError('This property is write-only!')
+            result = NaN;
         end
         function obj = set.AllocationFactors(obj, Value)
             calllib('dss_capi_v7', 'Settings_Set_AllocationFactors', Value);

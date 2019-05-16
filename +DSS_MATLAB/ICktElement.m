@@ -2,55 +2,56 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     % ICktElement: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllPropertyNames - (read-only) Array containing all property names of the active device.
-    %    AllVariableNames - (read-only) Array of strings listing all the published variable names, if a PCElement. Otherwise, null string.
-    %    AllVariableValues - (read-only) Array of doubles. Values of state variables of active element if PC element.
+    %    AllPropertyNames - Array containing all property names of the active device.
+    %    AllVariableNames - Array of strings listing all the published variable names, if a PCElement. Otherwise, null string.
+    %    AllVariableValues - Array of doubles. Values of state variables of active element if PC element.
     %    BusNames - (read) Array of strings. Get  Bus definitions to which each terminal is connected. 0-based array.  (write) Array of strings. Set Bus definitions for each terminal is connected.
-    %    CplxSeqCurrents - (read-only) Complex double array of Sequence Currents for all conductors of all terminals of active circuit element.
-    %    CplxSeqVoltages - (read-only) Complex double array of Sequence Voltage for all terminals of active circuit element.
-    %    Currents - (read-only) Complex array of currents into each conductor of each terminal
-    %    CurrentsMagAng - (read-only) Currents in magnitude, angle format as a array of doubles.
+    %    CplxSeqCurrents - Complex double array of Sequence Currents for all conductors of all terminals of active circuit element.
+    %    CplxSeqVoltages - Complex double array of Sequence Voltage for all terminals of active circuit element.
+    %    Currents - Complex array of currents into each conductor of each terminal
+    %    CurrentsMagAng - Currents in magnitude, angle format as a array of doubles.
     %    DisplayName - Display name of the object (not necessarily unique)
-    %    EmergAmps - (read) Emergency Ampere Rating for PD elements  (write) Emergency Ampere Rating
+    %    EmergAmps - Emergency Ampere Rating for PD elements
     %    Enabled - Boolean indicating that element is currently in the circuit.
-    %    EnergyMeter - (read-only) Name of the Energy Meter this element is assigned to.
-    %    GUID - (read-only) globally unique identifier for this object
-    %    Handle - (read-only) Pointer to this object
-    %    HasOCPDevice - (read-only) True if a recloser, relay, or fuse controlling this ckt element. OCP = Overcurrent Protection
-    %    HasSwitchControl - (read-only) This element has a SwtControl attached.
-    %    HasVoltControl - (read-only) This element has a CapControl or RegControl attached.
-    %    Losses - (read-only) Total losses in the element: two-element complex array
-    %    Name - (read-only) Full Name of Active Circuit Element
-    %    NodeOrder - (read-only) Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal.
-    %    NormalAmps - (read) Normal ampere rating for PD Elements  (write) Normal ampere rating
-    %    NumConductors - (read-only) Number of Conductors per Terminal
-    %    NumControls - (read-only) Number of controls connected to this device. Use to determine valid range for index into Controller array.
-    %    NumPhases - (read-only) Number of Phases
-    %    NumProperties - (read-only) Number of Properties this Circuit Element.
-    %    NumTerminals - (read-only) Number of Terminals this Circuit Element
-    %    OCPDevIndex - (read-only) Index into Controller list of OCP Device controlling this CktElement
-    %    OCPDevType - (read-only) 0=None; 1=Fuse; 2=Recloser; 3=Relay;  Type of OCP controller device
-    %    PhaseLosses - (read-only) Complex array of losses by phase
-    %    Powers - (read-only) Complex array of powers into each conductor of each terminal
-    %    Residuals - (read-only) Residual currents for each terminal: (mag, angle)
-    %    SeqCurrents - (read-only) Double array of symmetrical component currents into each 3-phase terminal
-    %    SeqPowers - (read-only) Double array of sequence powers into each 3-phase teminal
-    %    SeqVoltages - (read-only) Double array of symmetrical component voltages at each 3-phase terminal
-    %    Voltages - (read-only) Complex array of voltages at terminals
-    %    VoltagesMagAng - (read-only) Voltages at each conductor in magnitude, angle form as array of doubles.
-    %    Yprim - (read-only) YPrim matrix, column order, complex numbers (paired)
+    %    EnergyMeter - Name of the Energy Meter this element is assigned to.
+    %    GUID - globally unique identifier for this object
+    %    Handle - Pointer to this object
+    %    HasOCPDevice - True if a recloser, relay, or fuse controlling this ckt element. OCP = Overcurrent Protection
+    %    HasSwitchControl - This element has a SwtControl attached.
+    %    HasVoltControl - This element has a CapControl or RegControl attached.
+    %    Losses - Total losses in the element: two-element complex array
+    %    Name - Full Name of Active Circuit Element
+    %    NodeOrder - Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal.
+    %    NormalAmps - Normal ampere rating for PD Elements
+    %    NumConductors - Number of Conductors per Terminal
+    %    NumControls - Number of controls connected to this device. Use to determine valid range for index into Controller array.
+    %    NumPhases - Number of Phases
+    %    NumProperties - Number of Properties this Circuit Element.
+    %    NumTerminals - Number of Terminals this Circuit Element
+    %    OCPDevIndex - Index into Controller list of OCP Device controlling this CktElement
+    %    OCPDevType - 0=None; 1=Fuse; 2=Recloser; 3=Relay;  Type of OCP controller device
+    %    PhaseLosses - Complex array of losses by phase
+    %    Powers - Complex array of powers into each conductor of each terminal
+    %    Residuals - Residual currents for each terminal: (mag, angle)
+    %    SeqCurrents - Double array of symmetrical component currents into each 3-phase terminal
+    %    SeqPowers - Double array of sequence powers into each 3-phase teminal
+    %    SeqVoltages - Double array of symmetrical component voltages at each 3-phase terminal
+    %    Voltages - Complex array of voltages at terminals
+    %    VoltagesMagAng - Voltages at each conductor in magnitude, angle form as array of doubles.
+    %    Yprim - YPrim matrix, column order, complex numbers (paired)
     % 
     % Methods:
     %    Close - 
-    %    Controller - (read-only) Full name of the i-th controller attached to this element. Ex: str = Controller(2).  See NumControls to determine valid index range
-    %    Variable - (read-only) Returns (value, Code). For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
-    %    Variablei - (read-only) Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
+    %    Controller - Full name of the i-th controller attached to this element. Ex: str = Controller(2).  See NumControls to determine valid index range
+    %    Variable - Returns (value, Code). For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
+    %    Variablei - Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
     %    IsOpen - 
     %    Open - 
     %    Properties - 
 
-    properties (Access = private)
-        PropertiesRef = DSS_MATLAB.IDSSProperty
+    properties (Access = protected)
+        apiutil
+        PropertiesRef
     end
 
     properties
@@ -94,6 +95,10 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ICktElement(apiutil)
+            obj.apiutil = apiutil;
+            obj.PropertiesRef = DSS_MATLAB.IDSSProperty(obj.apiutil);
+        end
 
         function obj = Close(obj, Term, Phs)
             calllib('dss_capi_v7', 'CktElement_Close', Term, Phs);
@@ -159,7 +164,8 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
         function result = get.AllVariableValues(obj)
             % (read-only) Array of doubles. Values of state variables of active element if PC element.
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_AllVariableValues');
+            calllib('dss_capi_v7', 'CktElement_Get_AllVariableValues_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.BusNames(obj)
@@ -174,22 +180,26 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
         function result = get.CplxSeqCurrents(obj)
             % (read-only) Complex double array of Sequence Currents for all conductors of all terminals of active circuit element.
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_CplxSeqCurrents');
+            calllib('dss_capi_v7', 'CktElement_Get_CplxSeqCurrents_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.CplxSeqVoltages(obj)
             % (read-only) Complex double array of Sequence Voltage for all terminals of active circuit element.
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_CplxSeqVoltages');
+            calllib('dss_capi_v7', 'CktElement_Get_CplxSeqVoltages_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Currents(obj)
             % (read-only) Complex array of currents into each conductor of each terminal
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_Currents');
+            calllib('dss_capi_v7', 'CktElement_Get_Currents_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.CurrentsMagAng(obj)
             % (read-only) Currents in magnitude, angle format as a array of doubles.
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_CurrentsMagAng');
+            calllib('dss_capi_v7', 'CktElement_Get_CurrentsMagAng_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.DisplayName(obj)
@@ -202,8 +212,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         end
 
         function result = get.EmergAmps(obj)
-            % (read) Emergency Ampere Rating for PD elements
-            % (write) Emergency Ampere Rating
+            % Emergency Ampere Rating for PD elements
             result = calllib('dss_capi_v7', 'CktElement_Get_EmergAmps');
         end
         function obj = set.EmergAmps(obj, Value)
@@ -252,7 +261,8 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
         function result = get.Losses(obj)
             % (read-only) Total losses in the element: two-element complex array
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_Losses');
+            calllib('dss_capi_v7', 'CktElement_Get_Losses_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Name(obj)
@@ -262,12 +272,12 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
         function result = get.NodeOrder(obj)
             % (read-only) Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal.
-            result = DSS_MATLAB.get_int32_array('CktElement_Get_NodeOrder');
+            calllib('dss_capi_v7', 'CktElement_Get_NodeOrder_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
 
         function result = get.NormalAmps(obj)
-            % (read) Normal ampere rating for PD Elements
-            % (write) Normal ampere rating
+            % Normal ampere rating for PD Elements
             result = calllib('dss_capi_v7', 'CktElement_Get_NormalAmps');
         end
         function obj = set.NormalAmps(obj, Value)
@@ -312,47 +322,56 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
         function result = get.PhaseLosses(obj)
             % (read-only) Complex array of losses by phase
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_PhaseLosses');
+            calllib('dss_capi_v7', 'CktElement_Get_PhaseLosses_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Powers(obj)
             % (read-only) Complex array of powers into each conductor of each terminal
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_Powers');
+            calllib('dss_capi_v7', 'CktElement_Get_Powers_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Residuals(obj)
             % (read-only) Residual currents for each terminal: (mag, angle)
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_Residuals');
+            calllib('dss_capi_v7', 'CktElement_Get_Residuals_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SeqCurrents(obj)
             % (read-only) Double array of symmetrical component currents into each 3-phase terminal
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_SeqCurrents');
+            calllib('dss_capi_v7', 'CktElement_Get_SeqCurrents_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SeqPowers(obj)
             % (read-only) Double array of sequence powers into each 3-phase teminal
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_SeqPowers');
+            calllib('dss_capi_v7', 'CktElement_Get_SeqPowers_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SeqVoltages(obj)
             % (read-only) Double array of symmetrical component voltages at each 3-phase terminal
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_SeqVoltages');
+            calllib('dss_capi_v7', 'CktElement_Get_SeqVoltages_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Voltages(obj)
             % (read-only) Complex array of voltages at terminals
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_Voltages');
+            calllib('dss_capi_v7', 'CktElement_Get_Voltages_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.VoltagesMagAng(obj)
             % (read-only) Voltages at each conductor in magnitude, angle form as array of doubles.
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_VoltagesMagAng');
+            calllib('dss_capi_v7', 'CktElement_Get_VoltagesMagAng_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Yprim(obj)
             % (read-only) YPrim matrix, column order, complex numbers (paired)
-            result = DSS_MATLAB.get_float64_array('CktElement_Get_Yprim');
+            calllib('dss_capi_v7', 'CktElement_Get_Yprim_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
     end
 end

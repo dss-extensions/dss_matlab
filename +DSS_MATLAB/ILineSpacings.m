@@ -8,12 +8,15 @@ classdef (CaseInsensitiveProperties) ILineSpacings < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active LineSpacing
     %    Next - Sets next LineSpacing active; returns 0 if no more.
     %    idx - Sets next LineSpacing active; returns 0 if no more.
-    %    Conductors - (read-only) Array of strings with names of all conductors in the active LineSpacing object
     %    Phases - Number of Phases
     %    Nconds - 
     %    Units - 
     %    Xcoords - Get/Set the X (horizontal) coordinates of the conductors
     %    Ycoords - Get/Set the Y (vertical/height) coordinates of the conductors
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -22,7 +25,6 @@ classdef (CaseInsensitiveProperties) ILineSpacings < DSS_MATLAB.Base
         Name
         Next
         idx
-        Conductors
         Phases
         Nconds
         Units
@@ -31,6 +33,9 @@ classdef (CaseInsensitiveProperties) ILineSpacings < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ILineSpacings(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -73,12 +78,6 @@ classdef (CaseInsensitiveProperties) ILineSpacings < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
-
-        function result = get.Conductors(obj)
-            % (read-only) Array of strings with names of all conductors in the active LineSpacing object
-            result = DSS_MATLAB.get_string_array('LineSpacings_Get_Conductors');
-        end
-
         function result = get.Phases(obj)
             % Number of Phases
             result = calllib('dss_capi_v7', 'LineSpacings_Get_Phases');
@@ -106,7 +105,8 @@ classdef (CaseInsensitiveProperties) ILineSpacings < DSS_MATLAB.Base
 
         function result = get.Xcoords(obj)
             % Get/Set the X (horizontal) coordinates of the conductors
-            result = DSS_MATLAB.get_float64_array('LineSpacings_Get_Xcoords');
+            calllib('dss_capi_v7', 'LineSpacings_Get_Xcoords_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Xcoords(obj, Value)
             calllib('dss_capi_v7', 'LineSpacings_Set_Xcoords', Value, numel(Value));
@@ -115,7 +115,8 @@ classdef (CaseInsensitiveProperties) ILineSpacings < DSS_MATLAB.Base
 
         function result = get.Ycoords(obj)
             % Get/Set the Y (vertical/height) coordinates of the conductors
-            result = DSS_MATLAB.get_float64_array('LineSpacings_Get_Ycoords');
+            calllib('dss_capi_v7', 'LineSpacings_Get_Ycoords_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Ycoords(obj, Value)
             calllib('dss_capi_v7', 'LineSpacings_Set_Ycoords', Value, numel(Value));

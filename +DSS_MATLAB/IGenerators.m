@@ -12,14 +12,18 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
     %    Model - Generator Model
     %    PF - Power factor (pos. = producing vars). Updates kvar based on present kW value.
     %    Phases - Number of phases
-    %    RegisterNames - (read-only) Array of Names of all generator energy meter registers
-    %    RegisterValues - (read-only) Array of valus in generator energy meter registers.
+    %    RegisterNames - Array of Names of all generator energy meter registers
+    %    RegisterValues - Array of valus in generator energy meter registers.
     %    Vmaxpu - Vmaxpu for generator model
     %    Vminpu - Vminpu for Generator model
     %    kV - Voltage base for the active generator, kV
     %    kVArated - kVA rating of the generator
     %    kW - kW output for the active generator. kvar is updated for current power factor.
     %    kvar - kvar output for the active generator. Updates power factor based on present kW value.
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -43,6 +47,9 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IGenerators(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -129,7 +136,8 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
 
         function result = get.RegisterValues(obj)
             % (read-only) Array of valus in generator energy meter registers.
-            result = DSS_MATLAB.get_float64_array('Generators_Get_RegisterValues');
+            calllib('dss_capi_v7', 'Generators_Get_RegisterValues_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Vmaxpu(obj)

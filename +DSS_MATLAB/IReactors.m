@@ -8,7 +8,6 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active Reactor
     %    Next - Sets next Reactor active; returns 0 if no more.
     %    idx - Sets next Reactor active; returns 0 if no more.
-    %    Conductors - (read-only) Array of strings with names of all conductors in the active Reactor object
     %    SpecType - How the reactor data was provided: 1=kvar, 2=R+jX, 3=R and X matrices, 4=sym components.  Depending on this value, only some properties are filled or make sense in the context.
     %    IsDelta - Delta connection or wye?
     %    Parallel - Indicates whether Rmatrix and Xmatrix are to be considered in parallel.
@@ -29,6 +28,10 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
     %    Z1 - Positive-sequence impedance, ohms, as a 2-element array representing a complex number.    If defined, Z1, Z2, and Z0 are used to define the impedance matrix of the REACTOR.    Z1 MUST BE DEFINED TO USE THIS OPTION FOR DEFINING THE MATRIX.    Side Effect: Sets Z2 and Z0 to same values unless they were previously defined.
     %    Z2 - Negative-sequence impedance, ohms, as a 2-element array representing a complex number.    Used to define the impedance matrix of the REACTOR if Z1 is also specified.    Note: Z2 defaults to Z1 if it is not specifically defined. If Z2 is not equal to Z1, the impedance matrix is asymmetrical.
     %    Z0 - Zero-sequence impedance, ohms, as a 2-element array representing a complex number.    Used to define the impedance matrix of the REACTOR if Z1 is also specified.    Note: Z0 defaults to Z1 if it is not specifically defined.
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -61,6 +64,9 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IReactors(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -101,12 +107,6 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
         function obj = set.idx(obj, Value)
             calllib('dss_capi_v7', 'Reactors_Set_idx', Value);
             obj.CheckForError();
-        end
-
-
-        function result = get.Conductors(obj)
-            % (read-only) Array of strings with names of all conductors in the active Reactor object
-            result = DSS_MATLAB.get_string_array('Reactors_Get_Conductors');
         end
 
         function result = get.SpecType(obj)
@@ -237,7 +237,8 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
 
         function result = get.Rmatrix(obj)
             % Resistance matrix, ohms at base frequency. Order of the matrix is the number of phases. Mutually exclusive to specifying parameters by kvar or X.
-            result = DSS_MATLAB.get_float64_array('Reactors_Get_Rmatrix');
+            calllib('dss_capi_v7', 'Reactors_Get_Rmatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Rmatrix(obj, Value)
             calllib('dss_capi_v7', 'Reactors_Set_Rmatrix', Value, numel(Value));
@@ -246,7 +247,8 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
 
         function result = get.Xmatrix(obj)
             % Reactance matrix, ohms at base frequency. Order of the matrix is the number of phases. Mutually exclusive to specifying parameters by kvar or X.
-            result = DSS_MATLAB.get_float64_array('Reactors_Get_Xmatrix');
+            calllib('dss_capi_v7', 'Reactors_Get_Xmatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Xmatrix(obj, Value)
             calllib('dss_capi_v7', 'Reactors_Set_Xmatrix', Value, numel(Value));
@@ -255,7 +257,8 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
 
         function result = get.Z(obj)
             % Alternative way of defining R and X properties. Enter a 2-element array representing R +jX in ohms.
-            result = DSS_MATLAB.get_float64_array('Reactors_Get_Z');
+            calllib('dss_capi_v7', 'Reactors_Get_Z_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Z(obj, Value)
             calllib('dss_capi_v7', 'Reactors_Set_Z', Value, numel(Value));
@@ -270,7 +273,8 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
             % Z1 MUST BE DEFINED TO USE THIS OPTION FOR DEFINING THE MATRIX.
             % 
             % Side Effect: Sets Z2 and Z0 to same values unless they were previously defined.
-            result = DSS_MATLAB.get_float64_array('Reactors_Get_Z1');
+            calllib('dss_capi_v7', 'Reactors_Get_Z1_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Z1(obj, Value)
             calllib('dss_capi_v7', 'Reactors_Set_Z1', Value, numel(Value));
@@ -283,7 +287,8 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
             % Used to define the impedance matrix of the REACTOR if Z1 is also specified.
             % 
             % Note: Z2 defaults to Z1 if it is not specifically defined. If Z2 is not equal to Z1, the impedance matrix is asymmetrical.
-            result = DSS_MATLAB.get_float64_array('Reactors_Get_Z2');
+            calllib('dss_capi_v7', 'Reactors_Get_Z2_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Z2(obj, Value)
             calllib('dss_capi_v7', 'Reactors_Set_Z2', Value, numel(Value));
@@ -296,7 +301,8 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
             % Used to define the impedance matrix of the REACTOR if Z1 is also specified.
             % 
             % Note: Z0 defaults to Z1 if it is not specifically defined.
-            result = DSS_MATLAB.get_float64_array('Reactors_Get_Z0');
+            calllib('dss_capi_v7', 'Reactors_Get_Z0_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Z0(obj, Value)
             calllib('dss_capi_v7', 'Reactors_Set_Z0', Value, numel(Value));

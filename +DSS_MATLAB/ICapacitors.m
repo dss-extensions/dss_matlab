@@ -8,7 +8,7 @@ classdef (CaseInsensitiveProperties) ICapacitors < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active Capacitor
     %    Next - Sets next Capacitor active; returns 0 if no more.
     %    idx - Sets next Capacitor active; returns 0 if no more.
-    %    AvailableSteps - (read-only) Number of Steps available in cap bank to be switched ON.
+    %    AvailableSteps - Number of Steps available in cap bank to be switched ON.
     %    IsDelta - Delta connection or wye?
     %    NumSteps - Number of steps (default 1) for distributing and switching the total bank kVAR.
     %    States - A array of  integer [0..numsteps-1] indicating state of each step. If the read value is -1 an error has occurred.
@@ -20,6 +20,10 @@ classdef (CaseInsensitiveProperties) ICapacitors < DSS_MATLAB.Base
     %    Close - 
     %    Open - 
     %    SubtractStep - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -37,6 +41,9 @@ classdef (CaseInsensitiveProperties) ICapacitors < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ICapacitors(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function result = AddStep(obj)
             result = (calllib('dss_capi_v7', 'Capacitors_AddStep') ~= 0);
@@ -121,7 +128,8 @@ classdef (CaseInsensitiveProperties) ICapacitors < DSS_MATLAB.Base
 
         function result = get.States(obj)
             % A array of  integer [0..numsteps-1] indicating state of each step. If the read value is -1 an error has occurred.
-            result = DSS_MATLAB.get_int32_array('Capacitors_Get_States');
+            calllib('dss_capi_v7', 'Capacitors_Get_States_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
         function obj = set.States(obj, Value)
             calllib('dss_capi_v7', 'Capacitors_Set_States', Value, numel(Value));

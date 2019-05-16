@@ -18,8 +18,8 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
     %    Length - Length of line section in units compatible with the LineCode definition.
     %    LineCode - Name of LineCode object that defines the impedances.
     %    NormAmps - Normal ampere rating of Line.
-    %    NumCust - (read-only) Number of customers on this line section.
-    %    Parent - (read-only) Sets Parent of the active Line to be the active line. Returns 0 if no parent or action fails.
+    %    NumCust - Number of customers on this line section.
+    %    Parent - Sets Parent of the active Line to be the active line. Returns 0 if no parent or action fails.
     %    Phases - Number of Phases, this Line element.
     %    R0 - Zero Sequence resistance, ohms per unit length.
     %    R1 - Positive Sequence resistance, ohms per unit length.
@@ -27,7 +27,7 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
     %    Rho - Earth Resistivity, m-ohms
     %    Rmatrix - Resistance matrix (full), ohms per unit length. Array of doubles.
     %    Spacing - Line spacing code
-    %    TotalCust - (read-only) Total Number of customers served from this line section.
+    %    TotalCust - Total Number of customers served from this line section.
     %    Units - 
     %    X0 - Zero Sequence reactance ohms per unit length.
     %    X1 - Positive Sequence reactance, ohms per unit length.
@@ -38,6 +38,10 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
     % 
     % Methods:
     %    New - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -76,6 +80,9 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ILines(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function result = New(obj, Name)
             result = calllib('dss_capi_v7', 'Lines_New', Name);
@@ -160,7 +167,8 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
         end
 
         function result = get.Cmatrix(obj)
-            result = DSS_MATLAB.get_float64_array('Lines_Get_Cmatrix');
+            calllib('dss_capi_v7', 'Lines_Get_Cmatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Cmatrix(obj, Value)
             calllib('dss_capi_v7', 'Lines_Set_Cmatrix', Value, numel(Value));
@@ -269,7 +277,8 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
 
         function result = get.Rmatrix(obj)
             % Resistance matrix (full), ohms per unit length. Array of doubles.
-            result = DSS_MATLAB.get_float64_array('Lines_Get_Rmatrix');
+            calllib('dss_capi_v7', 'Lines_Get_Rmatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Rmatrix(obj, Value)
             calllib('dss_capi_v7', 'Lines_Set_Rmatrix', Value, numel(Value));
@@ -326,7 +335,8 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
         end
 
         function result = get.Xmatrix(obj)
-            result = DSS_MATLAB.get_float64_array('Lines_Get_Xmatrix');
+            calllib('dss_capi_v7', 'Lines_Get_Xmatrix_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Xmatrix(obj, Value)
             calllib('dss_capi_v7', 'Lines_Set_Xmatrix', Value, numel(Value));
@@ -335,7 +345,8 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
 
         function result = get.Yprim(obj)
             % Yprimitive: Does Nothing at present on Put; Dangerous
-            result = DSS_MATLAB.get_float64_array('Lines_Get_Yprim');
+            calllib('dss_capi_v7', 'Lines_Get_Yprim_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Yprim(obj, Value)
             calllib('dss_capi_v7', 'Lines_Set_Yprim', Value, numel(Value));

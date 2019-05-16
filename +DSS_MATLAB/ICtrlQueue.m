@@ -2,12 +2,12 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
     % ICtrlQueue: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    ActionCode - (read-only) Code for the active action. Long integer code to tell the control device what to do
-    %    DeviceHandle - (read-only) Handle (User defined) to device that must act on the pending action.
-    %    NumActions - (read-only) Number of Actions on the current actionlist (that have been popped off the control queue by CheckControlActions)
-    %    PopAction - (read-only) Pops next action off the action list and makes it the active action. Returns zero if none.
-    %    Queue - (read-only) Array of strings containing the entire queue in CSV format
-    %    QueueSize - (read-only) Number of items on the OpenDSS control Queue
+    %    ActionCode - Code for the active action. Long integer code to tell the control device what to do
+    %    DeviceHandle - Handle (User defined) to device that must act on the pending action.
+    %    NumActions - Number of Actions on the current actionlist (that have been popped off the control queue by CheckControlActions)
+    %    PopAction - Pops next action off the action list and makes it the active action. Returns zero if none.
+    %    Queue - Array of strings containing the entire queue in CSV format
+    %    QueueSize - Number of items on the OpenDSS control Queue
     %    Action - (write-only) Set the active action by index
     % 
     % Methods:
@@ -17,6 +17,10 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
     %    DoAllQueue - 
     %    Show - 
     %    Push - Push a control action onto the DSS control queue by time, action code, and device handle (user defined). Returns Control Queue handle.
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         ActionCode
@@ -29,6 +33,9 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ICtrlQueue(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = ClearActions(obj)
             calllib('dss_capi_v7', 'CtrlQueue_ClearActions');
@@ -91,7 +98,7 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
 
         function result = get.Action(obj)
             % (write-only) Set the active action by index
-            raise AttributeError('This property is write-only!')
+            result = NaN;
         end
         function obj = set.Action(obj, Param1)
             calllib('dss_capi_v7', 'CtrlQueue_Set_Action', Param1);

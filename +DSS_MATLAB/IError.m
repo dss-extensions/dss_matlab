@@ -2,9 +2,13 @@ classdef (CaseInsensitiveProperties) IError < DSS_MATLAB.Base
     % IError: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    Description - (read-only) Description of error for last operation
-    %    Number - (read-only) Error Number (returns current value and then resets to zero)
+    %    Description - Description of error for last operation
+    %    Number - Error Number (returns current value and then resets to zero)
     %    EarlyAbort - EarlyAbort controls whether all errors halts the DSS script processing (Compile/Redirect), defaults to True.
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         Description
@@ -13,6 +17,9 @@ classdef (CaseInsensitiveProperties) IError < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IError(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

@@ -2,22 +2,26 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
     % IPDElements: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AccumulatedL - (read-only) accummulated failure rate for this branch on downline
-    %    Count - (read-only) Number of PD elements (including disabled elements)
+    %    AccumulatedL - accummulated failure rate for this branch on downline
+    %    Count - Number of PD elements (including disabled elements)
     %    FaultRate - Get/Set Number of failures per year. For LINE elements: Number of failures per unit length per year.
-    %    First - (read-only) Set the first enabled PD element to be the active element.  Returns 0 if none found.
-    %    FromTerminal - (read-only) Number of the terminal of active PD element that is on the "from" side. This is set after the meter zone is determined.
-    %    IsShunt - (read-only) Variant boolean indicating of PD element should be treated as a shunt element rather than a series element. Applies to Capacitor and Reactor elements in particular.
-    %    Lambda - (read-only) Failure rate for this branch. Faults per year including length of line.
+    %    First - Set the first enabled PD element to be the active element.  Returns 0 if none found.
+    %    FromTerminal - Number of the terminal of active PD element that is on the "from" side. This is set after the meter zone is determined.
+    %    IsShunt - Variant boolean indicating of PD element should be treated as a shunt element rather than a series element. Applies to Capacitor and Reactor elements in particular.
+    %    Lambda - Failure rate for this branch. Faults per year including length of line.
     %    Name - Get/Set name of active PD Element. Returns null string if active element is not PDElement type.
-    %    Next - (read-only) Advance to the next PD element in the circuit. Enabled elements only. Returns 0 when no more elements.
-    %    Numcustomers - (read-only) Number of customers, this branch
-    %    ParentPDElement - (read-only) Sets the parent PD element to be the active circuit element.  Returns 0 if no more elements upline.
+    %    Next - Advance to the next PD element in the circuit. Enabled elements only. Returns 0 when no more elements.
+    %    Numcustomers - Number of customers, this branch
+    %    ParentPDElement - Sets the parent PD element to be the active circuit element.  Returns 0 if no more elements upline.
     %    RepairTime - Average repair time for this element in hours
-    %    SectionID - (read-only) Integer ID of the feeder section that this PDElement branch is part of
-    %    TotalMiles - (read-only) Total miles of line from this element to the end of the zone. For recloser siting algorithm.
-    %    Totalcustomers - (read-only) Total number of customers from this branch to the end of the zone
+    %    SectionID - Integer ID of the feeder section that this PDElement branch is part of
+    %    TotalMiles - Total miles of line from this element to the end of the zone. For recloser siting algorithm.
+    %    Totalcustomers - Total number of customers from this branch to the end of the zone
     %    pctPermanent - Get/Set percent of faults that are permanent (require repair). Otherwise, fault is assumed to be transient/temporary.
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AccumulatedL
@@ -39,6 +43,9 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IPDElements(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

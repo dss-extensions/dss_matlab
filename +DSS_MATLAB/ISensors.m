@@ -24,6 +24,10 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
     %    Reset - 
     %    ResetAll - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -45,6 +49,9 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ISensors(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = Reset(obj)
             calllib('dss_capi_v7', 'Sensors_Reset');
@@ -98,7 +105,8 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
 
         function result = get.Currents(obj)
             % Array of doubles for the line current measurements; don't use with kWS and kVARS.
-            result = DSS_MATLAB.get_float64_array('Sensors_Get_Currents');
+            calllib('dss_capi_v7', 'Sensors_Get_Currents_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Currents(obj, Value)
             calllib('dss_capi_v7', 'Sensors_Set_Currents', Value, numel(Value));
@@ -161,7 +169,8 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
 
         function result = get.kVARS(obj)
             % Array of doubles for Q measurements. Overwrites Currents with a new estimate using kWS.
-            result = DSS_MATLAB.get_float64_array('Sensors_Get_kVARS');
+            calllib('dss_capi_v7', 'Sensors_Get_kVARS_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.kVARS(obj, Value)
             calllib('dss_capi_v7', 'Sensors_Set_kVARS', Value, numel(Value));
@@ -170,7 +179,8 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
 
         function result = get.kVS(obj)
             % Array of doubles for the LL or LN (depending on Delta connection) voltage measurements.
-            result = DSS_MATLAB.get_float64_array('Sensors_Get_kVS');
+            calllib('dss_capi_v7', 'Sensors_Get_kVS_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.kVS(obj, Value)
             calllib('dss_capi_v7', 'Sensors_Set_kVS', Value, numel(Value));
@@ -188,7 +198,8 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
 
         function result = get.kWS(obj)
             % Array of doubles for P measurements. Overwrites Currents with a new estimate using kVARS.
-            result = DSS_MATLAB.get_float64_array('Sensors_Get_kWS');
+            calllib('dss_capi_v7', 'Sensors_Get_kWS_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.kWS(obj, Value)
             calllib('dss_capi_v7', 'Sensors_Set_kWS', Value, numel(Value));

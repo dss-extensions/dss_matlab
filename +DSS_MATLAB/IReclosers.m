@@ -15,7 +15,7 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
     %    NumFast - Number of fast shots
     %    PhaseInst - Phase instantaneous curve multipler or actual amps
     %    PhaseTrip - (read) Phase trip curve multiplier or actual amps  (write) Phase Trip multiplier or actual amps
-    %    RecloseIntervals - (read-only) Variant Array of Doubles: reclose intervals, s, between shots.
+    %    RecloseIntervals - Variant Array of Doubles: reclose intervals, s, between shots.
     %    Shots - Number of shots to lockout (fast + delayed)
     %    SwitchedObj - Full name of the circuit element that is being switched by the Recloser.
     %    SwitchedTerm - Terminal number of the controlled device being switched by the Recloser
@@ -23,6 +23,10 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
     % Methods:
     %    Close - 
     %    Open - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -45,6 +49,9 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IReclosers(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = Close(obj)
             calllib('dss_capi_v7', 'Reclosers_Close');
@@ -164,7 +171,8 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
 
         function result = get.RecloseIntervals(obj)
             % (read-only) Variant Array of Doubles: reclose intervals, s, between shots.
-            result = DSS_MATLAB.get_float64_array('Reclosers_Get_RecloseIntervals');
+            calllib('dss_capi_v7', 'Reclosers_Get_RecloseIntervals_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Shots(obj)

@@ -2,9 +2,13 @@ classdef (CaseInsensitiveProperties) IDSSProperty < DSS_MATLAB.Base
     % IDSSProperty: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    Description - (read-only) Description of the property.
-    %    Name - (read-only) Name of Property
+    %    Description - Description of the property.
+    %    Name - Name of Property
     %    Val - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         Description
@@ -13,6 +17,9 @@ classdef (CaseInsensitiveProperties) IDSSProperty < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IDSSProperty(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

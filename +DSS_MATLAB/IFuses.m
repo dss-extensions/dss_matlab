@@ -11,7 +11,7 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
     %    Delay - (read) A fixed delay time in seconds added to the fuse blowing time determined by the TCC curve. Default is 0.  (write) Fixed delay time in seconds added to the fuse blowing time to represent fuse clear or other delay.
     %    MonitoredObj - Full name of the circuit element to which the fuse is connected.
     %    MonitoredTerm - (read) Terminal number to which the fuse is connected.  (write) Number of the terminal to which the fuse is connected
-    %    NumPhases - (read-only) Number of phases, this fuse.
+    %    NumPhases - Number of phases, this fuse.
     %    RatedCurrent - (read) Multiplier or actual amps for the TCCcurve object. Defaults to 1.0.  Multipliy current values of TCC curve by this to get actual amps.  (write) Multiplier or actual fuse amps for the TCC curve. Defaults to 1.0. Has to correspond to the Current axis of TCCcurve object.
     %    SwitchedObj - (read) Full name of the circuit element switch that the fuse controls. Defaults to the MonitoredObj.  (write) Full name of the circuit element switch that the fuse controls. Defaults to MonitoredObj.
     %    SwitchedTerm - (read) Number of the terminal containing the switch controlled by the fuse.  (write) Number of the terminal of the controlled element containing the switch controlled by the fuse.
@@ -21,6 +21,10 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
     %    Close - 
     %    IsBlown - 
     %    Open - 
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -40,6 +44,9 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IFuses(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = Close(obj)
             calllib('dss_capi_v7', 'Fuses_Close');

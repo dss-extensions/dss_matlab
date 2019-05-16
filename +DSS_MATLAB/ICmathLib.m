@@ -2,15 +2,22 @@ classdef (CaseInsensitiveProperties) ICmathLib < DSS_MATLAB.Base
     % ICmathLib: DSS MATLAB interface class to DSS C-API
     % 
     % Methods:
-    %    cabs - (read-only) Return abs value of complex number given in real and imag doubles
-    %    cdang - (read-only) Returns the angle, in degrees, of a complex number specified as two doubles: Realpart and imagpart.
-    %    cdiv - (read-only) Divide two complex number: (a1, b1)/(a2, b2). Returns array of two doubles representing complex result.
-    %    cmplx - (read-only) Convert real and imaginary doubles to Array of doubles
-    %    cmul - (read-only) Multiply two complex numbers: (a1, b1) * (a2, b2). Returns result as a array of two doubles.
-    %    ctopolardeg - (read-only) Convert complex number to magnitude and angle, degrees. Returns array of two doubles.
-    %    pdegtocomplex - (read-only) Convert magnitude, angle in degrees to a complex number. Returns Array of two doubles.
+    %    cabs - Return abs value of complex number given in real and imag doubles
+    %    cdang - Returns the angle, in degrees, of a complex number specified as two doubles: Realpart and imagpart.
+    %    cdiv - Divide two complex number: (a1, b1)/(a2, b2). Returns array of two doubles representing complex result.
+    %    cmplx - Convert real and imaginary doubles to Array of doubles
+    %    cmul - Multiply two complex numbers: (a1, b1) * (a2, b2). Returns result as a array of two doubles.
+    %    ctopolardeg - Convert complex number to magnitude and angle, degrees. Returns array of two doubles.
+    %    pdegtocomplex - Convert magnitude, angle in degrees to a complex number. Returns Array of two doubles.
+
+    properties (Access = protected)
+        apiutil
+    end
 
     methods (Access = public)
+        function obj = ICmathLib(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function result = cabs(obj, realpart, imagpart)
             % (read-only) Return abs value of complex number given in real and imag doubles
@@ -24,27 +31,32 @@ classdef (CaseInsensitiveProperties) ICmathLib < DSS_MATLAB.Base
 
         function result = cdiv(obj, a1, b1, a2, b2)
             % (read-only) Divide two complex number: (a1, b1)/(a2, b2). Returns array of two doubles representing complex result.
-            result = DSS_MATLAB.get_float64_array('CmathLib_Get_cdiv', a1, b1, a2, b2);
+            calllib('dss_capi_v7', 'CmathLib_Get_cdiv_GR', a1, b1, a2, b2);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = cmplx(obj, RealPart, ImagPart)
             % (read-only) Convert real and imaginary doubles to Array of doubles
-            result = DSS_MATLAB.get_float64_array('CmathLib_Get_cmplx', RealPart, ImagPart);
+            calllib('dss_capi_v7', 'CmathLib_Get_cmplx_GR', RealPart, ImagPart);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = cmul(obj, a1, b1, a2, b2)
             % (read-only) Multiply two complex numbers: (a1, b1) * (a2, b2). Returns result as a array of two doubles.
-            result = DSS_MATLAB.get_float64_array('CmathLib_Get_cmul', a1, b1, a2, b2);
+            calllib('dss_capi_v7', 'CmathLib_Get_cmul_GR', a1, b1, a2, b2);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = ctopolardeg(obj, RealPart, ImagPart)
             % (read-only) Convert complex number to magnitude and angle, degrees. Returns array of two doubles.
-            result = DSS_MATLAB.get_float64_array('CmathLib_Get_ctopolardeg', RealPart, ImagPart);
+            calllib('dss_capi_v7', 'CmathLib_Get_ctopolardeg_GR', RealPart, ImagPart);
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = pdegtocomplex(obj, magnitude, angle)
             % (read-only) Convert magnitude, angle in degrees to a complex number. Returns Array of two doubles.
-            result = DSS_MATLAB.get_float64_array('CmathLib_Get_pdegtocomplex', magnitude, angle);
+            calllib('dss_capi_v7', 'CmathLib_Get_pdegtocomplex_GR', magnitude, angle);
+            result = obj.apiutil.get_float64_gr_array();
         end
     end
     methods

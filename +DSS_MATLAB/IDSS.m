@@ -14,14 +14,14 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
     %    Parser - 
     %    DSSim_Coms - 
     %    YMatrix - 
-    %    Classes - (read-only) List of DSS intrinsic classes (names of the classes)
+    %    Classes - List of DSS intrinsic classes (names of the classes)
     %    DataPath - DSS Data File Path.  Default path for reports, etc. from DSS
-    %    DefaultEditor - (read-only) Returns the path name for the default text editor.
-    %    NumCircuits - (read-only) Number of Circuits currently defined
-    %    NumClasses - (read-only) Number of DSS intrinsic classes
-    %    NumUserClasses - (read-only) Number of user-defined classes
-    %    UserClasses - (read-only) List of user-defined classes
-    %    Version - (read-only) Get version string for the DSS.
+    %    DefaultEditor - Returns the path name for the default text editor.
+    %    NumCircuits - Number of Circuits currently defined
+    %    NumClasses - Number of DSS intrinsic classes
+    %    NumUserClasses - Number of user-defined classes
+    %    UserClasses - List of user-defined classes
+    %    Version - Get version string for the DSS.
     %    AllowForms - Gets/sets whether text output is allowed
     %    AllowEditor - Gets/sets whether running the external editor for "Show" is allowed.
     % 
@@ -34,21 +34,22 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
     %    NewCircuit - 
 
     properties (Access = protected)
-        libraryWasLoaded = 0
+        apiutil
     end
+
     properties
-        ActiveCircuit = DSS_MATLAB.ICircuit
-        Circuits = DSS_MATLAB.ICircuit
-        Error = DSS_MATLAB.IError
-        Text = DSS_MATLAB.IText
-        DSSProgress = DSS_MATLAB.IDSSProgress
-        ActiveClass = DSS_MATLAB.IActiveClass
-        Executive = DSS_MATLAB.IDSS_Executive
-        Events = DSS_MATLAB.IDSSEvents
-        CmathLib = DSS_MATLAB.ICmathLib
-        Parser = DSS_MATLAB.IParser
-        DSSim_Coms = DSS_MATLAB.IDSSimComs
-        YMatrix = DSS_MATLAB.IYMatrix
+        ActiveCircuit
+        Circuits
+        Error
+        Text
+        DSSProgress
+        ActiveClass
+        Executive
+        Events
+        CmathLib
+        Parser
+        DSSim_Coms
+        YMatrix
         Classes
         DataPath
         DefaultEditor
@@ -62,20 +63,21 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
     end
 
     methods (Access = public)
-        function obj = IDSS(obj)
-            MfilePath = fileparts(mfilename('fullpath'));
-            DLLfilePath = fullfile(MfilePath, 'dss_capi_v7');
-            if libisloaded('dss_capi_v7')
-                return
-            else
-                loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7_no_thunk);
-                obj.libraryWasLoaded = 1;
-            end
-        end
-        function delete(obj)
-            % if (obj.libraryWasLoaded ~= 0)
-                % unloadlibrary('dss_capi_v7');
-            % end
+        function obj = IDSS()
+            obj.apiutil = DSS_MATLAB.APIUtil();
+            obj.apiutil.InitBuffers();
+            obj.ActiveCircuit = DSS_MATLAB.ICircuit(obj.apiutil);
+            obj.Circuits = DSS_MATLAB.ICircuit(obj.apiutil);
+            obj.Error = DSS_MATLAB.IError(obj.apiutil);
+            obj.Text = DSS_MATLAB.IText(obj.apiutil);
+            obj.DSSProgress = DSS_MATLAB.IDSSProgress(obj.apiutil);
+            obj.ActiveClass = DSS_MATLAB.IActiveClass(obj.apiutil);
+            obj.Executive = DSS_MATLAB.IDSS_Executive(obj.apiutil);
+            obj.Events = DSS_MATLAB.IDSSEvents(obj.apiutil);
+            obj.CmathLib = DSS_MATLAB.ICmathLib(obj.apiutil);
+            obj.Parser = DSS_MATLAB.IParser(obj.apiutil);
+            obj.DSSim_Coms = DSS_MATLAB.IDSSimComs(obj.apiutil);
+            obj.YMatrix = DSS_MATLAB.IYMatrix(obj.apiutil);
         end
 
         function obj = ClearAll(obj)
@@ -104,9 +106,8 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
             result = obj.ActiveCircuit;
         end
     end
-    
     methods
-        
+
         function result = get.Classes(obj)
             % (read-only) List of DSS intrinsic classes (names of the classes)
             result = DSS_MATLAB.get_string_array('DSS_Get_Classes');

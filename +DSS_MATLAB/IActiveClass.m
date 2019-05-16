@@ -2,13 +2,17 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
     % IActiveClass: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    ActiveClassName - (read-only) Returns name of active class.
-    %    AllNames - (read-only) Array of strings consisting of all element names in the active class.
-    %    Count - (read-only) Number of elements in Active Class. Same as NumElements Property.
-    %    First - (read-only) Sets first element in the active class to be the active DSS object. If object is a CktElement, ActiveCktELment also points to this element. Returns 0 if none.
+    %    ActiveClassName - Returns name of active class.
+    %    AllNames - Array of strings consisting of all element names in the active class.
+    %    Count - Number of elements in Active Class. Same as NumElements Property.
+    %    First - Sets first element in the active class to be the active DSS object. If object is a CktElement, ActiveCktELment also points to this element. Returns 0 if none.
     %    Name - Name of the Active Element of the Active Class
-    %    Next - (read-only) Sets next element in active class to be the active DSS object. If object is a CktElement, ActiveCktElement also points to this element.  Returns 0 if no more.
-    %    NumElements - (read-only) Number of elements in this class. Same as Count property.
+    %    Next - Sets next element in active class to be the active DSS object. If object is a CktElement, ActiveCktElement also points to this element.  Returns 0 if no more.
+    %    NumElements - Number of elements in this class. Same as Count property.
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         ActiveClassName
@@ -21,6 +25,9 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = IActiveClass(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods

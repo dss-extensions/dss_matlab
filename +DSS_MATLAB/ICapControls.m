@@ -26,6 +26,10 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
     % Methods:
     %    Reset - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         AllNames
         Count
@@ -50,6 +54,9 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ICapControls(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = Reset(obj)
             calllib('dss_capi_v7', 'CapControls_Reset');

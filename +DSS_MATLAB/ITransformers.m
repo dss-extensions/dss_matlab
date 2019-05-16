@@ -24,13 +24,17 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
     %    Xneut - Active Winding neutral reactance [ohms] for wye connections.
     %    kV - Active Winding kV rating.  Phase-phase for 2 or 3 phases, actual winding kV for 1 phase transformer.
     %    kVA - Active Winding kVA rating. On winding 1, this also determines normal and emergency current ratings for all windings.
-    %    WdgVoltages - (read-only) Complex array of voltages for active winding
-    %    WdgCurrents - (read-only) All Winding currents (ph1, wdg1, wdg2,... ph2, wdg1, wdg2 ...)
-    %    strWdgCurrents - (read-only) All winding currents in CSV string form like the WdgCurrents property
+    %    WdgVoltages - Complex array of voltages for active winding
+    %    WdgCurrents - All Winding currents (ph1, wdg1, wdg2,... ph2, wdg1, wdg2 ...)
+    %    strWdgCurrents - All winding currents in CSV string form like the WdgCurrents property
     %    CoreType - Transformer Core Type: 0=shell;1 = 1-phase; 3= 3-leg; 5= 5-leg
     %    RdcOhms - dc Resistance of active winding in ohms for GIC analysis
     %    LossesByType - Complex array with the losses by type (total losses, load losses, no-load losses), in VA
     %    AllLossesByType - Complex array with the losses by type (total losses, load losses, no-load losses), in VA, concatenated for ALL transformers
+
+    properties (Access = protected)
+        apiutil
+    end
 
     properties
         AllNames
@@ -65,6 +69,9 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
     end
 
     methods (Access = public)
+        function obj = ITransformers(apiutil)
+            obj.apiutil = apiutil;
+        end
 
     end
     methods
@@ -254,12 +261,14 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
 
         function result = get.WdgVoltages(obj)
             % (read-only) Complex array of voltages for active winding
-            result = DSS_MATLAB.get_float64_array('Transformers_Get_WdgVoltages');
+            calllib('dss_capi_v7', 'Transformers_Get_WdgVoltages_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.WdgCurrents(obj)
             % (read-only) All Winding currents (ph1, wdg1, wdg2,... ph2, wdg1, wdg2 ...)
-            result = DSS_MATLAB.get_float64_array('Transformers_Get_WdgCurrents');
+            calllib('dss_capi_v7', 'Transformers_Get_WdgCurrents_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.strWdgCurrents(obj)
@@ -287,12 +296,14 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
 
         function result = get.LossesByType(obj)
             % Complex array with the losses by type (total losses, load losses, no-load losses), in VA
-            result = DSS_MATLAB.get_float64_array('Transformers_Get_LossesByType');
+            calllib('dss_capi_v7', 'Transformers_Get_LossesByType_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllLossesByType(obj)
             % Complex array with the losses by type (total losses, load losses, no-load losses), in VA, concatenated for ALL transformers
-            result = DSS_MATLAB.get_float64_array('Transformers_Get_AllLossesByType');
+            calllib('dss_capi_v7', 'Transformers_Get_AllLossesByType_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
     end
 end

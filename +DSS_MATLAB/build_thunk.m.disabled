@@ -1,0 +1,27 @@
+% This script builds the thunk DLL file for DSS_MATLAB.
+% Since the performance is nearly the same without it,
+% this is disabled
+
+original_folder = pwd;
+try
+    MfilePath = fileparts(mfilename('fullpath'));
+    
+    if libisloaded('dss_capi_v7')
+        unloadlibrary('dss_capi_v7');
+    end
+    
+    cd(MfilePath);
+    DLLfilePath = fullfile(MfilePath, 'dss_capi_v7');
+    try
+        loadlibrary(DLLfilePath, 'dss_capi.h', 'mfilename', 'dss_capi_v7');
+    catch err
+        % ignored
+    end
+
+    loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7);
+    disp('Thunk file for DSS_MATLAB was build successfully!');
+
+catch err
+    cd(original_folder);
+    rethrow(err);
+end

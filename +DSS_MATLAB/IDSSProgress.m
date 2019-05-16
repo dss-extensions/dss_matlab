@@ -9,12 +9,19 @@ classdef (CaseInsensitiveProperties) IDSSProgress < DSS_MATLAB.Base
     %    Close - 
     %    Show - 
 
+    properties (Access = protected)
+        apiutil
+    end
+
     properties
         Caption
         PctProgress
     end
 
     methods (Access = public)
+        function obj = IDSSProgress(apiutil)
+            obj.apiutil = apiutil;
+        end
 
         function obj = Close(obj)
             calllib('dss_capi_v7', 'DSSProgress_Close');
@@ -29,7 +36,7 @@ classdef (CaseInsensitiveProperties) IDSSProgress < DSS_MATLAB.Base
 
         function result = get.Caption(obj)
             % (write-only) Caption to appear on the bottom of the DSS Progress form.
-            raise AttributeError('This property is write-only!')
+            result = NaN;
         end
         function obj = set.Caption(obj, Value)
             calllib('dss_capi_v7', 'DSSProgress_Set_Caption', Value);
@@ -38,7 +45,7 @@ classdef (CaseInsensitiveProperties) IDSSProgress < DSS_MATLAB.Base
 
         function result = get.PctProgress(obj)
             % (write-only) Percent progress to indicate [0..100]
-            raise AttributeError('This property is write-only!')
+            result = NaN;
         end
         function obj = set.PctProgress(obj, Value)
             calllib('dss_capi_v7', 'DSSProgress_Set_PctProgress', Value);

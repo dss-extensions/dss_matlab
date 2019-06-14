@@ -1,8 +1,6 @@
 # DSS MATLAB: an unofficial MATLAB package for EPRI's OpenDSS
 
-**Currently in pre-release status!** 
-
-This is work-in-progress version of a set of MATLAB classes that expose the DSS C-API library with the same structure as the COM object. At the moment, this is the equivalent of DSS Python and DSS Sharp for MATLAB usage.
+This is version of a set of MATLAB classes that expose the DSS C-API library with the same structure as the COM object, with the same as extensions as DSS Python. This is the equivalent of DSS Python and DSS Sharp for MATLAB usage.
 
 Related projects: 
 - [`OpenDSS`](https://sourceforge.net/projects/electricdss/): The main OpenDSS project, maintained by EPRI.
@@ -10,6 +8,8 @@ Related projects:
 - [`DSS Python`](http://github.com/dss-extensions/dss_python): Python bindings that mimics the official COM interface.
 - [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): More pythonic bindings and useful tools.
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
+
+The first non-preview version, 0.10.3, is expected to cover most of the COM functions and classes. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users.
 
 ## Usage
 
@@ -44,6 +44,20 @@ function [Start,Obj,Text] = DSSStartup
 ```
 
 If you want some code to play with, you can use the MATLAB examples from the official OpenDSS distribution, from a local installation (e.g. `C:\OpenDSS\Examples\Matlab`) or from the [official SVN repository](https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/Distrib/Examples/Matlab/).
+
+[Sandia's GridPV toolbox](https://pvpmc.sandia.gov/applications/gridpv-toolbox/) has been confirmed to work with very minor changes. Note that the toolbox seems to be out-of-date for some features, so don't expect everything to work even with COM (e.g. Google Maps integration seem broken). 
+
+**As a general advice (valid for COM and DSS_MATLAB), avoid using the `get` function without parameters on OpenDSS classes. Some properties like `First` and `Next` used for iteration of elements change the current active element and can lead to misleading data!**
+
+## Known differences and more
+
+We maintain a list of important differences between the official COM implementation and DSS C-API at:
+
+https://github.com/dss-extensions/dss_capi/blob/master/docs/known_differences.md
+
+Most of these apply indirectly to DSS_MATLAB.
+
+The [list of important changes](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md#version-0103) through development is also useful.
 
 ## Credits / Acknowlegement
 

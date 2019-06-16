@@ -9,7 +9,7 @@ Related projects:
 - [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): More pythonic bindings and useful tools.
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
-The first non-preview version, 0.10.3, is expected to cover most of the COM functions and classes. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users.
+Version 0.10.3, released on 2019-06-14, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users.
 
 ## Usage
 
@@ -45,7 +45,7 @@ function [Start,Obj,Text] = DSSStartup
 
 If you want some code to play with, you can use the MATLAB examples from the official OpenDSS distribution, from a local installation (e.g. `C:\OpenDSS\Examples\Matlab`) or from the [official SVN repository](https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/Distrib/Examples/Matlab/).
 
-[Sandia's GridPV toolbox](https://pvpmc.sandia.gov/applications/gridpv-toolbox/) has been confirmed to work with very minor changes. Note that the toolbox seems to be out-of-date for some features, so don't expect everything to work even with COM (e.g. Google Maps integration seem broken). 
+[Sandia's GridPV toolbox](https://pvpmc.sandia.gov/applications/gridpv-toolbox/) has been confirmed to work with very minor changes. Note that the toolbox seems to be out-of-date for some features, so don't expect everything to work even with COM (e.g. Google Maps integration seems broken nowadays). 
 
 **As a general advice (valid for COM and DSS_MATLAB), avoid using the `get` function without parameters on OpenDSS classes. Some properties like `First` and `Next` used for iteration of elements change the current active element and can lead to misleading data!**
 

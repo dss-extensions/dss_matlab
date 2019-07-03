@@ -2,7 +2,7 @@
 % If you have not already added DSS_MATLAB to your MATLAB path, you can
 % use a command like one of the following -- adjust path as necessary:
 
-%path(path, 'c:\users\user\username\dss_matlab');
+%path(path, 'c:\users\username\dss_matlab');
 %path(path, '/home/username/dss_matlab');
 %path(path, '/Users/username/dss_matlab');
 
@@ -66,7 +66,7 @@ Bus.Voltages
 
 idx = Load.First;
 while idx ~= 0
-    disp(sprintf('Load %s - rated power: %g kW, %g kvar', Load.Name, Load.kW, Load.kvar))
+    fprintf('Load %s - rated power: %g kW, %g kvar', Load.Name, Load.kW, Load.kvar);
     idx = Load.Next;
 end
 

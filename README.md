@@ -51,7 +51,7 @@ function [Start,Obj,Text] = DSSStartup
     Text = Obj.Text;    
 ```
 
-On 2019-07-02, a simple example for the IEEE13 system was added in https://github.com/dss-extensions/dss_matlab/tree/master/examples/13Bus -- you can download the 4 files on that folder if you want to try DSS_MATLAB with a simple circuit. Those files will be included in a future release to simplify the process.
+On 2019-07-02, a simple example for the IEEE13 system was added in [13Bus.zip](https://github.com/dss-extensions/dss_matlab/raw/master/examples/13Bus.zip) if you want to try DSS_MATLAB with a sample circuit. The example files will be included in a future release to simplify the process.
 
 If you want more code to play with, you can use the MATLAB examples from the official OpenDSS distribution, from a local installation (e.g. `C:\OpenDSS\Examples\Matlab`) or from the [official SVN repository](https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/Distrib/Examples/Matlab/).
 

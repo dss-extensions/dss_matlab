@@ -1,5 +1,13 @@
 # DSS MATLAB: an unofficial MATLAB package for EPRI's OpenDSS
 
+---
+
+## **[📦 Downloads available here](https://github.com/dss-extensions/dss_matlab/releases/latest) for Linux, macOS and Windows**
+
+*Note that the repository itself doesn't contain the binaries since this is a multi-platform project. If you download the git repository, you still need the binary files from DSS C-API.*
+
+---
+
 This is version of a set of MATLAB classes that expose the DSS C-API library with the same structure as the COM object, with the same as extensions as DSS Python. This is the equivalent of DSS Python and DSS Sharp for MATLAB usage.
 
 Related projects: 
@@ -43,7 +51,9 @@ function [Start,Obj,Text] = DSSStartup
     Text = Obj.Text;    
 ```
 
-If you want some code to play with, you can use the MATLAB examples from the official OpenDSS distribution, from a local installation (e.g. `C:\OpenDSS\Examples\Matlab`) or from the [official SVN repository](https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/Distrib/Examples/Matlab/).
+On 2019-07-02, a simple example for the IEEE13 system was added in https://github.com/dss-extensions/dss_matlab/tree/master/examples/13Bus -- you can download the 4 files on that folder if you want to try DSS_MATLAB with a simple circuit. Those files will be included in a future release to simplify the process.
+
+If you want more code to play with, you can use the MATLAB examples from the official OpenDSS distribution, from a local installation (e.g. `C:\OpenDSS\Examples\Matlab`) or from the [official SVN repository](https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/Distrib/Examples/Matlab/).
 
 [Sandia's GridPV toolbox](https://pvpmc.sandia.gov/applications/gridpv-toolbox/) has been confirmed to work with very minor changes. Note that the toolbox seems to be out-of-date for some features, so don't expect everything to work even with COM (e.g. Google Maps integration seems broken nowadays). 
 

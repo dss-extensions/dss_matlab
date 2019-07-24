@@ -24,7 +24,7 @@ classdef Base < handle & matlab.mixin.CustomDisplay & matlab.mixin.SetGet
         function obj = CheckForError(obj)
             error = calllib('dss_capi_v7', 'Error_Get_Number');
             if error ~= 0
-                ME = MException(['DSS_MATLAB:Error' int2str(error)], calllib('dss_capi_v7', 'Error_Get_Description'));
+                ME = MException(['DSS_MATLAB:Error' int2str(error)], strrep(calllib('dss_capi_v7', 'Error_Get_Description'), '\', '\\'));
                 throw(ME);
             end
         end

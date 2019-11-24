@@ -17,7 +17,7 @@ Related projects:
 - [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): More pythonic bindings and useful tools.
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
-Version 0.10.3, released on 2019-06-14, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users.
+Version 0.10.4, released on 2019-11-23, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users.
 
 ## Usage
 
@@ -51,7 +51,7 @@ function [Start,Obj,Text] = DSSStartup
     Text = Obj.Text;    
 ```
 
-On 2019-07-02, a simple example for the IEEE13 system was added in [13Bus.zip](https://github.com/dss-extensions/dss_matlab/raw/master/examples/13Bus.zip) if you want to try DSS_MATLAB with a sample circuit. The example files will be included in a future release to simplify the process.
+On 2019-07-02, a simple example for the IEEE13 system was added in [13Bus.zip](https://github.com/dss-extensions/dss_matlab/raw/master/examples/13Bus.zip) if you want to try DSS_MATLAB with a sample circuit. This file is now also included in the download package.
 
 If you want more code to play with, you can use the MATLAB examples from the official OpenDSS distribution, from a local installation (e.g. `C:\OpenDSS\Examples\Matlab`) or from the [official SVN repository](https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/Distrib/Examples/Matlab/).
 
@@ -67,7 +67,7 @@ https://github.com/dss-extensions/dss_capi/blob/master/docs/known_differences.md
 
 Most of these apply indirectly to DSS_MATLAB.
 
-The [list of important changes](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md#version-0103) through development is also useful.
+The [list of important changes](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0104) through development is also useful.
 
 ## Credits / Acknowlegement
 

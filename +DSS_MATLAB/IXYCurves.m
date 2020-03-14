@@ -9,14 +9,14 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
     %    Next - Sets next XYCurve active; returns 0 if no more.
     %    idx - Sets next XYCurve active; returns 0 if no more.
     %    Npts - Get/Set Number of points in X-Y curve
-    %    Xarray - Get/Set X values as a Array of doubles. Set Npts to max number expected if setting
+    %    Xarray - Get/set X values as a Array of doubles. Set Npts to max number expected if setting
     %    Xscale - Factor to scale X values from original curve
     %    Xshift - Amount to shift X value from original curve
     %    Yarray - Get/Set Y values in curve; Set Npts to max number expected if setting
-    %    Yscale - (read) Factor to scale Y values from original curve  (write) Amount to scale Y values from original curve. Represents a curve shift.
-    %    Yshift - amount to shift Y valiue from original curve
+    %    Yscale - Factor to scale Y values from original curve
+    %    Yshift - Amount to shift Y valiue from original curve
     %    x - Set X value or get interpolated value after setting Y
-    %    y - (read) Y value for present X or set this value then get corresponding X  (write) Set Y value or get interpolated Y value after setting X
+    %    y - Set Y value or get interpolated Y value after setting X
 
     properties (Access = protected)
         apiutil
@@ -97,7 +97,7 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
         end
 
         function result = get.Xarray(obj)
-            % Get/Set X values as a Array of doubles. Set Npts to max number expected if setting
+            % Get/set X values as a Array of doubles. Set Npts to max number expected if setting
             calllib('dss_capi_v7', 'XYCurves_Get_Xarray_GR');
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -135,8 +135,7 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
         end
 
         function result = get.Yscale(obj)
-            % (read) Factor to scale Y values from original curve
-            % (write) Amount to scale Y values from original curve. Represents a curve shift.
+            % Factor to scale Y values from original curve
             result = calllib('dss_capi_v7', 'XYCurves_Get_Yscale');
         end
         function obj = set.Yscale(obj, Value)
@@ -145,7 +144,7 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
         end
 
         function result = get.Yshift(obj)
-            % amount to shift Y valiue from original curve
+            % Amount to shift Y valiue from original curve
             result = calllib('dss_capi_v7', 'XYCurves_Get_Yshift');
         end
         function obj = set.Yshift(obj, Value)
@@ -163,8 +162,7 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
         end
 
         function result = get.y(obj)
-            % (read) Y value for present X or set this value then get corresponding X
-            % (write) Set Y value or get interpolated Y value after setting X
+            % Set Y value or get interpolated Y value after setting X
             result = calllib('dss_capi_v7', 'XYCurves_Get_y');
         end
         function obj = set.y(obj, Value)

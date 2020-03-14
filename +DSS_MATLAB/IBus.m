@@ -19,7 +19,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
     %    SeqVoltages - Double Array of sequence voltages at this bus.
     %    TotalMiles - Total length of line downline from this bus, in miles. For recloser siting algorithm.
     %    VLL - For 2- and 3-phase buses, returns array of complex numbers represetin L-L voltages in volts. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only first 3.
-    %    VMagAngle - Variant Array of doubles containing voltages in Magnitude (VLN), angle (deg)
+    %    VMagAngle - Array of doubles containing voltages in Magnitude (VLN), angle (deg)
     %    Voc - Open circuit voltage; Complex array.
     %    Voltages - Complex array of voltages at this bus.
     %    YscMatrix - Complex array of Ysc matrix at bus. Column by column.
@@ -181,7 +181,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
         end
 
         function result = get.VMagAngle(obj)
-            % (read-only) Variant Array of doubles containing voltages in Magnitude (VLN), angle (deg)
+            % (read-only) Array of doubles containing voltages in Magnitude (VLN), angle (deg)
             calllib('dss_capi_v7', 'Bus_Get_VMagAngle_GR');
             result = obj.apiutil.get_float64_gr_array();
         end

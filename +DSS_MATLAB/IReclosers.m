@@ -8,14 +8,14 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active Recloser
     %    Next - Sets next Recloser active; returns 0 if no more.
     %    idx - Sets next Recloser active; returns 0 if no more.
-    %    GroundInst - (read) Ground (3I0) instantaneous trip setting - curve multipler or actual amps.  (write) Ground (3I0) trip instantaneous multiplier or actual amps
+    %    GroundInst - Ground (3I0) instantaneous trip setting - curve multipler or actual amps.
     %    GroundTrip - Ground (3I0) trip multiplier or actual amps
-    %    MonitoredObj - (read) Full name of object this Recloser is monitoring.  (write) Set monitored object by full name.
+    %    MonitoredObj - Full name of object this Recloser to be monitored.
     %    MonitoredTerm - Terminal number of Monitored object for the Recloser
     %    NumFast - Number of fast shots
     %    PhaseInst - Phase instantaneous curve multipler or actual amps
-    %    PhaseTrip - (read) Phase trip curve multiplier or actual amps  (write) Phase Trip multiplier or actual amps
-    %    RecloseIntervals - Variant Array of Doubles: reclose intervals, s, between shots.
+    %    PhaseTrip - Phase trip curve multiplier or actual amps
+    %    RecloseIntervals - Array of Doubles: reclose intervals, s, between shots.
     %    Shots - Number of shots to lockout (fast + delayed)
     %    SwitchedObj - Full name of the circuit element that is being switched by the Recloser.
     %    SwitchedTerm - Terminal number of the controlled device being switched by the Recloser
@@ -104,8 +104,7 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
 
 
         function result = get.GroundInst(obj)
-            % (read) Ground (3I0) instantaneous trip setting - curve multipler or actual amps.
-            % (write) Ground (3I0) trip instantaneous multiplier or actual amps
+            % Ground (3I0) instantaneous trip setting - curve multipler or actual amps.
             result = calllib('dss_capi_v7', 'Reclosers_Get_GroundInst');
         end
         function obj = set.GroundInst(obj, Value)
@@ -123,8 +122,7 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
         end
 
         function result = get.MonitoredObj(obj)
-            % (read) Full name of object this Recloser is monitoring.
-            % (write) Set monitored object by full name.
+            % Full name of object this Recloser to be monitored.
             result = calllib('dss_capi_v7', 'Reclosers_Get_MonitoredObj');
         end
         function obj = set.MonitoredObj(obj, Value)
@@ -160,8 +158,7 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
         end
 
         function result = get.PhaseTrip(obj)
-            % (read) Phase trip curve multiplier or actual amps
-            % (write) Phase Trip multiplier or actual amps
+            % Phase trip curve multiplier or actual amps
             result = calllib('dss_capi_v7', 'Reclosers_Get_PhaseTrip');
         end
         function obj = set.PhaseTrip(obj, Value)
@@ -170,7 +167,7 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
         end
 
         function result = get.RecloseIntervals(obj)
-            % (read-only) Variant Array of Doubles: reclose intervals, s, between shots.
+            % (read-only) Array of Doubles: reclose intervals, s, between shots.
             calllib('dss_capi_v7', 'Reclosers_Get_RecloseIntervals_GR');
             result = obj.apiutil.get_float64_gr_array();
         end

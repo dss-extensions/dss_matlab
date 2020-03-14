@@ -35,6 +35,7 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
     %    Xmatrix - 
     %    Yprim - Yprimitive: Does Nothing at present on Put; Dangerous
     %    SeasonRating - Delivers the rating for the current season (in Amps)  if the "SeasonalRatings" option is active
+    %    IsSwitch - Sets/gets the Line element switch status. Setting it has side-effects to the line parameters.
     % 
     % Methods:
     %    New - 
@@ -77,6 +78,7 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
         Xmatrix
         Yprim
         SeasonRating
+        IsSwitch
     end
 
     methods (Access = public)
@@ -356,6 +358,14 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
         function result = get.SeasonRating(obj)
             % Delivers the rating for the current season (in Amps)  if the "SeasonalRatings" option is active
             result = calllib('dss_capi_v7', 'Lines_Get_SeasonRating');
+        end
+
+        function result = get.IsSwitch(obj)
+            % Sets/gets the Line element switch status. Setting it has side-effects to the line parameters.
+            result = (calllib('dss_capi_v7', 'Lines_Get_IsSwitch') ~= 0);
+        end
+        function obj = set.IsSwitch(obj, Value)
+            calllib('dss_capi_v7', 'Lines_Set_IsSwitch', Value);
         end
     end
 end

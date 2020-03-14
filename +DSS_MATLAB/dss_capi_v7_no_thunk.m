@@ -52,6 +52,8 @@ fcns.thunkname{fcnNum}='int32voidThunk';fcns.name{fcnNum}='ActiveClass_Get_First
 fcns.thunkname{fcnNum}='int32voidThunk';fcns.name{fcnNum}='ActiveClass_Get_Next'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
 % char * ActiveClass_Get_Name ( void ); 
 fcns.thunkname{fcnNum}='cstringvoidThunk';fcns.name{fcnNum}='ActiveClass_Get_Name'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='cstring'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% char * ActiveClass_Get_ActiveClassParent ( void ); 
+fcns.thunkname{fcnNum}='cstringvoidThunk';fcns.name{fcnNum}='ActiveClass_Get_ActiveClassParent'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='cstring'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
 % void ActiveClass_Set_Name ( char * Value ); 
 fcns.thunkname{fcnNum}='voidcstringThunk';fcns.name{fcnNum}='ActiveClass_Set_Name'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'cstring'};fcnNum=fcnNum+1;
 % int32_t ActiveClass_Get_NumElements ( void ); 
@@ -1630,6 +1632,12 @@ fcns.thunkname{fcnNum}='voiddoubleThunk';fcns.name{fcnNum}='PVSystems_Set_kVArat
 fcns.thunkname{fcnNum}='voiddoubleThunk';fcns.name{fcnNum}='PVSystems_Set_PF'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'double'};fcnNum=fcnNum+1;
 % void PVSystems_Set_kvar ( double Value ); 
 fcns.thunkname{fcnNum}='voiddoubleThunk';fcns.name{fcnNum}='PVSystems_Set_kvar'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'double'};fcnNum=fcnNum+1;
+% double PVSystems_Get_Pmpp ( void ); 
+fcns.thunkname{fcnNum}='doublevoidThunk';fcns.name{fcnNum}='PVSystems_Get_Pmpp'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='double'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void PVSystems_Set_Pmpp ( double Value ); 
+fcns.thunkname{fcnNum}='voiddoubleThunk';fcns.name{fcnNum}='PVSystems_Set_Pmpp'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'double'};fcnNum=fcnNum+1;
+% double PVSystems_Get_IrradianceNow ( void ); 
+fcns.thunkname{fcnNum}='doublevoidThunk';fcns.name{fcnNum}='PVSystems_Get_IrradianceNow'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='double'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
 % void Reclosers_Get_AllNames ( char *** ResultPtr , int32_t * ResultCount ); 
 fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='Reclosers_Get_AllNames'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'voidPtr', 'int32Ptr'};fcnNum=fcnNum+1;
 % void Reclosers_Get_AllNames_GR ( void ); 

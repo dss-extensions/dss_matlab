@@ -8,13 +8,13 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active Fuse
     %    Next - Sets next Fuse active; returns 0 if no more.
     %    idx - Sets next Fuse active; returns 0 if no more.
-    %    Delay - (read) A fixed delay time in seconds added to the fuse blowing time determined by the TCC curve. Default is 0.  (write) Fixed delay time in seconds added to the fuse blowing time to represent fuse clear or other delay.
+    %    Delay - A fixed delay time in seconds added to the fuse blowing time determined by the TCC curve. Default is 0.  This represents a fuse clear or other delay.
     %    MonitoredObj - Full name of the circuit element to which the fuse is connected.
-    %    MonitoredTerm - (read) Terminal number to which the fuse is connected.  (write) Number of the terminal to which the fuse is connected
+    %    MonitoredTerm - Terminal number to which the fuse is connected.
     %    NumPhases - Number of phases, this fuse.
-    %    RatedCurrent - (read) Multiplier or actual amps for the TCCcurve object. Defaults to 1.0.  Multipliy current values of TCC curve by this to get actual amps.  (write) Multiplier or actual fuse amps for the TCC curve. Defaults to 1.0. Has to correspond to the Current axis of TCCcurve object.
-    %    SwitchedObj - (read) Full name of the circuit element switch that the fuse controls. Defaults to the MonitoredObj.  (write) Full name of the circuit element switch that the fuse controls. Defaults to MonitoredObj.
-    %    SwitchedTerm - (read) Number of the terminal containing the switch controlled by the fuse.  (write) Number of the terminal of the controlled element containing the switch controlled by the fuse.
+    %    RatedCurrent - Multiplier or actual amps for the TCCcurve object. Defaults to 1.0.   Multiply current values of TCC curve by this to get actual amps.
+    %    SwitchedObj - Full name of the circuit element switch that the fuse controls.   Defaults to the MonitoredObj.
+    %    SwitchedTerm - Number of the terminal of the controlled element containing the switch controlled by the fuse.
     %    TCCcurve - Name of the TCCcurve object that determines fuse blowing.
     % 
     % Methods:
@@ -103,8 +103,8 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
 
 
         function result = get.Delay(obj)
-            % (read) A fixed delay time in seconds added to the fuse blowing time determined by the TCC curve. Default is 0.
-            % (write) Fixed delay time in seconds added to the fuse blowing time to represent fuse clear or other delay.
+            % A fixed delay time in seconds added to the fuse blowing time determined by the TCC curve. Default is 0.
+            % This represents a fuse clear or other delay.
             result = calllib('dss_capi_v7', 'Fuses_Get_Delay');
         end
         function obj = set.Delay(obj, Value)
@@ -122,8 +122,7 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
         end
 
         function result = get.MonitoredTerm(obj)
-            % (read) Terminal number to which the fuse is connected.
-            % (write) Number of the terminal to which the fuse is connected
+            % Terminal number to which the fuse is connected.
             result = calllib('dss_capi_v7', 'Fuses_Get_MonitoredTerm');
         end
         function obj = set.MonitoredTerm(obj, Value)
@@ -137,8 +136,8 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
         end
 
         function result = get.RatedCurrent(obj)
-            % (read) Multiplier or actual amps for the TCCcurve object. Defaults to 1.0.  Multipliy current values of TCC curve by this to get actual amps.
-            % (write) Multiplier or actual fuse amps for the TCC curve. Defaults to 1.0. Has to correspond to the Current axis of TCCcurve object.
+            % Multiplier or actual amps for the TCCcurve object. Defaults to 1.0. 
+            % Multiply current values of TCC curve by this to get actual amps.
             result = calllib('dss_capi_v7', 'Fuses_Get_RatedCurrent');
         end
         function obj = set.RatedCurrent(obj, Value)
@@ -147,8 +146,8 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
         end
 
         function result = get.SwitchedObj(obj)
-            % (read) Full name of the circuit element switch that the fuse controls. Defaults to the MonitoredObj.
-            % (write) Full name of the circuit element switch that the fuse controls. Defaults to MonitoredObj.
+            % Full name of the circuit element switch that the fuse controls. 
+            % Defaults to the MonitoredObj.
             result = calllib('dss_capi_v7', 'Fuses_Get_SwitchedObj');
         end
         function obj = set.SwitchedObj(obj, Value)
@@ -157,8 +156,7 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
         end
 
         function result = get.SwitchedTerm(obj)
-            % (read) Number of the terminal containing the switch controlled by the fuse.
-            % (write) Number of the terminal of the controlled element containing the switch controlled by the fuse.
+            % Number of the terminal of the controlled element containing the switch controlled by the fuse.
             result = calllib('dss_capi_v7', 'Fuses_Get_SwitchedTerm');
         end
         function obj = set.SwitchedTerm(obj, Value)

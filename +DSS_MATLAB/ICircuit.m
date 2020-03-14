@@ -416,8 +416,11 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
         end
 
         function result = get.SystemY(obj)
-            % (read-only) System Y matrix (after a solution has been performed)
-            result = DSS_MATLAB.get_float64_array('Circuit_Get_SystemY');
+            % (read-only) System Y matrix (after a solution has been performed). 
+            % This is deprecated as it returns a dense matrix. Only use it for small systems.
+            % For large scale systems, prefer YMatrix.GetCompressedYMatrix.
+            calllib('dss_capi_v7', 'Circuit_Get_SystemY_GR');
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.TotalPower(obj)

@@ -168,9 +168,9 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
         function result = get.AllowEditor(obj)
             % Gets/sets whether running the external editor for "Show" is allowed
             % 
-            %         AllowEditor controls whether the external editor is used in commands like "Show".
-            %         If you set to 0 (false), the editor is not executed. Note that other side effects,
-            %         such as the creation of files, are not affected.
+            % AllowEditor controls whether the external editor is used in commands like "Show".
+            % If you set to 0 (false), the editor is not executed. Note that other side effects,
+            % such as the creation of files, are not affected.
             result = (calllib('dss_capi_v7', 'DSS_Get_AllowEditor') ~= 0);
         end
         function obj = set.AllowEditor(obj, value)

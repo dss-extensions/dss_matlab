@@ -10,7 +10,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
     %    idx - Sets next LineGeometrie active; returns 0 if no more.
     %    Conductors - Array of strings with names of all conductors in the active LineGeometry object
     %    EmergAmps - Emergency ampere rating
-    %    NormAmps - Normal Ampere rating
+    %    NormAmps - Normal ampere rating
     %    RhoEarth - 
     %    Reduce - 
     %    Phases - Number of Phases
@@ -132,7 +132,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
         end
 
         function result = get.NormAmps(obj)
-            % Normal Ampere rating
+            % Normal ampere rating
             result = calllib('dss_capi_v7', 'LineGeometries_Get_NormAmps');
         end
         function obj = set.NormAmps(obj, Value)

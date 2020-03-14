@@ -7,7 +7,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
     %    FaultRate - Get/Set Number of failures per year. For LINE elements: Number of failures per unit length per year.
     %    First - Set the first enabled PD element to be the active element.  Returns 0 if none found.
     %    FromTerminal - Number of the terminal of active PD element that is on the "from" side. This is set after the meter zone is determined.
-    %    IsShunt - Variant boolean indicating of PD element should be treated as a shunt element rather than a series element. Applies to Capacitor and Reactor elements in particular.
+    %    IsShunt - Boolean indicating of PD element should be treated as a shunt element rather than a series element. Applies to Capacitor and Reactor elements in particular.
     %    Lambda - Failure rate for this branch. Faults per year including length of line.
     %    Name - Get/Set name of active PD Element. Returns null string if active element is not PDElement type.
     %    Next - Advance to the next PD element in the circuit. Enabled elements only. Returns 0 when no more elements.
@@ -80,7 +80,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
         end
 
         function result = get.IsShunt(obj)
-            % (read-only) Variant boolean indicating of PD element should be treated as a shunt element rather than a series element. Applies to Capacitor and Reactor elements in particular.
+            % (read-only) Boolean indicating of PD element should be treated as a shunt element rather than a series element. Applies to Capacitor and Reactor elements in particular.
             result = (calllib('dss_capi_v7', 'PDElements_Get_IsShunt') ~= 0);
         end
 

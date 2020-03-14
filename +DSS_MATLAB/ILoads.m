@@ -12,7 +12,7 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
     %    CVRcurve - Name of a loadshape with both Mult and Qmult, for CVR factors as a function of time.
     %    CVRvars - Percent reduction in Q for percent reduction in V. Must be used with dssLoadModelCVR.
     %    CVRwatts - Percent reduction in P for percent reduction in V. Must be used with dssLoadModelCVR.
-    %    Cfactor - Factor relates average to peak kw.  Used for allocation with kwh and kwhdays/
+    %    Cfactor - Factor relates average to peak kw.  Used for allocation with kwh and kwhdays
     %    Class - 
     %    Growth - Name of the growthshape curve for yearly load growth factors.
     %    IsDelta - Delta loads are connected line-to-line.
@@ -31,13 +31,13 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
     %    Vminpu - Minimum voltage to apply the load model. Below this, constant Z is used.
     %    Xneut - Neutral reactance for wye-connected loads.
     %    Yearly - Name of yearly duration loadshape
-    %    ZIPV - Array of 7  doubles with values for ZIPV property of the LOAD object
+    %    ZIPV - Array of 7 doubles with values for ZIPV property of the load object
     %    daily - Name of the loadshape for a daily load profile.
     %    duty - Name of the loadshape for a duty cycle simulation.
     %    kV - Set kV rating for active Load. For 2 or more phases set Line-Line kV. Else actual kV across terminals.
     %    kW - Set kW for active Load. Updates kvar based on present PF.
     %    kva - Base load kva. Also defined kw and kvar or pf input, or load allocation by kwh or xfkva.
-    %    kvar - Set kvar for active Load. Updates PF based on present kW.
+    %    kvar - Get/set kvar for active Load. If set, updates PF based on present kW.
     %    kwh - kwh billed for this period. Can be used with Cfactor for load allocation.
     %    kwhdays - Length of kwh billing period for average demand calculation. Default 30.
     %    pctSeriesRL - Percent of Load that is modeled as series R-L for harmonics studies
@@ -175,7 +175,7 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
         end
 
         function result = get.Cfactor(obj)
-            % Factor relates average to peak kw.  Used for allocation with kwh and kwhdays/
+            % Factor relates average to peak kw.  Used for allocation with kwh and kwhdays
             result = calllib('dss_capi_v7', 'Loads_Get_Cfactor');
         end
         function obj = set.Cfactor(obj, Value)
@@ -345,7 +345,7 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
         end
 
         function result = get.ZIPV(obj)
-            % Array of 7  doubles with values for ZIPV property of the LOAD object
+            % Array of 7 doubles with values for ZIPV property of the load object
             calllib('dss_capi_v7', 'Loads_Get_ZIPV_GR');
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -400,7 +400,7 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
         end
 
         function result = get.kvar(obj)
-            % Set kvar for active Load. Updates PF based on present kW.
+            % Get/set kvar for active Load. If set, updates PF based on present kW.
             result = calllib('dss_capi_v7', 'Loads_Get_kvar');
         end
         function obj = set.kvar(obj, Value)

@@ -10,13 +10,13 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
     %    idx - Sets next LoadShape active; returns 0 if no more.
     %    HrInterval - Fixed interval time value, hours.
     %    MinInterval - Fixed Interval time value, in minutes
-    %    Npts - (read) Get Number of points in active Loadshape.  (write) Set number of points to allocate for active Loadshape.
+    %    Npts - Get/set Number of points in active Loadshape.
     %    PBase - 
     %    Pmult - Array of doubles for the P multiplier in the Loadshape.
     %    QBase - Base for normalizing Q curve. If left at zero, the peak value is used.
     %    Qmult - Array of doubles containing the Q multipliers.
     %    TimeArray - Time array in hours correscponding to P and Q multipliers when the Interval=0.
-    %    UseActual - T/F flag to let Loads know to use the actual value in the curve rather than use the value as a multiplier.
+    %    UseActual - Boolean flag to let Loads know to use the actual value in the curve rather than use the value as a multiplier.
     %    sInterval - 
     % 
     % Methods:
@@ -120,8 +120,7 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
         end
 
         function result = get.Npts(obj)
-            % (read) Get Number of points in active Loadshape.
-            % (write) Set number of points to allocate for active Loadshape.
+            % Get/set Number of points in active Loadshape.
             result = calllib('dss_capi_v7', 'LoadShapes_Get_Npts');
         end
         function obj = set.Npts(obj, Value)
@@ -177,7 +176,7 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
         end
 
         function result = get.UseActual(obj)
-            % T/F flag to let Loads know to use the actual value in the curve rather than use the value as a multiplier.
+            % Boolean flag to let Loads know to use the actual value in the curve rather than use the value as a multiplier.
             result = (calllib('dss_capi_v7', 'LoadShapes_Get_UseActual') ~= 0);
         end
         function obj = set.UseActual(obj, Value)

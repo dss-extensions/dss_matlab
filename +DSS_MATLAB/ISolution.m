@@ -24,7 +24,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
     %    LoadMult - Default load multiplier applied to all non-fixed loads
     %    MaxControlIterations - Maximum allowable control iterations
     %    MaxIterations - Max allowable iterations.
-    %    MinIterations - (read) Minimum number of iterations required for a power flow solution.  (write) Mininum number of iterations required for a power flow solution.
+    %    MinIterations - Minimum number of iterations required for a power flow solution.
     %    Mode - Set present solution mode (by a text code - see DSS Help)
     %    ModeID - ID (text) of the present solution mode
     %    MostIterationsDone - Max number of iterations required to converge at any control iteration of the most recent solution.
@@ -399,8 +399,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.MinIterations(obj)
-            % (read) Minimum number of iterations required for a power flow solution.
-            % (write) Mininum number of iterations required for a power flow solution.
+            % Minimum number of iterations required for a power flow solution.
             result = calllib('dss_capi_v7', 'Solution_Get_MinIterations');
         end
         function obj = set.MinIterations(obj, Value)

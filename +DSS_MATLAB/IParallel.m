@@ -2,9 +2,9 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
     % IParallel: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    ActiveActor - (read) Gets the ID of the Active Actor  (write) Sets the Active Actor
+    %    ActiveActor - Gets/sets the ID of the Active Actor
     %    ActiveParallel - (read) Sets ON/OFF (1/0) Parallel features of the Engine  (write) Delivers if the Parallel features of the Engine are Active
-    %    ActorCPU - (read) Gets the CPU of the Active Actor  (write) Sets the CPU for the Active Actor
+    %    ActorCPU - Gets/sets the CPU of the Active Actor
     %    ActorProgress - Gets the progress of all existing actors in pct
     %    ActorStatus - Gets the status of each actor
     %    ConcatenateReports - (read) Reads the values of the ConcatenateReports option (1=enabled, 0=disabled)  (write) Enable/Disable (1/0) the ConcatenateReports option for extracting monitors data
@@ -49,8 +49,7 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
     methods
 
         function result = get.ActiveActor(obj)
-            % (read) Gets the ID of the Active Actor
-            % (write) Sets the Active Actor
+            % Gets/sets the ID of the Active Actor
             result = calllib('dss_capi_v7', 'Parallel_Get_ActiveActor');
         end
         function obj = set.ActiveActor(obj, Value)
@@ -69,8 +68,7 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
         end
 
         function result = get.ActorCPU(obj)
-            % (read) Gets the CPU of the Active Actor
-            % (write) Sets the CPU for the Active Actor
+            % Gets/sets the CPU of the Active Actor
             result = calllib('dss_capi_v7', 'Parallel_Get_ActorCPU');
         end
         function obj = set.ActorCPU(obj, Value)

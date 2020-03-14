@@ -11,8 +11,8 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
     %    Action - Open or Close the switch. No effect if switch is locked.  However, Reset removes any lock and then closes the switch (shelf state).
     %    Delay - Time delay [s] betwen arming and opening or closing the switch.  Control may reset before actually operating the switch.
     %    IsLocked - The lock prevents both manual and automatic switch operation.
-    %    NormalState - (read) Get Normal state of switch  (write) set Normal state of switch  (see actioncodes) dssActionOpen or dssActionClose
-    %    State - (read) Force switch to specified state  (write) Get Present state of switch
+    %    NormalState - Get/set Normal state of switch (see actioncodes) dssActionOpen or dssActionClose
+    %    State - Set it to force the switch to a specified state, otherwise read its present state.
     %    SwitchedObj - Full name of the switched element.
     %    SwitchedTerm - Terminal number where the switch is located on the SwitchedObj
     % 
@@ -118,8 +118,7 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
         end
 
         function result = get.NormalState(obj)
-            % (read) Get Normal state of switch
-            % (write) set Normal state of switch  (see actioncodes) dssActionOpen or dssActionClose
+            % Get/set Normal state of switch (see actioncodes) dssActionOpen or dssActionClose
             result = calllib('dss_capi_v7', 'SwtControls_Get_NormalState');
         end
         function obj = set.NormalState(obj, Value)
@@ -128,8 +127,7 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
         end
 
         function result = get.State(obj)
-            % (read) Force switch to specified state
-            % (write) Get Present state of switch
+            % Set it to force the switch to a specified state, otherwise read its present state.
             result = calllib('dss_capi_v7', 'SwtControls_Get_State');
         end
         function obj = set.State(obj, Value)

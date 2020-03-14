@@ -2,8 +2,8 @@ language: generic
 
 env:
     global:
-        - DSS_CAPI_VERSION=0.10.4
-        - DSS_MATLAB_VERSION=0.10.4
+        - DSS_CAPI_VERSION=0.10.5
+        - DSS_MATLAB_VERSION=0.10.5
 
 matrix:
   include:

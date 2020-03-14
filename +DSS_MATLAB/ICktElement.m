@@ -39,6 +39,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     %    Voltages - Complex array of voltages at terminals
     %    VoltagesMagAng - Voltages at each conductor in magnitude, angle form as array of doubles.
     %    Yprim - YPrim matrix, column order, complex numbers (paired)
+    %    IsIsolated - Returns true if the current active element is isolated.  Note that this only fetches the current value. See also the Topology interface.
     % 
     % Methods:
     %    Close - 
@@ -92,6 +93,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         Voltages
         VoltagesMagAng
         Yprim
+        IsIsolated
     end
 
     methods (Access = public)
@@ -273,6 +275,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         function result = get.NodeOrder(obj)
             % (read-only) Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal.
             calllib('dss_capi_v7', 'CktElement_Get_NodeOrder_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
         end
 
@@ -372,6 +375,12 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
             % (read-only) YPrim matrix, column order, complex numbers (paired)
             calllib('dss_capi_v7', 'CktElement_Get_Yprim_GR');
             result = obj.apiutil.get_float64_gr_array();
+        end
+
+        function result = get.IsIsolated(obj)
+            % Returns true if the current active element is isolated.
+            % Note that this only fetches the current value. See also the Topology interface.
+            result = (calllib('dss_capi_v7', 'CktElement_Get_IsIsolated') ~= 0);
         end
     end
 end

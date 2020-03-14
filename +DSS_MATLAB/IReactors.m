@@ -40,7 +40,6 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
         Name
         Next
         idx
-        Conductors
         SpecType
         IsDelta
         Parallel
@@ -108,6 +107,7 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
             calllib('dss_capi_v7', 'Reactors_Set_idx', Value);
             obj.CheckForError();
         end
+
 
         function result = get.SpecType(obj)
             % How the reactor data was provided: 1=kvar, 2=R+jX, 3=R and X matrices, 4=sym components.

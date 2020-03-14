@@ -8,13 +8,21 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active PVSystem
     %    Next - Sets next PVSystem active; returns 0 if no more.
     %    idx - Sets next PVSystem active; returns 0 if no more.
-    %    Irradiance - (read) Get the present value of the Irradiance property in W/sq-m  (write) Set the present Irradiance value in W/sq-m
-    %    PF - (read) Get Power factor  (write) Set PF
-    %    RegisterNames - Variant Array of PVSYSTEM energy meter register names
+    %    Irradiance - Get/set the present value of the Irradiance property in W/m²
+    %    PF - Get/set the power factor for the active PVSystem
+    %    RegisterNames - Array of PVSYSTEM energy meter register names
     %    RegisterValues - Array of doubles containing values in PVSystem registers.
-    %    kVArated - (read) Get Rated kVA of the PVSystem  (write) Set kva rated
+    %    kVArated - Get/set Rated kVA of the PVSystem
     %    kW - get kW output
-    %    kvar - (read) Get kvar value  (write) Set kvar output value
+    %    kvar - Get/set kvar output value
+    %    daily - Name of the loadshape for a daily PVSystem profile.
+    %    duty - Name of the load shape to use for duty cycle dispatch simulations such as  for solar ramp rate studies. Must be previously defined as a Loadshape  object. Typically would have time intervals of 1-5 seconds.
+    %    yearly - Dispatch shape to use for yearly simulations. Must be previously defined  as a Loadshape object. If this is not specified, the Daily dispatch shape,  if any, is repeated during Yearly solution modes. In the default dispatch  mode, the PVSystem element uses this loadshape to trigger State changes.
+    %    Tdaily - Temperature shape to use for daily simulations. Must be previously defined  as a TShape object of 24 hrs, typically. The PVSystem element uses this  TShape to determine the Pmpp from the Pmpp vs T curve. Units must agree  with the Pmpp vs T curve.
+    %    Tduty - Temperature shape to use for duty cycle dispatch simulations such as for  solar ramp rate studies. Must be previously defined as a TShape object.  Typically would have time intervals of 1-5 seconds. Designate the number  of points to solve using the Set Number=xxxx command. If there are fewer  points in the actual shape, the shape is assumed to repeat. The PVSystem  model uses this TShape to determine the Pmpp from the Pmpp vs T curve.  Units must agree with the Pmpp vs T curve.
+    %    Tyearly - Temperature shape to use for yearly simulations. Must be previously defined  as a TShape object. If this is not specified, the Daily dispatch shape, if  any, is repeated during Yearly solution modes. The PVSystem element uses  this TShape to determine the Pmpp from the Pmpp vs T curve. Units must  agree with the Pmpp vs T curve.
+    %    IrradianceNow - Returns the current irradiance value for the active PVSystem. Use it to   know what's the current irradiance value for the PV during a simulation.
+    %    Pmpp - Gets/sets the rated max power of the PV array for 1.0 kW/sq-m irradiance   and a user-selected array temperature of the active PVSystem.
 
     properties (Access = protected)
         apiutil
@@ -34,6 +42,14 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         kVArated
         kW
         kvar
+        daily
+        duty
+        yearly
+        Tdaily
+        Tduty
+        Tyearly
+        IrradianceNow
+        Pmpp
     end
 
     methods (Access = public)
@@ -84,8 +100,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
 
 
         function result = get.Irradiance(obj)
-            % (read) Get the present value of the Irradiance property in W/sq-m
-            % (write) Set the present Irradiance value in W/sq-m
+            % Get/set the present value of the Irradiance property in W/m²
             result = calllib('dss_capi_v7', 'PVSystems_Get_Irradiance');
         end
         function obj = set.Irradiance(obj, Value)
@@ -94,8 +109,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         end
 
         function result = get.PF(obj)
-            % (read) Get Power factor
-            % (write) Set PF
+            % Get/set the power factor for the active PVSystem
             result = calllib('dss_capi_v7', 'PVSystems_Get_PF');
         end
         function obj = set.PF(obj, Value)
@@ -104,7 +118,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         end
 
         function result = get.RegisterNames(obj)
-            % (read-only) Variant Array of PVSYSTEM energy meter register names
+            % (read-only) Array of PVSYSTEM energy meter register names
             result = DSS_MATLAB.get_string_array('PVSystems_Get_RegisterNames');
         end
 
@@ -115,8 +129,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         end
 
         function result = get.kVArated(obj)
-            % (read) Get Rated kVA of the PVSystem
-            % (write) Set kva rated
+            % Get/set Rated kVA of the PVSystem
             result = calllib('dss_capi_v7', 'PVSystems_Get_kVArated');
         end
         function obj = set.kVArated(obj, Value)
@@ -130,12 +143,99 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         end
 
         function result = get.kvar(obj)
-            % (read) Get kvar value
-            % (write) Set kvar output value
+            % Get/set kvar output value
             result = calllib('dss_capi_v7', 'PVSystems_Get_kvar');
         end
         function obj = set.kvar(obj, Value)
             calllib('dss_capi_v7', 'PVSystems_Set_kvar', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.daily(obj)
+            % Name of the loadshape for a daily PVSystem profile.
+            result = calllib('dss_capi_v7', 'PVSystems_Get_daily');
+        end
+        function obj = set.daily(obj, Value)
+            calllib('dss_capi_v7', 'PVSystems_Set_daily', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.duty(obj)
+            % Name of the load shape to use for duty cycle dispatch simulations such as
+            % for solar ramp rate studies. Must be previously defined as a Loadshape
+            % object. Typically would have time intervals of 1-5 seconds.
+            result = calllib('dss_capi_v7', 'PVSystems_Get_duty');
+        end
+        function obj = set.duty(obj, Value)
+            calllib('dss_capi_v7', 'PVSystems_Set_duty', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.yearly(obj)
+            % Dispatch shape to use for yearly simulations. Must be previously defined
+            % as a Loadshape object. If this is not specified, the Daily dispatch shape,
+            % if any, is repeated during Yearly solution modes. In the default dispatch
+            % mode, the PVSystem element uses this loadshape to trigger State changes.
+            result = calllib('dss_capi_v7', 'PVSystems_Get_yearly');
+        end
+        function obj = set.yearly(obj, Value)
+            calllib('dss_capi_v7', 'PVSystems_Set_yearly', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Tdaily(obj)
+            % Temperature shape to use for daily simulations. Must be previously defined
+            % as a TShape object of 24 hrs, typically. The PVSystem element uses this
+            % TShape to determine the Pmpp from the Pmpp vs T curve. Units must agree
+            % with the Pmpp vs T curve.
+            result = calllib('dss_capi_v7', 'PVSystems_Get_Tdaily');
+        end
+        function obj = set.Tdaily(obj, Value)
+            calllib('dss_capi_v7', 'PVSystems_Set_Tdaily', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Tduty(obj)
+            % Temperature shape to use for duty cycle dispatch simulations such as for
+            % solar ramp rate studies. Must be previously defined as a TShape object.
+            % Typically would have time intervals of 1-5 seconds. Designate the number
+            % of points to solve using the Set Number=xxxx command. If there are fewer
+            % points in the actual shape, the shape is assumed to repeat. The PVSystem
+            % model uses this TShape to determine the Pmpp from the Pmpp vs T curve.
+            % Units must agree with the Pmpp vs T curve.
+            result = calllib('dss_capi_v7', 'PVSystems_Get_Tduty');
+        end
+        function obj = set.Tduty(obj, Value)
+            calllib('dss_capi_v7', 'PVSystems_Set_Tduty', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Tyearly(obj)
+            % Temperature shape to use for yearly simulations. Must be previously defined
+            % as a TShape object. If this is not specified, the Daily dispatch shape, if
+            % any, is repeated during Yearly solution modes. The PVSystem element uses
+            % this TShape to determine the Pmpp from the Pmpp vs T curve. Units must
+            % agree with the Pmpp vs T curve.
+            result = calllib('dss_capi_v7', 'PVSystems_Get_Tyearly');
+        end
+        function obj = set.Tyearly(obj, Value)
+            calllib('dss_capi_v7', 'PVSystems_Set_Tyearly', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.IrradianceNow(obj)
+            % Returns the current irradiance value for the active PVSystem. Use it to 
+            % know what's the current irradiance value for the PV during a simulation.
+            result = calllib('dss_capi_v7', 'PVSystems_Get_IrradianceNow');
+        end
+
+        function result = get.Pmpp(obj)
+            % Gets/sets the rated max power of the PV array for 1.0 kW/sq-m irradiance 
+            % and a user-selected array temperature of the active PVSystem.
+            result = calllib('dss_capi_v7', 'PVSystems_Get_Pmpp');
+        end
+        function obj = set.Pmpp(obj, Value)
+            calllib('dss_capi_v7', 'PVSystems_Set_Pmpp', Value);
             obj.CheckForError();
         end
     end

@@ -9,6 +9,7 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
     %    Name - Name of the Active Element of the Active Class
     %    Next - Sets next element in active class to be the active DSS object. If object is a CktElement, ActiveCktElement also points to this element.  Returns 0 if no more.
     %    NumElements - Number of elements in this class. Same as Count property.
+    %    ActiveClassParent - Get the name of the parent class of the active class
 
     properties (Access = protected)
         apiutil
@@ -22,6 +23,7 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
         Name
         Next
         NumElements
+        ActiveClassParent
     end
 
     methods (Access = public)
@@ -69,6 +71,11 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
         function result = get.NumElements(obj)
             % (read-only) Number of elements in this class. Same as Count property.
             result = calllib('dss_capi_v7', 'ActiveClass_Get_NumElements');
+        end
+
+        function result = get.ActiveClassParent(obj)
+            % Get the name of the parent class of the active class
+            result = calllib('dss_capi_v7', 'ActiveClass_Get_ActiveClassParent');
         end
     end
 end

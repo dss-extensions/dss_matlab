@@ -4,7 +4,7 @@
 
 ## **[📦 Downloads available here](https://github.com/dss-extensions/dss_matlab/releases/latest) for Linux, macOS and Windows**
 
-*Note that the repository itself doesn't contain the binaries since this is a multi-platform project. If you download the git repository, you still need the binary files from DSS C-API.*
+*Note that the repository itself doesn't contain the binaries since this is a multi-platform project. If you download the git repository, you still need the binary files from the DSS C-API library.*
 
 ---
 
@@ -17,7 +17,7 @@ Related projects:
 - [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): More pythonic bindings and useful tools.
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
-Version 0.10.4, released on 2019-11-23, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users.
+Version 0.10.5, released on 2020-03-14, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project uses the [DSS C-API library version 0.10.5](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0105), based on OpenDSS revision 2836 (which is slightly newer than OpenDSS v8.6.7.1).
 
 ## Usage
 
@@ -59,7 +59,7 @@ If you want more code to play with, you can use the MATLAB examples from the off
 
 **As a general advice (valid for COM and DSS_MATLAB), avoid using the `get` function without parameters on OpenDSS classes. Some properties like `First` and `Next` used for iteration of elements change the current active element and can lead to misleading data!**
 
-## Known differences and more
+## Known differences and history
 
 We maintain a list of important differences between the official COM implementation and DSS C-API at:
 
@@ -67,7 +67,7 @@ https://github.com/dss-extensions/dss_capi/blob/master/docs/known_differences.md
 
 Most of these apply indirectly to DSS_MATLAB.
 
-The [list of important changes](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0104) through development is also useful.
+The [list of important changes](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0105) through development is also useful.
 
 ## Credits / Acknowlegement
 

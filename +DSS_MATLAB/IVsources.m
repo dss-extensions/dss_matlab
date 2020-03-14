@@ -8,7 +8,7 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active Vsource
     %    Next - Sets next Vsource active; returns 0 if no more.
     %    idx - Sets next Vsource active; returns 0 if no more.
-    %    AngleDeg - (read) Phase angle of first phase in degrees  (write) phase angle in degrees
+    %    AngleDeg - Phase angle of first phase in degrees
     %    BasekV - Source voltage in kV
     %    Frequency - Source frequency in Hz
     %    Phases - Number of phases
@@ -80,8 +80,7 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
 
 
         function result = get.AngleDeg(obj)
-            % (read) Phase angle of first phase in degrees
-            % (write) phase angle in degrees
+            % Phase angle of first phase in degrees
             result = calllib('dss_capi_v7', 'Vsources_Get_AngleDeg');
         end
         function obj = set.AngleDeg(obj, Value)

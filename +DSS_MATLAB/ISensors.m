@@ -24,10 +24,6 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
     %    Reset - 
     %    ResetAll - 
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         AllNames
         Count
@@ -50,15 +46,17 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = ISensors(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
         function obj = Reset(obj)
-            calllib('dss_capi_v7', 'Sensors_Reset');
+            calllib(obj.libname, 'Sensors_Reset');
+            obj.CheckForError();
         end
 
         function obj = ResetAll(obj)
-            calllib('dss_capi_v7', 'Sensors_ResetAll');
+            calllib(obj.libname, 'Sensors_ResetAll');
+            obj.CheckForError();
         end
 
     end
@@ -66,143 +64,154 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Sensor names
-            result = DSS_MATLAB.get_string_array('Sensors_Get_AllNames');
+            result = obj.apiutil.get_string_array('Sensors_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of Sensor objects
-            result = calllib('dss_capi_v7', 'Sensors_Get_Count');
+            result = calllib(obj.libname, 'Sensors_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of Sensor; returns 0 if none.
-            result = calllib('dss_capi_v7', 'Sensors_Get_First');
+            result = calllib(obj.libname, 'Sensors_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Sensor
-            result = calllib('dss_capi_v7', 'Sensors_Get_Name');
+            result = calllib(obj.libname, 'Sensors_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_Name', Value);
+            calllib(obj.libname, 'Sensors_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Sensor active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'Sensors_Get_Next');
+            result = calllib(obj.libname, 'Sensors_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active Sensor by index;  1..Count
-            result = calllib('dss_capi_v7', 'Sensors_Get_idx');
+            result = calllib(obj.libname, 'Sensors_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_idx', Value);
+            calllib(obj.libname, 'Sensors_Set_idx', Value);
             obj.CheckForError();
         end
 
 
         function result = get.Currents(obj)
             % Array of doubles for the line current measurements; don't use with kWS and kVARS.
-            calllib('dss_capi_v7', 'Sensors_Get_Currents_GR');
+            calllib(obj.libname, 'Sensors_Get_Currents_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Currents(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_Currents', Value, numel(Value));
+            calllib(obj.libname, 'Sensors_Set_Currents', Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.IsDelta(obj)
             % True if measured voltages are line-line. Currents are always line currents.
-            result = (calllib('dss_capi_v7', 'Sensors_Get_IsDelta') ~= 0);
+            result = (calllib(obj.libname, 'Sensors_Get_IsDelta') ~= 0);
+            obj.CheckForError();
         end
         function obj = set.IsDelta(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_IsDelta', Value);
+            calllib(obj.libname, 'Sensors_Set_IsDelta', Value);
             obj.CheckForError();
         end
 
         function result = get.MeteredElement(obj)
             % Full Name of the measured element
-            result = calllib('dss_capi_v7', 'Sensors_Get_MeteredElement');
+            result = calllib(obj.libname, 'Sensors_Get_MeteredElement');
+            obj.CheckForError();
         end
         function obj = set.MeteredElement(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_MeteredElement', Value);
+            calllib(obj.libname, 'Sensors_Set_MeteredElement', Value);
             obj.CheckForError();
         end
 
         function result = get.MeteredTerminal(obj)
             % Number of the measured terminal in the measured element.
-            result = calllib('dss_capi_v7', 'Sensors_Get_MeteredTerminal');
+            result = calllib(obj.libname, 'Sensors_Get_MeteredTerminal');
+            obj.CheckForError();
         end
         function obj = set.MeteredTerminal(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_MeteredTerminal', Value);
+            calllib(obj.libname, 'Sensors_Set_MeteredTerminal', Value);
             obj.CheckForError();
         end
 
         function result = get.PctError(obj)
             % Assumed percent error in the Sensor measurement. Default is 1.
-            result = calllib('dss_capi_v7', 'Sensors_Get_PctError');
+            result = calllib(obj.libname, 'Sensors_Get_PctError');
+            obj.CheckForError();
         end
         function obj = set.PctError(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_PctError', Value);
+            calllib(obj.libname, 'Sensors_Set_PctError', Value);
             obj.CheckForError();
         end
 
         function result = get.ReverseDelta(obj)
             % True if voltage measurements are 1-3, 3-2, 2-1.
-            result = (calllib('dss_capi_v7', 'Sensors_Get_ReverseDelta') ~= 0);
+            result = (calllib(obj.libname, 'Sensors_Get_ReverseDelta') ~= 0);
+            obj.CheckForError();
         end
         function obj = set.ReverseDelta(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_ReverseDelta', Value);
+            calllib(obj.libname, 'Sensors_Set_ReverseDelta', Value);
             obj.CheckForError();
         end
 
         function result = get.Weight(obj)
             % Weighting factor for this Sensor measurement with respect to other Sensors. Default is 1.
-            result = calllib('dss_capi_v7', 'Sensors_Get_Weight');
+            result = calllib(obj.libname, 'Sensors_Get_Weight');
+            obj.CheckForError();
         end
         function obj = set.Weight(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_Weight', Value);
+            calllib(obj.libname, 'Sensors_Set_Weight', Value);
             obj.CheckForError();
         end
 
         function result = get.kVARS(obj)
             % Array of doubles for Q measurements. Overwrites Currents with a new estimate using kWS.
-            calllib('dss_capi_v7', 'Sensors_Get_kVARS_GR');
+            calllib(obj.libname, 'Sensors_Get_kVARS_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.kVARS(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_kVARS', Value, numel(Value));
+            calllib(obj.libname, 'Sensors_Set_kVARS', Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.kVS(obj)
             % Array of doubles for the LL or LN (depending on Delta connection) voltage measurements.
-            calllib('dss_capi_v7', 'Sensors_Get_kVS_GR');
+            calllib(obj.libname, 'Sensors_Get_kVS_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.kVS(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_kVS', Value, numel(Value));
+            calllib(obj.libname, 'Sensors_Set_kVS', Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.kVbase(obj)
             % Voltage base for the sensor measurements. LL for 2 and 3-phase sensors, LN for 1-phase sensors.
-            result = calllib('dss_capi_v7', 'Sensors_Get_kVbase');
+            result = calllib(obj.libname, 'Sensors_Get_kVbase');
+            obj.CheckForError();
         end
         function obj = set.kVbase(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_kVbase', Value);
+            calllib(obj.libname, 'Sensors_Set_kVbase', Value);
             obj.CheckForError();
         end
 
         function result = get.kWS(obj)
             % Array of doubles for P measurements. Overwrites Currents with a new estimate using kVARS.
-            calllib('dss_capi_v7', 'Sensors_Get_kWS_GR');
+            calllib(obj.libname, 'Sensors_Get_kWS_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.kWS(obj, Value)
-            calllib('dss_capi_v7', 'Sensors_Set_kWS', Value, numel(Value));
+            calllib(obj.libname, 'Sensors_Set_kWS', Value, numel(Value));
             obj.CheckForError();
         end
     end

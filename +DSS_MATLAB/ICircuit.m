@@ -2,6 +2,8 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     % ICircuit: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
+    %    Buses - 
+    %    CktElements - 
     %    ActiveElement - 
     %    Solution - 
     %    ActiveBus - 
@@ -58,16 +60,14 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    NumNodes - Total number of nodes in the circuit.
     %    ParentPDElement - Sets Parent PD element, if any, to be the active circuit element and returns index>0; Returns 0 if it fails or not applicable.
     %    SubstationLosses - Complex losses in all transformers designated to substations.
-    %    SystemY - System Y matrix (after a solution has been performed)
+    %    SystemY - System Y matrix (after a solution has been performed).   This is deprecated as it returns a dense matrix. Only use it for small systems.  For large scale systems, prefer YMatrix.GetCompressedYMatrix.
     %    TotalPower - Total power, watts delivered to the circuit
     %    YCurrents - Array of doubles containing complex injection currents for the present solution. Is is the "I" vector of I=YV
     %    YNodeOrder - Array of strings containing the names of the nodes in the same order as the Y matrix
     %    YNodeVarray - Complex array of actual node voltages in same order as SystemY matrix.
     % 
     % Methods:
-    %    Buses - 
     %    Capacity - 
-    %    CktElements - 
     %    Disable - 
     %    Enable - 
     %    EndOfTimeStepUpdate - 
@@ -89,11 +89,9 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    SetActiveElement - 
     %    UpdateStorage - 
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
+        Buses
+        CktElements
         ActiveElement
         Solution
         ActiveBus
@@ -158,7 +156,9 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = ICircuit(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
+            obj.Buses = DSS_MATLAB.IBus(obj.apiutil);
+            obj.CktElements = DSS_MATLAB.ICktElement(obj.apiutil);
             obj.ActiveElement = DSS_MATLAB.ICktElement(obj.apiutil);
             obj.Solution = DSS_MATLAB.ISolution(obj.apiutil);
             obj.ActiveBus = DSS_MATLAB.IBus(obj.apiutil);
@@ -200,122 +200,115 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
         end
 
         function result = Capacity(obj, Start, Increment)
-            result = calllib('dss_capi_v7', 'Circuit_Capacity', Start, Increment);
+            result = calllib(obj.libname, 'Circuit_Capacity', Start, Increment);
+            obj.CheckForError();
         end
 
         function obj = Disable(obj, Name)
-            calllib('dss_capi_v7', 'Circuit_Disable', Name);
+            calllib(obj.libname, 'Circuit_Disable', Name);
+            obj.CheckForError();
         end
 
         function obj = Enable(obj, Name)
-            calllib('dss_capi_v7', 'Circuit_Enable', Name);
+            calllib(obj.libname, 'Circuit_Enable', Name);
+            obj.CheckForError();
         end
 
         function obj = EndOfTimeStepUpdate(obj)
-            calllib('dss_capi_v7', 'Circuit_EndOfTimeStepUpdate');
+            calllib(obj.libname, 'Circuit_EndOfTimeStepUpdate');
+            obj.CheckForError();
         end
 
         function result = FirstElement(obj)
-            result = calllib('dss_capi_v7', 'Circuit_FirstElement');
+            result = calllib(obj.libname, 'Circuit_FirstElement');
+            obj.CheckForError();
         end
 
         function result = FirstPCElement(obj)
-            result = calllib('dss_capi_v7', 'Circuit_FirstPCElement');
+            result = calllib(obj.libname, 'Circuit_FirstPCElement');
+            obj.CheckForError();
         end
 
         function result = FirstPDElement(obj)
-            result = calllib('dss_capi_v7', 'Circuit_FirstPDElement');
+            result = calllib(obj.libname, 'Circuit_FirstPDElement');
+            obj.CheckForError();
         end
 
         function result = AllNodeDistancesByPhase(obj, Phase)
             % (read-only) Returns an array of doubles representing the distances to parent EnergyMeter. Sequence of array corresponds to other node ByPhase properties.
-            calllib('dss_capi_v7', 'Circuit_Get_AllNodeDistancesByPhase_GR', Phase);
+            calllib(obj.libname, 'Circuit_Get_AllNodeDistancesByPhase_GR', Phase);
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = AllNodeNamesByPhase(obj, Phase)
             % (read-only) Return array of strings of the node names for the By Phase criteria. Sequence corresponds to other ByPhase properties.
-            result = DSS_MATLAB.get_string_array('Circuit_Get_AllNodeNamesByPhase', Phase);
+            result = obj.apiutil.get_string_array('Circuit_Get_AllNodeNamesByPhase', Phase);
+            obj.CheckForError();
         end
 
         function result = AllNodeVmagByPhase(obj, Phase)
             % (read-only) Returns Array of doubles represent voltage magnitudes for nodes on the specified phase.
-            calllib('dss_capi_v7', 'Circuit_Get_AllNodeVmagByPhase_GR', Phase);
+            calllib(obj.libname, 'Circuit_Get_AllNodeVmagByPhase_GR', Phase);
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = AllNodeVmagPUByPhase(obj, Phase)
             % (read-only) Returns array of per unit voltage magnitudes for each node by phase
-            calllib('dss_capi_v7', 'Circuit_Get_AllNodeVmagPUByPhase_GR', Phase);
+            calllib(obj.libname, 'Circuit_Get_AllNodeVmagPUByPhase_GR', Phase);
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = NextElement(obj)
-            result = calllib('dss_capi_v7', 'Circuit_NextElement');
+            result = calllib(obj.libname, 'Circuit_NextElement');
+            obj.CheckForError();
         end
 
         function result = NextPCElement(obj)
-            result = calllib('dss_capi_v7', 'Circuit_NextPCElement');
+            result = calllib(obj.libname, 'Circuit_NextPCElement');
+            obj.CheckForError();
         end
 
         function result = NextPDElement(obj)
-            result = calllib('dss_capi_v7', 'Circuit_NextPDElement');
+            result = calllib(obj.libname, 'Circuit_NextPDElement');
+            obj.CheckForError();
         end
 
         function obj = Sample(obj)
-            calllib('dss_capi_v7', 'Circuit_Sample');
+            calllib(obj.libname, 'Circuit_Sample');
+            obj.CheckForError();
         end
 
         function obj = SaveSample(obj)
-            calllib('dss_capi_v7', 'Circuit_SaveSample');
+            calllib(obj.libname, 'Circuit_SaveSample');
+            obj.CheckForError();
         end
 
         function result = SetActiveBus(obj, BusName)
-            result = calllib('dss_capi_v7', 'Circuit_SetActiveBus', BusName);
+            result = calllib(obj.libname, 'Circuit_SetActiveBus', BusName);
             obj.CheckForError();
         end
 
         function result = SetActiveBusi(obj, BusIndex)
-            result = calllib('dss_capi_v7', 'Circuit_SetActiveBusi', BusIndex);
+            result = calllib(obj.libname, 'Circuit_SetActiveBusi', BusIndex);
+            obj.CheckForError();
         end
 
         function result = SetActiveClass(obj, ClassName)
-            result = calllib('dss_capi_v7', 'Circuit_SetActiveClass', ClassName);
+            result = calllib(obj.libname, 'Circuit_SetActiveClass', ClassName);
             obj.CheckForError();
         end
 
         function result = SetActiveElement(obj, FullName)
-            result = calllib('dss_capi_v7', 'Circuit_SetActiveElement', FullName);
+            result = calllib(obj.libname, 'Circuit_SetActiveElement', FullName);
             obj.CheckForError();
         end
 
         function obj = UpdateStorage(obj)
-            calllib('dss_capi_v7', 'Circuit_UpdateStorage');
-        end
-
-        function result = CktElements(obj, NameOrIdx)
-            if ischar(NameOrIdx) | isstring(NameOrIdx)
-                obj.SetActiveElement(NameOrIdx);
-            elseif isinteger(NameOrIdx)
-                calllib('dss_capi_v7', 'Circuit_SetCktElementIndex', FullName);
-                obj.CheckForError();
-            else
-                ME = MException(['DSS_MATLAB:Error'], 'Expected char, string or integer');
-                throw(ME);
-            end
-            result = obj.ActiveCktElement;
-        end
-
-        function result = Buses(obj, NameOrIdx)
-            if ischar(NameOrIdx) | isstring(NameOrIdx)
-                obj.SetActiveBus(NameOrIdx);
-            elseif isinteger(NameOrIdx)
-                obj.SetActiveBusi(NameOrIdx);
-            else
-                ME = MException(['DSS_MATLAB:Error'], 'Expected char, string or integer');
-                throw(ME);
-            end
-            result = obj.ActiveBus;
+            calllib(obj.libname, 'Circuit_UpdateStorage');
+            obj.CheckForError();
         end
 
     end
@@ -323,95 +316,112 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.AllBusDistances(obj)
             % (read-only) Returns distance from each bus to parent EnergyMeter. Corresponds to sequence in AllBusNames.
-            calllib('dss_capi_v7', 'Circuit_Get_AllBusDistances_GR');
+            calllib(obj.libname, 'Circuit_Get_AllBusDistances_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllBusNames(obj)
             % (read-only) Array of strings containing names of all buses in circuit (see AllNodeNames).
-            result = DSS_MATLAB.get_string_array('Circuit_Get_AllBusNames');
+            result = obj.apiutil.get_string_array('Circuit_Get_AllBusNames');
+            obj.CheckForError();
         end
 
         function result = get.AllBusVmag(obj)
             % (read-only) Array of magnitudes (doubles) of voltages at all buses
-            calllib('dss_capi_v7', 'Circuit_Get_AllBusVmag_GR');
+            calllib(obj.libname, 'Circuit_Get_AllBusVmag_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllBusVmagPu(obj)
             % (read-only) Double Array of all bus voltages (each node) magnitudes in Per unit
-            calllib('dss_capi_v7', 'Circuit_Get_AllBusVmagPu_GR');
+            calllib(obj.libname, 'Circuit_Get_AllBusVmagPu_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllBusVolts(obj)
             % (read-only) Complex array of all bus, node voltages from most recent solution
-            calllib('dss_capi_v7', 'Circuit_Get_AllBusVolts_GR');
+            calllib(obj.libname, 'Circuit_Get_AllBusVolts_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllElementLosses(obj)
             % (read-only) Array of total losses (complex) in each circuit element
-            calllib('dss_capi_v7', 'Circuit_Get_AllElementLosses_GR');
+            calllib(obj.libname, 'Circuit_Get_AllElementLosses_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllElementNames(obj)
             % (read-only) Array of strings containing Full Name of all elements.
-            result = DSS_MATLAB.get_string_array('Circuit_Get_AllElementNames');
+            result = obj.apiutil.get_string_array('Circuit_Get_AllElementNames');
+            obj.CheckForError();
         end
 
         function result = get.AllNodeDistances(obj)
             % (read-only) Returns an array of distances from parent EnergyMeter for each Node. Corresponds to AllBusVMag sequence.
-            calllib('dss_capi_v7', 'Circuit_Get_AllNodeDistances_GR');
+            calllib(obj.libname, 'Circuit_Get_AllNodeDistances_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllNodeNames(obj)
             % (read-only) Array of strings containing full name of each node in system in same order as returned by AllBusVolts, etc.
-            result = DSS_MATLAB.get_string_array('Circuit_Get_AllNodeNames');
+            result = obj.apiutil.get_string_array('Circuit_Get_AllNodeNames');
+            obj.CheckForError();
         end
 
         function result = get.LineLosses(obj)
             % (read-only) Complex total line losses in the circuit
-            calllib('dss_capi_v7', 'Circuit_Get_LineLosses_GR');
+            calllib(obj.libname, 'Circuit_Get_LineLosses_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Losses(obj)
             % (read-only) Total losses in active circuit, complex number (two-element array of double).
-            calllib('dss_capi_v7', 'Circuit_Get_Losses_GR');
+            calllib(obj.libname, 'Circuit_Get_Losses_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Name(obj)
             % (read-only) Name of the active circuit.
-            result = calllib('dss_capi_v7', 'Circuit_Get_Name');
+            result = calllib(obj.libname, 'Circuit_Get_Name');
+            obj.CheckForError();
         end
 
         function result = get.NumBuses(obj)
             % (read-only) Total number of Buses in the circuit.
-            result = calllib('dss_capi_v7', 'Circuit_Get_NumBuses');
+            result = calllib(obj.libname, 'Circuit_Get_NumBuses');
+            obj.CheckForError();
         end
 
         function result = get.NumCktElements(obj)
             % (read-only) Number of CktElements in the circuit.
-            result = calllib('dss_capi_v7', 'Circuit_Get_NumCktElements');
+            result = calllib(obj.libname, 'Circuit_Get_NumCktElements');
+            obj.CheckForError();
         end
 
         function result = get.NumNodes(obj)
             % (read-only) Total number of nodes in the circuit.
-            result = calllib('dss_capi_v7', 'Circuit_Get_NumNodes');
+            result = calllib(obj.libname, 'Circuit_Get_NumNodes');
+            obj.CheckForError();
         end
 
         function result = get.ParentPDElement(obj)
             % (read-only) Sets Parent PD element, if any, to be the active circuit element and returns index>0; Returns 0 if it fails or not applicable.
-            result = calllib('dss_capi_v7', 'Circuit_Get_ParentPDElement');
+            result = calllib(obj.libname, 'Circuit_Get_ParentPDElement');
+            obj.CheckForError();
         end
 
         function result = get.SubstationLosses(obj)
             % (read-only) Complex losses in all transformers designated to substations.
-            calllib('dss_capi_v7', 'Circuit_Get_SubstationLosses_GR');
+            calllib(obj.libname, 'Circuit_Get_SubstationLosses_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
@@ -419,30 +429,35 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
             % (read-only) System Y matrix (after a solution has been performed). 
             % This is deprecated as it returns a dense matrix. Only use it for small systems.
             % For large scale systems, prefer YMatrix.GetCompressedYMatrix.
-            calllib('dss_capi_v7', 'Circuit_Get_SystemY_GR');
+            calllib(obj.libname, 'Circuit_Get_SystemY_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.TotalPower(obj)
             % (read-only) Total power, watts delivered to the circuit
-            calllib('dss_capi_v7', 'Circuit_Get_TotalPower_GR');
+            calllib(obj.libname, 'Circuit_Get_TotalPower_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.YCurrents(obj)
             % (read-only) Array of doubles containing complex injection currents for the present solution. Is is the "I" vector of I=YV
-            calllib('dss_capi_v7', 'Circuit_Get_YCurrents_GR');
+            calllib(obj.libname, 'Circuit_Get_YCurrents_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.YNodeOrder(obj)
             % (read-only) Array of strings containing the names of the nodes in the same order as the Y matrix
-            result = DSS_MATLAB.get_string_array('Circuit_Get_YNodeOrder');
+            result = obj.apiutil.get_string_array('Circuit_Get_YNodeOrder');
+            obj.CheckForError();
         end
 
         function result = get.YNodeVarray(obj)
             % (read-only) Complex array of actual node voltages in same order as SystemY matrix.
-            calllib('dss_capi_v7', 'Circuit_Get_YNodeVarray_GR');
+            calllib(obj.libname, 'Circuit_Get_YNodeVarray_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
     end

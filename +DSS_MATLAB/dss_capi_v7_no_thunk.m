@@ -2,7 +2,7 @@ function [methodinfo,structs,enuminfo,ThunkLibName]=dss_capi_v7_to_discard
 %DSS_CAPI_V7 Create structures to define interfaces found in 'dss_capi_v7'.
 
 % This file is a slightly modified version of the version generated 
-% automatically which uses the thunk DLL. Also using cdecl instead 
+% automatically which uses the thunk DLL. Although using cdecl instead 
 % of thunk is officially unsupported, we only use simple pointers 
 % and values, without any complex structure. 
 % Tested on Windows, Linux and macOS.
@@ -3070,6 +3070,65 @@ fcns.thunkname{fcnNum}='voidint32Thunk';fcns.name{fcnNum}='WireData_Set_idx'; fc
 fcns.thunkname{fcnNum}='int32voidThunk';fcns.name{fcnNum}='XYCurves_Get_idx'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
 % void XYCurves_Set_idx ( int32_t Value ); 
 fcns.thunkname{fcnNum}='voidint32Thunk';fcns.name{fcnNum}='XYCurves_Set_idx'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'int32'};fcnNum=fcnNum+1;
+% uint16_t DSS_Get_LegacyModels ( void ); 
+fcns.thunkname{fcnNum}='uint16voidThunk';fcns.name{fcnNum}='DSS_Get_LegacyModels'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='uint16'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void DSS_Set_LegacyModels ( uint16_t Value ); 
+fcns.thunkname{fcnNum}='voiduint16Thunk';fcns.name{fcnNum}='DSS_Set_LegacyModels'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint16'};fcnNum=fcnNum+1;
+% uint16_t Error_Get_ExtendedErrors ( void ); 
+fcns.thunkname{fcnNum}='uint16voidThunk';fcns.name{fcnNum}='Error_Get_ExtendedErrors'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='uint16'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void Error_Set_ExtendedErrors ( uint16_t Value ); 
+fcns.thunkname{fcnNum}='voiduint16Thunk';fcns.name{fcnNum}='Error_Set_ExtendedErrors'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint16'};fcnNum=fcnNum+1;
+% double WireData_Get_CapRadius ( void ); 
+fcns.thunkname{fcnNum}='doublevoidThunk';fcns.name{fcnNum}='WireData_Get_CapRadius'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='double'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void WireData_Set_CapRadius ( double Value ); 
+fcns.thunkname{fcnNum}='voiddoubleThunk';fcns.name{fcnNum}='WireData_Set_CapRadius'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'double'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllNames ( char *** ResultPtr , int32_t * ResultCount ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='PDElements_Get_AllNames'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'voidPtr', 'int32Ptr'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllMaxCurrents ( double ** ResultPtr , int32_t * ResultCount , uint16_t AllNodes ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtruint16Thunk';fcns.name{fcnNum}='PDElements_Get_AllMaxCurrents'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'doublePtrPtr', 'int32Ptr', 'uint16'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllPctNorm ( double ** ResultPtr , int32_t * ResultCount , uint16_t AllNodes ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtruint16Thunk';fcns.name{fcnNum}='PDElements_Get_AllPctNorm'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'doublePtrPtr', 'int32Ptr', 'uint16'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllPctEmerg ( double ** ResultPtr , int32_t * ResultCount , uint16_t AllNodes ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtruint16Thunk';fcns.name{fcnNum}='PDElements_Get_AllPctEmerg'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'doublePtrPtr', 'int32Ptr', 'uint16'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllCurrents ( double ** ResultPtr , int32_t * ResultCount ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='PDElements_Get_AllCurrents'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'doublePtrPtr', 'int32Ptr'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllCurrentsMagAng ( double ** ResultPtr , int32_t * ResultCount ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='PDElements_Get_AllCurrentsMagAng'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'doublePtrPtr', 'int32Ptr'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllCplxSeqCurrents ( double ** ResultPtr , int32_t * ResultCount ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='PDElements_Get_AllCplxSeqCurrents'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'doublePtrPtr', 'int32Ptr'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllSeqCurrents ( double ** ResultPtr , int32_t * ResultCount ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='PDElements_Get_AllSeqCurrents'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'doublePtrPtr', 'int32Ptr'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllPowers ( double ** ResultPtr , int32_t * ResultCount ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='PDElements_Get_AllPowers'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'doublePtrPtr', 'int32Ptr'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllNumPhases ( int32_t ** ResultPtr , int32_t * ResultCount ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='PDElements_Get_AllNumPhases'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'int32PtrPtr', 'int32Ptr'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllNumConductors ( int32_t ** ResultPtr , int32_t * ResultCount ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='PDElements_Get_AllNumConductors'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'int32PtrPtr', 'int32Ptr'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllNumTerminals ( int32_t ** ResultPtr , int32_t * ResultCount ); 
+fcns.thunkname{fcnNum}='voidvoidPtrvoidPtrThunk';fcns.name{fcnNum}='PDElements_Get_AllNumTerminals'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'int32PtrPtr', 'int32Ptr'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllMaxCurrents_GR ( uint16_t AllNodes ); 
+fcns.thunkname{fcnNum}='voiduint16Thunk';fcns.name{fcnNum}='PDElements_Get_AllMaxCurrents_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint16'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllPctNorm_GR ( uint16_t AllNodes ); 
+fcns.thunkname{fcnNum}='voiduint16Thunk';fcns.name{fcnNum}='PDElements_Get_AllPctNorm_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint16'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllPctEmerg_GR ( uint16_t AllNodes ); 
+fcns.thunkname{fcnNum}='voiduint16Thunk';fcns.name{fcnNum}='PDElements_Get_AllPctEmerg_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint16'};fcnNum=fcnNum+1;
+% void PDElements_Get_AllCurrents_GR ( void ); 
+fcns.thunkname{fcnNum}='voidvoidThunk';fcns.name{fcnNum}='PDElements_Get_AllCurrents_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void PDElements_Get_AllCurrentsMagAng_GR ( void ); 
+fcns.thunkname{fcnNum}='voidvoidThunk';fcns.name{fcnNum}='PDElements_Get_AllCurrentsMagAng_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void PDElements_Get_AllCplxSeqCurrents_GR ( void ); 
+fcns.thunkname{fcnNum}='voidvoidThunk';fcns.name{fcnNum}='PDElements_Get_AllCplxSeqCurrents_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void PDElements_Get_AllSeqCurrents_GR ( void ); 
+fcns.thunkname{fcnNum}='voidvoidThunk';fcns.name{fcnNum}='PDElements_Get_AllSeqCurrents_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void PDElements_Get_AllPowers_GR ( void ); 
+fcns.thunkname{fcnNum}='voidvoidThunk';fcns.name{fcnNum}='PDElements_Get_AllPowers_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void PDElements_Get_AllNumPhases_GR ( void ); 
+fcns.thunkname{fcnNum}='voidvoidThunk';fcns.name{fcnNum}='PDElements_Get_AllNumPhases_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void PDElements_Get_AllNumConductors_GR ( void ); 
+fcns.thunkname{fcnNum}='voidvoidThunk';fcns.name{fcnNum}='PDElements_Get_AllNumConductors_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+% void PDElements_Get_AllNumTerminals_GR ( void ); 
+fcns.thunkname{fcnNum}='voidvoidThunk';fcns.name{fcnNum}='PDElements_Get_AllNumTerminals_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+
 enuminfo.SolutionLoadModels=struct('SolutionLoadModels_PowerFlow',1,'SolutionLoadModels_Admittance',2);
 enuminfo.LineUnits=struct('LineUnits_none',0,'LineUnits_Miles',1,'LineUnits_kFt',2,'LineUnits_km',3,'LineUnits_meter',4,'LineUnits_ft',5,'LineUnits_inch',6,'LineUnits_cm',7,'LineUnits_mm',8,'LineUnits_Maxnum',9);
 enuminfo.AutoAddTypes=struct('AutoAddTypes_AddGen',1,'AutoAddTypes_AddCap',2);

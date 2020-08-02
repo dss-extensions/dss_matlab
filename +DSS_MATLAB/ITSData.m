@@ -26,10 +26,6 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
     %    TapeLayer - 
     %    TapeLap - 
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         AllNames
         Count
@@ -58,7 +54,7 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = ITSData(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
     end
@@ -66,178 +62,195 @@ classdef (CaseInsensitiveProperties) ITSData < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all TSData names
-            result = DSS_MATLAB.get_string_array('TSData_Get_AllNames');
+            result = obj.apiutil.get_string_array('TSData_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of TSData objects
-            result = calllib('dss_capi_v7', 'TSData_Get_Count');
+            result = calllib(obj.libname, 'TSData_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of TSData; returns 0 if none.
-            result = calllib('dss_capi_v7', 'TSData_Get_First');
+            result = calllib(obj.libname, 'TSData_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active TSData
-            result = calllib('dss_capi_v7', 'TSData_Get_Name');
+            result = calllib(obj.libname, 'TSData_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_Name', Value);
+            calllib(obj.libname, 'TSData_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next TSData active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'TSData_Get_Next');
+            result = calllib(obj.libname, 'TSData_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active TSData by index;  1..Count
-            result = calllib('dss_capi_v7', 'TSData_Get_idx');
+            result = calllib(obj.libname, 'TSData_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_idx', Value);
+            calllib(obj.libname, 'TSData_Set_idx', Value);
             obj.CheckForError();
         end
 
 
         function result = get.EmergAmps(obj)
             % Emergency ampere rating
-            result = calllib('dss_capi_v7', 'TSData_Get_EmergAmps');
+            result = calllib(obj.libname, 'TSData_Get_EmergAmps');
+            obj.CheckForError();
         end
         function obj = set.EmergAmps(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_EmergAmps', Value);
+            calllib(obj.libname, 'TSData_Set_EmergAmps', Value);
             obj.CheckForError();
         end
 
         function result = get.NormAmps(obj)
             % Normal Ampere rating
-            result = calllib('dss_capi_v7', 'TSData_Get_NormAmps');
+            result = calllib(obj.libname, 'TSData_Get_NormAmps');
+            obj.CheckForError();
         end
         function obj = set.NormAmps(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_NormAmps', Value);
+            calllib(obj.libname, 'TSData_Set_NormAmps', Value);
             obj.CheckForError();
         end
 
         function result = get.Rdc(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_Rdc');
+            result = calllib(obj.libname, 'TSData_Get_Rdc');
+            obj.CheckForError();
         end
         function obj = set.Rdc(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_Rdc', Value);
+            calllib(obj.libname, 'TSData_Set_Rdc', Value);
             obj.CheckForError();
         end
 
         function result = get.Rac(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_Rac');
+            result = calllib(obj.libname, 'TSData_Get_Rac');
+            obj.CheckForError();
         end
         function obj = set.Rac(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_Rac', Value);
+            calllib(obj.libname, 'TSData_Set_Rac', Value);
             obj.CheckForError();
         end
 
         function result = get.GMRac(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_GMRac');
+            result = calllib(obj.libname, 'TSData_Get_GMRac');
+            obj.CheckForError();
         end
         function obj = set.GMRac(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_GMRac', Value);
+            calllib(obj.libname, 'TSData_Set_GMRac', Value);
             obj.CheckForError();
         end
 
         function result = get.GMRUnits(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_GMRUnits');
+            result = calllib(obj.libname, 'TSData_Get_GMRUnits');
+            obj.CheckForError();
         end
         function obj = set.GMRUnits(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_GMRUnits', Value);
+            calllib(obj.libname, 'TSData_Set_GMRUnits', Value);
             obj.CheckForError();
         end
 
         function result = get.Radius(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_Radius');
+            result = calllib(obj.libname, 'TSData_Get_Radius');
+            obj.CheckForError();
         end
         function obj = set.Radius(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_Radius', Value);
+            calllib(obj.libname, 'TSData_Set_Radius', Value);
             obj.CheckForError();
         end
 
         function result = get.RadiusUnits(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_RadiusUnits');
+            result = calllib(obj.libname, 'TSData_Get_RadiusUnits');
+            obj.CheckForError();
         end
         function obj = set.RadiusUnits(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_RadiusUnits', Value);
+            calllib(obj.libname, 'TSData_Set_RadiusUnits', Value);
             obj.CheckForError();
         end
 
         function result = get.ResistanceUnits(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_ResistanceUnits');
+            result = calllib(obj.libname, 'TSData_Get_ResistanceUnits');
+            obj.CheckForError();
         end
         function obj = set.ResistanceUnits(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_ResistanceUnits', Value);
+            calllib(obj.libname, 'TSData_Set_ResistanceUnits', Value);
             obj.CheckForError();
         end
 
         function result = get.Diameter(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_Diameter');
+            result = calllib(obj.libname, 'TSData_Get_Diameter');
+            obj.CheckForError();
         end
         function obj = set.Diameter(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_Diameter', Value);
+            calllib(obj.libname, 'TSData_Set_Diameter', Value);
             obj.CheckForError();
         end
 
         function result = get.EpsR(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_EpsR');
+            result = calllib(obj.libname, 'TSData_Get_EpsR');
+            obj.CheckForError();
         end
         function obj = set.EpsR(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_EpsR', Value);
+            calllib(obj.libname, 'TSData_Set_EpsR', Value);
             obj.CheckForError();
         end
 
         function result = get.InsLayer(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_InsLayer');
+            result = calllib(obj.libname, 'TSData_Get_InsLayer');
+            obj.CheckForError();
         end
         function obj = set.InsLayer(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_InsLayer', Value);
+            calllib(obj.libname, 'TSData_Set_InsLayer', Value);
             obj.CheckForError();
         end
 
         function result = get.DiaIns(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_DiaIns');
+            result = calllib(obj.libname, 'TSData_Get_DiaIns');
+            obj.CheckForError();
         end
         function obj = set.DiaIns(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_DiaIns', Value);
+            calllib(obj.libname, 'TSData_Set_DiaIns', Value);
             obj.CheckForError();
         end
 
         function result = get.DiaCable(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_DiaCable');
+            result = calllib(obj.libname, 'TSData_Get_DiaCable');
+            obj.CheckForError();
         end
         function obj = set.DiaCable(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_DiaCable', Value);
+            calllib(obj.libname, 'TSData_Set_DiaCable', Value);
             obj.CheckForError();
         end
 
         function result = get.DiaShield(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_DiaShield');
+            result = calllib(obj.libname, 'TSData_Get_DiaShield');
+            obj.CheckForError();
         end
         function obj = set.DiaShield(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_DiaShield', Value);
+            calllib(obj.libname, 'TSData_Set_DiaShield', Value);
             obj.CheckForError();
         end
 
         function result = get.TapeLayer(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_TapeLayer');
+            result = calllib(obj.libname, 'TSData_Get_TapeLayer');
+            obj.CheckForError();
         end
         function obj = set.TapeLayer(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_TapeLayer', Value);
+            calllib(obj.libname, 'TSData_Set_TapeLayer', Value);
             obj.CheckForError();
         end
 
         function result = get.TapeLap(obj)
-            result = calllib('dss_capi_v7', 'TSData_Get_TapeLap');
+            result = calllib(obj.libname, 'TSData_Get_TapeLap');
+            obj.CheckForError();
         end
         function obj = set.TapeLap(obj, Value)
-            calllib('dss_capi_v7', 'TSData_Set_TapeLap', Value);
+            calllib(obj.libname, 'TSData_Set_TapeLap', Value);
             obj.CheckForError();
         end
     end

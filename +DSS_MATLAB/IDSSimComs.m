@@ -5,22 +5,20 @@ classdef (CaseInsensitiveProperties) IDSSimComs < DSS_MATLAB.Base
     %    BusVoltage - 
     %    BusVoltagepu - 
 
-    properties (Access = protected)
-        apiutil
-    end
-
     methods (Access = public)
         function obj = IDSSimComs(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
         function result = BusVoltage(obj, Index)
-            calllib('dss_capi_v7', 'DSSimComs_BusVoltage_GR', Index);
+            calllib(obj.libname, 'DSSimComs_BusVoltage_GR', Index);
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = BusVoltagepu(obj, Index)
-            calllib('dss_capi_v7', 'DSSimComs_BusVoltagepu_GR', Index);
+            calllib(obj.libname, 'DSSimComs_BusVoltagepu_GR', Index);
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
     end

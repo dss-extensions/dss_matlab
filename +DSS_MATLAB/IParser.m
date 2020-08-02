@@ -3,7 +3,7 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
     % 
     % Properties:
     %    AutoIncrement - Default is FALSE. If TRUE parser automatically advances to next token after DblValue, IntValue, or StrValue. Simpler when you don't need to check for parameter names.
-    %    BeginQuote - (read) Get String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.  (write) Set String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.
+    %    BeginQuote - Get/Set String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.
     %    CmdString - String to be parsed. Loading this string resets the Parser to the beginning of the line. Then parse off the tokens in sequence.
     %    DblValue - Return next parameter as a double.
     %    Delimiters - String defining hard delimiters used to separate token on the command string. Default is , and =. The = separates token name from token value. These override whitesspace to separate tokens.
@@ -18,10 +18,6 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
     %    SymMatrix - Use this property to parse a matrix token specified in lower triangle form. Symmetry is forced.
     %    Vector - Returns token as array of doubles. For parsing quoted array syntax.
     %    ResetDelimiters - 
-
-    properties (Access = protected)
-        apiutil
-    end
 
     properties
         AutoIncrement
@@ -38,29 +34,33 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IParser(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
         function result = Matrix(obj, ExpectedOrder)
             % (read-only) Use this property to parse a Matrix token in OpenDSS format.  Returns square matrix of order specified. Order same as default Fortran order: column by column.
-            calllib('dss_capi_v7', 'Parser_Get_Matrix_GR', ExpectedOrder);
+            calllib(obj.libname, 'Parser_Get_Matrix_GR', ExpectedOrder);
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = SymMatrix(obj, ExpectedOrder)
             % (read-only) Use this property to parse a matrix token specified in lower triangle form. Symmetry is forced.
-            calllib('dss_capi_v7', 'Parser_Get_SymMatrix_GR', ExpectedOrder);
+            calllib(obj.libname, 'Parser_Get_SymMatrix_GR', ExpectedOrder);
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = Vector(obj, ExpectedSize)
             % (read-only) Returns token as array of doubles. For parsing quoted array syntax.
-            calllib('dss_capi_v7', 'Parser_Get_Vector_GR', ExpectedSize);
+            calllib(obj.libname, 'Parser_Get_Vector_GR', ExpectedSize);
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function obj = ResetDelimiters(obj)
-            calllib('dss_capi_v7', 'Parser_ResetDelimiters');
+            calllib(obj.libname, 'Parser_ResetDelimiters');
+            obj.CheckForError();
         end
 
     end
@@ -68,77 +68,86 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
 
         function result = get.AutoIncrement(obj)
             % Default is FALSE. If TRUE parser automatically advances to next token after DblValue, IntValue, or StrValue. Simpler when you don't need to check for parameter names.
-            result = (calllib('dss_capi_v7', 'Parser_Get_AutoIncrement') ~= 0);
+            result = (calllib(obj.libname, 'Parser_Get_AutoIncrement') ~= 0);
+            obj.CheckForError();
         end
         function obj = set.AutoIncrement(obj, Value)
-            calllib('dss_capi_v7', 'Parser_Set_AutoIncrement', Value);
+            calllib(obj.libname, 'Parser_Set_AutoIncrement', Value);
             obj.CheckForError();
         end
 
         function result = get.BeginQuote(obj)
-            % (read) Get String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.
-            % (write) Set String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.
-            result = calllib('dss_capi_v7', 'Parser_Get_BeginQuote');
+            % Get/Set String containing the the characters for Quoting in OpenDSS scripts. Matching pairs defined in EndQuote. Default is "'([{.
+            result = calllib(obj.libname, 'Parser_Get_BeginQuote');
+            obj.CheckForError();
         end
         function obj = set.BeginQuote(obj, Value)
-            calllib('dss_capi_v7', 'Parser_Set_BeginQuote', Value);
+            calllib(obj.libname, 'Parser_Set_BeginQuote', Value);
             obj.CheckForError();
         end
 
         function result = get.CmdString(obj)
             % String to be parsed. Loading this string resets the Parser to the beginning of the line. Then parse off the tokens in sequence.
-            result = calllib('dss_capi_v7', 'Parser_Get_CmdString');
+            result = calllib(obj.libname, 'Parser_Get_CmdString');
+            obj.CheckForError();
         end
         function obj = set.CmdString(obj, Value)
-            calllib('dss_capi_v7', 'Parser_Set_CmdString', Value);
+            calllib(obj.libname, 'Parser_Set_CmdString', Value);
             obj.CheckForError();
         end
 
         function result = get.DblValue(obj)
             % (read-only) Return next parameter as a double.
-            result = calllib('dss_capi_v7', 'Parser_Get_DblValue');
+            result = calllib(obj.libname, 'Parser_Get_DblValue');
+            obj.CheckForError();
         end
 
         function result = get.Delimiters(obj)
             % String defining hard delimiters used to separate token on the command string. Default is , and =. The = separates token name from token value. These override whitesspace to separate tokens.
-            result = calllib('dss_capi_v7', 'Parser_Get_Delimiters');
+            result = calllib(obj.libname, 'Parser_Get_Delimiters');
+            obj.CheckForError();
         end
         function obj = set.Delimiters(obj, Value)
-            calllib('dss_capi_v7', 'Parser_Set_Delimiters', Value);
+            calllib(obj.libname, 'Parser_Set_Delimiters', Value);
             obj.CheckForError();
         end
 
         function result = get.EndQuote(obj)
             % String containing characters, in order, that match the beginning quote characters in BeginQuote. Default is "')]}
-            result = calllib('dss_capi_v7', 'Parser_Get_EndQuote');
+            result = calllib(obj.libname, 'Parser_Get_EndQuote');
+            obj.CheckForError();
         end
         function obj = set.EndQuote(obj, Value)
-            calllib('dss_capi_v7', 'Parser_Set_EndQuote', Value);
+            calllib(obj.libname, 'Parser_Set_EndQuote', Value);
             obj.CheckForError();
         end
 
         function result = get.IntValue(obj)
             % (read-only) Return next parameter as a long integer.
-            result = calllib('dss_capi_v7', 'Parser_Get_IntValue');
+            result = calllib(obj.libname, 'Parser_Get_IntValue');
+            obj.CheckForError();
         end
 
         function result = get.NextParam(obj)
             % (read-only) Get next token and return tag name (before = sign) if any. See AutoIncrement.
-            result = calllib('dss_capi_v7', 'Parser_Get_NextParam');
+            result = calllib(obj.libname, 'Parser_Get_NextParam');
+            obj.CheckForError();
         end
 
         function result = get.StrValue(obj)
             % (read-only) Return next parameter as a string
-            result = calllib('dss_capi_v7', 'Parser_Get_StrValue');
+            result = calllib(obj.libname, 'Parser_Get_StrValue');
+            obj.CheckForError();
         end
 
         function result = get.WhiteSpace(obj)
             % (read) Get the characters used for White space in the command string.  Default is blank and Tab.
             % (write) Set the characters used for White space in the command string.  Default is blank and Tab.
-            result = calllib('dss_capi_v7', 'Parser_Get_WhiteSpace');
+            result = calllib(obj.libname, 'Parser_Get_WhiteSpace');
+            obj.CheckForError();
         end
         function obj = set.WhiteSpace(obj, Value)
-            calllib('dss_capi_v7', 'Parser_Set_WhiteSpace', Value);
+            calllib(obj.libname, 'Parser_Set_WhiteSpace', Value);
             obj.CheckForError();
         end
     end

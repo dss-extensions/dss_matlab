@@ -18,10 +18,6 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
     %    getI - Get the data from the internal Current pointer
     %    getV - Get the data from the internal Voltage pointer
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         SystemYChanged
         UseAuxCurrents
@@ -29,7 +25,7 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IYMatrix(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
         function result = GetCompressedYMatrix(obj, factor)
@@ -43,7 +39,7 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
             ColPtr = libpointer('int32PtrPtr');
             RowIdxPtr = libpointer('int32PtrPtr');
             cValsPtr = libpointer('doublePtrPtr');
-            calllib('dss_capi_v7', 'YMatrix_GetCompressedYMatrix', factor, nBus, nNz, ColPtr, RowIdxPtr, cValsPtr);
+            calllib(obj.libname, 'YMatrix_GetCompressedYMatrix', factor, nBus, nNz, ColPtr, RowIdxPtr, cValsPtr);
             obj.CheckForError;
             if ((~nBus.Value(1) || ~nNz.Value(1)))
                 result = 0;
@@ -62,37 +58,37 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
                 end
                 
                 result = sparse(double(RowIdxPtr.Value) + 1, cols, vals);
-                calllib('dss_capi_v7', 'DSS_Dispose_PInteger', ColPtr);
-                calllib('dss_capi_v7', 'DSS_Dispose_PInteger', RowIdxPtr);
-                calllib('dss_capi_v7', 'DSS_Dispose_PDouble', cValsPtr);
+                calllib(obj.libname, 'DSS_Dispose_PInteger', ColPtr);
+                calllib(obj.libname, 'DSS_Dispose_PInteger', RowIdxPtr);
+                calllib(obj.libname, 'DSS_Dispose_PDouble', cValsPtr);
             end
         end
 
         function obj = ZeroInjCurr(obj)
-            calllib('dss_capi_v7', 'YMatrix_ZeroInjCurr');
+            calllib(obj.libname, 'YMatrix_ZeroInjCurr');
         end
 
         function obj = GetSourceInjCurrents(obj)
-            calllib('dss_capi_v7', 'YMatrix_GetSourceInjCurrents');
+            calllib(obj.libname, 'YMatrix_GetSourceInjCurrents');
         end
 
         function obj = GetPCInjCurr(obj)
-            calllib('dss_capi_v7', 'YMatrix_GetPCInjCurr');
+            calllib(obj.libname, 'YMatrix_GetPCInjCurr');
         end
 
         function obj = BuildYMatrixD(obj, BuildOps, AllocateVI)
-            calllib('dss_capi_v7', 'YMatrix_BuildYMatrixD', BuildOps, AllocateVI);
+            calllib(obj.libname, 'YMatrix_BuildYMatrixD', BuildOps, AllocateVI);
         end
 
         function obj = AddInAuxCurrents(obj, SType)
-            calllib('dss_capi_v7', 'YMatrix_AddInAuxCurrents', SType);
+            calllib(obj.libname, 'YMatrix_AddInAuxCurrents', SType);
         end
 
         function result = GetIPointer(obj)
             % Get access to the internal Current pointer
             IvectorPtr = libpointer('doublePtrPtr');
-            numNodes = (calllib('dss_capi_v7', 'Circuit_Get_NumNodes') + 1) * 2;
-            calllib('dss_capi_v7', 'YMatrix_getIpointer', IvectorPtr);
+            numNodes = (calllib(obj.libname, 'Circuit_Get_NumNodes') + 1) * 2;
+            calllib(obj.libname, 'YMatrix_getIpointer', IvectorPtr);
             setdatatype(IvectorPtr.Value, 'doublePtr', 1, numNodes);
             result = IvectorPtr;
         end
@@ -100,14 +96,14 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
         function result = GetVPointer(obj)
             % Get access to the internal Voltage pointer
             VvectorPtr = libpointer('doublePtrPtr');
-            numNodes = (calllib('dss_capi_v7', 'Circuit_Get_NumNodes') + 1) * 2;
-            calllib('dss_capi_v7', 'YMatrix_getVpointer', VvectorPtr);
+            numNodes = (calllib(obj.libname, 'Circuit_Get_NumNodes') + 1) * 2;
+            calllib(obj.libname, 'YMatrix_getVpointer', VvectorPtr);
             setdatatype(VvectorPtr.Value, 'doublePtr', 1, numNodes);
             result = VvectorPtr;
         end
  
         function result = SolveSystem(obj, NodeV)
-            result = calllib('dss_capi_v7', 'YMatrix_SolveSystem', NodeV);
+            result = calllib(obj.libname, 'YMatrix_SolveSystem', NodeV);
             obj.CheckForError();
         end
 
@@ -129,18 +125,18 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
     methods
         
         function result = get.SystemYChanged(obj)
-            result = calllib('dss_capi_v7', 'YMatrix_Get_SystemYChanged') ~= 0;
+            result = calllib(obj.libname, 'YMatrix_Get_SystemYChanged') ~= 0;
         end
         function obj = set.SystemYChanged(obj, value)
-            calllib('dss_capi_v7', 'YMatrix_Set_SystemYChanged', value);
+            calllib(obj.libname, 'YMatrix_Set_SystemYChanged', value);
             obj.CheckForError();
         end
 
         function result = get.UseAuxCurrents(obj)
-            result = calllib('dss_capi_v7', 'YMatrix_Get_UseAuxCurrents') ~= 0;
+            result = calllib(obj.libname, 'YMatrix_Get_UseAuxCurrents') ~= 0;
         end
         function obj = set.UseAuxCurrents(obj, value)
-            calllib('dss_capi_v7', 'YMatrix_Set_UseAuxCurrents', value);
+            calllib(obj.libname, 'YMatrix_Set_UseAuxCurrents', value);
             obj.CheckForError();
         end
         

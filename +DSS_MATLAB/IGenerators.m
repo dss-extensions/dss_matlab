@@ -21,10 +21,6 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
     %    kW - kW output for the active generator. kvar is updated for current power factor.
     %    kvar - kvar output for the active generator. Updates power factor based on present kW value.
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         AllNames
         Count
@@ -48,7 +44,7 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IGenerators(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
     end
@@ -56,141 +52,153 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Generator names
-            result = DSS_MATLAB.get_string_array('Generators_Get_AllNames');
+            result = obj.apiutil.get_string_array('Generators_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of Generator objects
-            result = calllib('dss_capi_v7', 'Generators_Get_Count');
+            result = calllib(obj.libname, 'Generators_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of Generator; returns 0 if none.
-            result = calllib('dss_capi_v7', 'Generators_Get_First');
+            result = calllib(obj.libname, 'Generators_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Generator
-            result = calllib('dss_capi_v7', 'Generators_Get_Name');
+            result = calllib(obj.libname, 'Generators_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_Name', Value);
+            calllib(obj.libname, 'Generators_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Generator active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'Generators_Get_Next');
+            result = calllib(obj.libname, 'Generators_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active Generator by index;  1..Count
-            result = calllib('dss_capi_v7', 'Generators_Get_idx');
+            result = calllib(obj.libname, 'Generators_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_idx', Value);
+            calllib(obj.libname, 'Generators_Set_idx', Value);
             obj.CheckForError();
         end
 
 
         function result = get.ForcedON(obj)
             % Indicates whether the generator is forced ON regardles of other dispatch criteria.
-            result = (calllib('dss_capi_v7', 'Generators_Get_ForcedON') ~= 0);
+            result = (calllib(obj.libname, 'Generators_Get_ForcedON') ~= 0);
+            obj.CheckForError();
         end
         function obj = set.ForcedON(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_ForcedON', Value);
+            calllib(obj.libname, 'Generators_Set_ForcedON', Value);
             obj.CheckForError();
         end
 
         function result = get.Model(obj)
             % Generator Model
-            result = calllib('dss_capi_v7', 'Generators_Get_Model');
+            result = calllib(obj.libname, 'Generators_Get_Model');
+            obj.CheckForError();
         end
         function obj = set.Model(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_Model', Value);
+            calllib(obj.libname, 'Generators_Set_Model', Value);
             obj.CheckForError();
         end
 
         function result = get.PF(obj)
             % Power factor (pos. = producing vars). Updates kvar based on present kW value.
-            result = calllib('dss_capi_v7', 'Generators_Get_PF');
+            result = calllib(obj.libname, 'Generators_Get_PF');
+            obj.CheckForError();
         end
         function obj = set.PF(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_PF', Value);
+            calllib(obj.libname, 'Generators_Set_PF', Value);
             obj.CheckForError();
         end
 
         function result = get.Phases(obj)
             % Number of phases
-            result = calllib('dss_capi_v7', 'Generators_Get_Phases');
+            result = calllib(obj.libname, 'Generators_Get_Phases');
+            obj.CheckForError();
         end
         function obj = set.Phases(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_Phases', Value);
+            calllib(obj.libname, 'Generators_Set_Phases', Value);
             obj.CheckForError();
         end
 
         function result = get.RegisterNames(obj)
             % (read-only) Array of Names of all generator energy meter registers
-            result = DSS_MATLAB.get_string_array('Generators_Get_RegisterNames');
+            result = obj.apiutil.get_string_array('Generators_Get_RegisterNames');
+            obj.CheckForError();
         end
 
         function result = get.RegisterValues(obj)
             % (read-only) Array of valus in generator energy meter registers.
-            calllib('dss_capi_v7', 'Generators_Get_RegisterValues_GR');
+            calllib(obj.libname, 'Generators_Get_RegisterValues_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Vmaxpu(obj)
             % Vmaxpu for generator model
-            result = calllib('dss_capi_v7', 'Generators_Get_Vmaxpu');
+            result = calllib(obj.libname, 'Generators_Get_Vmaxpu');
+            obj.CheckForError();
         end
         function obj = set.Vmaxpu(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_Vmaxpu', Value);
+            calllib(obj.libname, 'Generators_Set_Vmaxpu', Value);
             obj.CheckForError();
         end
 
         function result = get.Vminpu(obj)
             % Vminpu for Generator model
-            result = calllib('dss_capi_v7', 'Generators_Get_Vminpu');
+            result = calllib(obj.libname, 'Generators_Get_Vminpu');
+            obj.CheckForError();
         end
         function obj = set.Vminpu(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_Vminpu', Value);
+            calllib(obj.libname, 'Generators_Set_Vminpu', Value);
             obj.CheckForError();
         end
 
         function result = get.kV(obj)
             % Voltage base for the active generator, kV
-            result = calllib('dss_capi_v7', 'Generators_Get_kV');
+            result = calllib(obj.libname, 'Generators_Get_kV');
+            obj.CheckForError();
         end
         function obj = set.kV(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_kV', Value);
+            calllib(obj.libname, 'Generators_Set_kV', Value);
             obj.CheckForError();
         end
 
         function result = get.kVArated(obj)
             % kVA rating of the generator
-            result = calllib('dss_capi_v7', 'Generators_Get_kVArated');
+            result = calllib(obj.libname, 'Generators_Get_kVArated');
+            obj.CheckForError();
         end
         function obj = set.kVArated(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_kVArated', Value);
+            calllib(obj.libname, 'Generators_Set_kVArated', Value);
             obj.CheckForError();
         end
 
         function result = get.kW(obj)
             % kW output for the active generator. kvar is updated for current power factor.
-            result = calllib('dss_capi_v7', 'Generators_Get_kW');
+            result = calllib(obj.libname, 'Generators_Get_kW');
+            obj.CheckForError();
         end
         function obj = set.kW(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_kW', Value);
+            calllib(obj.libname, 'Generators_Set_kW', Value);
             obj.CheckForError();
         end
 
         function result = get.kvar(obj)
             % kvar output for the active generator. Updates power factor based on present kW value.
-            result = calllib('dss_capi_v7', 'Generators_Get_kvar');
+            result = calllib(obj.libname, 'Generators_Get_kvar');
+            obj.CheckForError();
         end
         function obj = set.kvar(obj, Value)
-            calllib('dss_capi_v7', 'Generators_Set_kvar', Value);
+            calllib(obj.libname, 'Generators_Set_kvar', Value);
             obj.CheckForError();
         end
     end

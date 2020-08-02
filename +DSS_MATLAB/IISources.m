@@ -12,10 +12,6 @@ classdef (CaseInsensitiveProperties) IISources < DSS_MATLAB.Base
     %    AngleDeg - Phase angle for ISource, degrees
     %    Frequency - The present frequency of the ISource, Hz
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         AllNames
         Count
@@ -30,7 +26,7 @@ classdef (CaseInsensitiveProperties) IISources < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IISources(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
     end
@@ -38,67 +34,70 @@ classdef (CaseInsensitiveProperties) IISources < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all ISource names
-            result = DSS_MATLAB.get_string_array('ISources_Get_AllNames');
+            result = obj.apiutil.get_string_array('ISources_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of ISource objects
-            result = calllib('dss_capi_v7', 'ISources_Get_Count');
+            result = calllib(obj.libname, 'ISources_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of ISource; returns 0 if none.
-            result = calllib('dss_capi_v7', 'ISources_Get_First');
+            result = calllib(obj.libname, 'ISources_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active ISource
-            result = calllib('dss_capi_v7', 'ISources_Get_Name');
+            result = calllib(obj.libname, 'ISources_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'ISources_Set_Name', Value);
+            calllib(obj.libname, 'ISources_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next ISource active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'ISources_Get_Next');
+            result = calllib(obj.libname, 'ISources_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active ISource by index;  1..Count
-            result = calllib('dss_capi_v7', 'ISources_Get_idx');
+            result = calllib(obj.libname, 'ISources_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'ISources_Set_idx', Value);
+            calllib(obj.libname, 'ISources_Set_idx', Value);
             obj.CheckForError();
         end
 
 
         function result = get.Amps(obj)
             % Magnitude of the ISource in amps
-            result = calllib('dss_capi_v7', 'ISources_Get_Amps');
+            result = calllib(obj.libname, 'ISources_Get_Amps');
+            obj.CheckForError();
         end
         function obj = set.Amps(obj, Value)
-            calllib('dss_capi_v7', 'ISources_Set_Amps', Value);
+            calllib(obj.libname, 'ISources_Set_Amps', Value);
             obj.CheckForError();
         end
 
         function result = get.AngleDeg(obj)
             % Phase angle for ISource, degrees
-            result = calllib('dss_capi_v7', 'ISources_Get_AngleDeg');
+            result = calllib(obj.libname, 'ISources_Get_AngleDeg');
+            obj.CheckForError();
         end
         function obj = set.AngleDeg(obj, Value)
-            calllib('dss_capi_v7', 'ISources_Set_AngleDeg', Value);
+            calllib(obj.libname, 'ISources_Set_AngleDeg', Value);
             obj.CheckForError();
         end
 
         function result = get.Frequency(obj)
             % The present frequency of the ISource, Hz
-            result = calllib('dss_capi_v7', 'ISources_Get_Frequency');
+            result = calllib(obj.libname, 'ISources_Get_Frequency');
+            obj.CheckForError();
         end
         function obj = set.Frequency(obj, Value)
-            calllib('dss_capi_v7', 'ISources_Set_Frequency', Value);
+            calllib(obj.libname, 'ISources_Set_Frequency', Value);
             obj.CheckForError();
         end
     end

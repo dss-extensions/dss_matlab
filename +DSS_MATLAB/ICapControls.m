@@ -26,10 +26,6 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
     % Methods:
     %    Reset - 
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         AllNames
         Count
@@ -55,11 +51,12 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = ICapControls(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
         function obj = Reset(obj)
-            calllib('dss_capi_v7', 'CapControls_Reset');
+            calllib(obj.libname, 'CapControls_Reset');
+            obj.CheckForError();
         end
 
     end
@@ -67,165 +64,179 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all CapControl names
-            result = DSS_MATLAB.get_string_array('CapControls_Get_AllNames');
+            result = obj.apiutil.get_string_array('CapControls_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of CapControl objects
-            result = calllib('dss_capi_v7', 'CapControls_Get_Count');
+            result = calllib(obj.libname, 'CapControls_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of CapControl; returns 0 if none.
-            result = calllib('dss_capi_v7', 'CapControls_Get_First');
+            result = calllib(obj.libname, 'CapControls_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active CapControl
-            result = calllib('dss_capi_v7', 'CapControls_Get_Name');
+            result = calllib(obj.libname, 'CapControls_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_Name', Value);
+            calllib(obj.libname, 'CapControls_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next CapControl active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'CapControls_Get_Next');
+            result = calllib(obj.libname, 'CapControls_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active CapControl by index;  1..Count
-            result = calllib('dss_capi_v7', 'CapControls_Get_idx');
+            result = calllib(obj.libname, 'CapControls_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_idx', Value);
+            calllib(obj.libname, 'CapControls_Set_idx', Value);
             obj.CheckForError();
         end
 
 
         function result = get.CTratio(obj)
             % Transducer ratio from pirmary current to control current.
-            result = calllib('dss_capi_v7', 'CapControls_Get_CTratio');
+            result = calllib(obj.libname, 'CapControls_Get_CTratio');
+            obj.CheckForError();
         end
         function obj = set.CTratio(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_CTratio', Value);
+            calllib(obj.libname, 'CapControls_Set_CTratio', Value);
             obj.CheckForError();
         end
 
         function result = get.Capacitor(obj)
             % Name of the Capacitor that is controlled.
-            result = calllib('dss_capi_v7', 'CapControls_Get_Capacitor');
+            result = calllib(obj.libname, 'CapControls_Get_Capacitor');
+            obj.CheckForError();
         end
         function obj = set.Capacitor(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_Capacitor', Value);
+            calllib(obj.libname, 'CapControls_Set_Capacitor', Value);
             obj.CheckForError();
         end
 
         function result = get.DeadTime(obj)
-            result = calllib('dss_capi_v7', 'CapControls_Get_DeadTime');
+            result = calllib(obj.libname, 'CapControls_Get_DeadTime');
+            obj.CheckForError();
         end
         function obj = set.DeadTime(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_DeadTime', Value);
+            calllib(obj.libname, 'CapControls_Set_DeadTime', Value);
             obj.CheckForError();
         end
 
         function result = get.Delay(obj)
             % Time delay [s] to switch on after arming.  Control may reset before actually switching.
-            result = calllib('dss_capi_v7', 'CapControls_Get_Delay');
+            result = calllib(obj.libname, 'CapControls_Get_Delay');
+            obj.CheckForError();
         end
         function obj = set.Delay(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_Delay', Value);
+            calllib(obj.libname, 'CapControls_Set_Delay', Value);
             obj.CheckForError();
         end
 
         function result = get.DelayOff(obj)
             % Time delay [s] before swithcing off a step. Control may reset before actually switching.
-            result = calllib('dss_capi_v7', 'CapControls_Get_DelayOff');
+            result = calllib(obj.libname, 'CapControls_Get_DelayOff');
+            obj.CheckForError();
         end
         function obj = set.DelayOff(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_DelayOff', Value);
+            calllib(obj.libname, 'CapControls_Set_DelayOff', Value);
             obj.CheckForError();
         end
 
         function result = get.Mode(obj)
             % Type of automatic controller.
-            result = calllib('dss_capi_v7', 'CapControls_Get_Mode');
+            result = calllib(obj.libname, 'CapControls_Get_Mode');
+            obj.CheckForError();
         end
         function obj = set.Mode(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_Mode', Value);
+            calllib(obj.libname, 'CapControls_Set_Mode', Value);
             obj.CheckForError();
         end
 
         function result = get.MonitoredObj(obj)
             % Full name of the element that PT and CT are connected to.
-            result = calllib('dss_capi_v7', 'CapControls_Get_MonitoredObj');
+            result = calllib(obj.libname, 'CapControls_Get_MonitoredObj');
+            obj.CheckForError();
         end
         function obj = set.MonitoredObj(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_MonitoredObj', Value);
+            calllib(obj.libname, 'CapControls_Set_MonitoredObj', Value);
             obj.CheckForError();
         end
 
         function result = get.MonitoredTerm(obj)
             % Terminal number on the element that PT and CT are connected to.
-            result = calllib('dss_capi_v7', 'CapControls_Get_MonitoredTerm');
+            result = calllib(obj.libname, 'CapControls_Get_MonitoredTerm');
+            obj.CheckForError();
         end
         function obj = set.MonitoredTerm(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_MonitoredTerm', Value);
+            calllib(obj.libname, 'CapControls_Set_MonitoredTerm', Value);
             obj.CheckForError();
         end
 
         function result = get.OFFSetting(obj)
             % Threshold to switch off a step. See Mode for units.
-            result = calllib('dss_capi_v7', 'CapControls_Get_OFFSetting');
+            result = calllib(obj.libname, 'CapControls_Get_OFFSetting');
+            obj.CheckForError();
         end
         function obj = set.OFFSetting(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_OFFSetting', Value);
+            calllib(obj.libname, 'CapControls_Set_OFFSetting', Value);
             obj.CheckForError();
         end
 
         function result = get.ONSetting(obj)
             % Threshold to arm or switch on a step.  See Mode for units.
-            result = calllib('dss_capi_v7', 'CapControls_Get_ONSetting');
+            result = calllib(obj.libname, 'CapControls_Get_ONSetting');
+            obj.CheckForError();
         end
         function obj = set.ONSetting(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_ONSetting', Value);
+            calllib(obj.libname, 'CapControls_Set_ONSetting', Value);
             obj.CheckForError();
         end
 
         function result = get.PTratio(obj)
             % Transducer ratio from primary feeder to control voltage.
-            result = calllib('dss_capi_v7', 'CapControls_Get_PTratio');
+            result = calllib(obj.libname, 'CapControls_Get_PTratio');
+            obj.CheckForError();
         end
         function obj = set.PTratio(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_PTratio', Value);
+            calllib(obj.libname, 'CapControls_Set_PTratio', Value);
             obj.CheckForError();
         end
 
         function result = get.UseVoltOverride(obj)
             % Enables Vmin and Vmax to override the control Mode
-            result = (calllib('dss_capi_v7', 'CapControls_Get_UseVoltOverride') ~= 0);
+            result = (calllib(obj.libname, 'CapControls_Get_UseVoltOverride') ~= 0);
+            obj.CheckForError();
         end
         function obj = set.UseVoltOverride(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_UseVoltOverride', Value);
+            calllib(obj.libname, 'CapControls_Set_UseVoltOverride', Value);
             obj.CheckForError();
         end
 
         function result = get.Vmax(obj)
             % With VoltOverride, swtich off whenever PT voltage exceeds this level.
-            result = calllib('dss_capi_v7', 'CapControls_Get_Vmax');
+            result = calllib(obj.libname, 'CapControls_Get_Vmax');
+            obj.CheckForError();
         end
         function obj = set.Vmax(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_Vmax', Value);
+            calllib(obj.libname, 'CapControls_Set_Vmax', Value);
             obj.CheckForError();
         end
 
         function result = get.Vmin(obj)
             % With VoltOverride, switch ON whenever PT voltage drops below this level.
-            result = calllib('dss_capi_v7', 'CapControls_Get_Vmin');
+            result = calllib(obj.libname, 'CapControls_Get_Vmin');
+            obj.CheckForError();
         end
         function obj = set.Vmin(obj, Value)
-            calllib('dss_capi_v7', 'CapControls_Set_Vmin', Value);
+            calllib(obj.libname, 'CapControls_Set_Vmin', Value);
             obj.CheckForError();
         end
     end

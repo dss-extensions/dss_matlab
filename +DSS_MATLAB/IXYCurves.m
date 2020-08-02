@@ -18,10 +18,6 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
     %    x - Set X value or get interpolated value after setting Y
     %    y - Set Y value or get interpolated Y value after setting X
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         AllNames
         Count
@@ -42,7 +38,7 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IXYCurves(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
     end
@@ -50,123 +46,132 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all XYCurve names
-            result = DSS_MATLAB.get_string_array('XYCurves_Get_AllNames');
+            result = obj.apiutil.get_string_array('XYCurves_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of XYCurve objects
-            result = calllib('dss_capi_v7', 'XYCurves_Get_Count');
+            result = calllib(obj.libname, 'XYCurves_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of XYCurve; returns 0 if none.
-            result = calllib('dss_capi_v7', 'XYCurves_Get_First');
+            result = calllib(obj.libname, 'XYCurves_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active XYCurve
-            result = calllib('dss_capi_v7', 'XYCurves_Get_Name');
+            result = calllib(obj.libname, 'XYCurves_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_Name', Value);
+            calllib(obj.libname, 'XYCurves_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next XYCurve active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'XYCurves_Get_Next');
+            result = calllib(obj.libname, 'XYCurves_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active XYCurve by index;  1..Count
-            result = calllib('dss_capi_v7', 'XYCurves_Get_idx');
+            result = calllib(obj.libname, 'XYCurves_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_idx', Value);
+            calllib(obj.libname, 'XYCurves_Set_idx', Value);
             obj.CheckForError();
         end
 
 
         function result = get.Npts(obj)
             % Get/Set Number of points in X-Y curve
-            result = calllib('dss_capi_v7', 'XYCurves_Get_Npts');
+            result = calllib(obj.libname, 'XYCurves_Get_Npts');
+            obj.CheckForError();
         end
         function obj = set.Npts(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_Npts', Value);
+            calllib(obj.libname, 'XYCurves_Set_Npts', Value);
             obj.CheckForError();
         end
 
         function result = get.Xarray(obj)
             % Get/set X values as a Array of doubles. Set Npts to max number expected if setting
-            calllib('dss_capi_v7', 'XYCurves_Get_Xarray_GR');
+            calllib(obj.libname, 'XYCurves_Get_Xarray_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Xarray(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_Xarray', Value, numel(Value));
+            calllib(obj.libname, 'XYCurves_Set_Xarray', Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.Xscale(obj)
             % Factor to scale X values from original curve
-            result = calllib('dss_capi_v7', 'XYCurves_Get_Xscale');
+            result = calllib(obj.libname, 'XYCurves_Get_Xscale');
+            obj.CheckForError();
         end
         function obj = set.Xscale(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_Xscale', Value);
+            calllib(obj.libname, 'XYCurves_Set_Xscale', Value);
             obj.CheckForError();
         end
 
         function result = get.Xshift(obj)
             % Amount to shift X value from original curve
-            result = calllib('dss_capi_v7', 'XYCurves_Get_Xshift');
+            result = calllib(obj.libname, 'XYCurves_Get_Xshift');
+            obj.CheckForError();
         end
         function obj = set.Xshift(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_Xshift', Value);
+            calllib(obj.libname, 'XYCurves_Set_Xshift', Value);
             obj.CheckForError();
         end
 
         function result = get.Yarray(obj)
             % Get/Set Y values in curve; Set Npts to max number expected if setting
-            calllib('dss_capi_v7', 'XYCurves_Get_Yarray_GR');
+            calllib(obj.libname, 'XYCurves_Get_Yarray_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Yarray(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_Yarray', Value, numel(Value));
+            calllib(obj.libname, 'XYCurves_Set_Yarray', Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.Yscale(obj)
             % Factor to scale Y values from original curve
-            result = calllib('dss_capi_v7', 'XYCurves_Get_Yscale');
+            result = calllib(obj.libname, 'XYCurves_Get_Yscale');
+            obj.CheckForError();
         end
         function obj = set.Yscale(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_Yscale', Value);
+            calllib(obj.libname, 'XYCurves_Set_Yscale', Value);
             obj.CheckForError();
         end
 
         function result = get.Yshift(obj)
             % Amount to shift Y valiue from original curve
-            result = calllib('dss_capi_v7', 'XYCurves_Get_Yshift');
+            result = calllib(obj.libname, 'XYCurves_Get_Yshift');
+            obj.CheckForError();
         end
         function obj = set.Yshift(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_Yshift', Value);
+            calllib(obj.libname, 'XYCurves_Set_Yshift', Value);
             obj.CheckForError();
         end
 
         function result = get.x(obj)
             % Set X value or get interpolated value after setting Y
-            result = calllib('dss_capi_v7', 'XYCurves_Get_x');
+            result = calllib(obj.libname, 'XYCurves_Get_x');
+            obj.CheckForError();
         end
         function obj = set.x(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_x', Value);
+            calllib(obj.libname, 'XYCurves_Set_x', Value);
             obj.CheckForError();
         end
 
         function result = get.y(obj)
             % Set Y value or get interpolated Y value after setting X
-            result = calllib('dss_capi_v7', 'XYCurves_Get_y');
+            result = calllib(obj.libname, 'XYCurves_Get_y');
+            obj.CheckForError();
         end
         function obj = set.y(obj, Value)
-            calllib('dss_capi_v7', 'XYCurves_Set_y', Value);
+            calllib(obj.libname, 'XYCurves_Set_y', Value);
             obj.CheckForError();
         end
     end

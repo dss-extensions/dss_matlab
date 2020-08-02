@@ -24,10 +24,6 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
     %    Close - 
     %    Open - 
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         AllNames
         Count
@@ -50,15 +46,17 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IReclosers(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
         function obj = Close(obj)
-            calllib('dss_capi_v7', 'Reclosers_Close');
+            calllib(obj.libname, 'Reclosers_Close');
+            obj.CheckForError();
         end
 
         function obj = Open(obj)
-            calllib('dss_capi_v7', 'Reclosers_Open');
+            calllib(obj.libname, 'Reclosers_Open');
+            obj.CheckForError();
         end
 
     end
@@ -66,136 +64,147 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Recloser names
-            result = DSS_MATLAB.get_string_array('Reclosers_Get_AllNames');
+            result = obj.apiutil.get_string_array('Reclosers_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of Recloser objects
-            result = calllib('dss_capi_v7', 'Reclosers_Get_Count');
+            result = calllib(obj.libname, 'Reclosers_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of Recloser; returns 0 if none.
-            result = calllib('dss_capi_v7', 'Reclosers_Get_First');
+            result = calllib(obj.libname, 'Reclosers_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Recloser
-            result = calllib('dss_capi_v7', 'Reclosers_Get_Name');
+            result = calllib(obj.libname, 'Reclosers_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_Name', Value);
+            calllib(obj.libname, 'Reclosers_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Recloser active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'Reclosers_Get_Next');
+            result = calllib(obj.libname, 'Reclosers_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active Recloser by index;  1..Count
-            result = calllib('dss_capi_v7', 'Reclosers_Get_idx');
+            result = calllib(obj.libname, 'Reclosers_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_idx', Value);
+            calllib(obj.libname, 'Reclosers_Set_idx', Value);
             obj.CheckForError();
         end
 
 
         function result = get.GroundInst(obj)
             % Ground (3I0) instantaneous trip setting - curve multipler or actual amps.
-            result = calllib('dss_capi_v7', 'Reclosers_Get_GroundInst');
+            result = calllib(obj.libname, 'Reclosers_Get_GroundInst');
+            obj.CheckForError();
         end
         function obj = set.GroundInst(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_GroundInst', Value);
+            calllib(obj.libname, 'Reclosers_Set_GroundInst', Value);
             obj.CheckForError();
         end
 
         function result = get.GroundTrip(obj)
             % Ground (3I0) trip multiplier or actual amps
-            result = calllib('dss_capi_v7', 'Reclosers_Get_GroundTrip');
+            result = calllib(obj.libname, 'Reclosers_Get_GroundTrip');
+            obj.CheckForError();
         end
         function obj = set.GroundTrip(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_GroundTrip', Value);
+            calllib(obj.libname, 'Reclosers_Set_GroundTrip', Value);
             obj.CheckForError();
         end
 
         function result = get.MonitoredObj(obj)
             % Full name of object this Recloser to be monitored.
-            result = calllib('dss_capi_v7', 'Reclosers_Get_MonitoredObj');
+            result = calllib(obj.libname, 'Reclosers_Get_MonitoredObj');
+            obj.CheckForError();
         end
         function obj = set.MonitoredObj(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_MonitoredObj', Value);
+            calllib(obj.libname, 'Reclosers_Set_MonitoredObj', Value);
             obj.CheckForError();
         end
 
         function result = get.MonitoredTerm(obj)
             % Terminal number of Monitored object for the Recloser
-            result = calllib('dss_capi_v7', 'Reclosers_Get_MonitoredTerm');
+            result = calllib(obj.libname, 'Reclosers_Get_MonitoredTerm');
+            obj.CheckForError();
         end
         function obj = set.MonitoredTerm(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_MonitoredTerm', Value);
+            calllib(obj.libname, 'Reclosers_Set_MonitoredTerm', Value);
             obj.CheckForError();
         end
 
         function result = get.NumFast(obj)
             % Number of fast shots
-            result = calllib('dss_capi_v7', 'Reclosers_Get_NumFast');
+            result = calllib(obj.libname, 'Reclosers_Get_NumFast');
+            obj.CheckForError();
         end
         function obj = set.NumFast(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_NumFast', Value);
+            calllib(obj.libname, 'Reclosers_Set_NumFast', Value);
             obj.CheckForError();
         end
 
         function result = get.PhaseInst(obj)
             % Phase instantaneous curve multipler or actual amps
-            result = calllib('dss_capi_v7', 'Reclosers_Get_PhaseInst');
+            result = calllib(obj.libname, 'Reclosers_Get_PhaseInst');
+            obj.CheckForError();
         end
         function obj = set.PhaseInst(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_PhaseInst', Value);
+            calllib(obj.libname, 'Reclosers_Set_PhaseInst', Value);
             obj.CheckForError();
         end
 
         function result = get.PhaseTrip(obj)
             % Phase trip curve multiplier or actual amps
-            result = calllib('dss_capi_v7', 'Reclosers_Get_PhaseTrip');
+            result = calllib(obj.libname, 'Reclosers_Get_PhaseTrip');
+            obj.CheckForError();
         end
         function obj = set.PhaseTrip(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_PhaseTrip', Value);
+            calllib(obj.libname, 'Reclosers_Set_PhaseTrip', Value);
             obj.CheckForError();
         end
 
         function result = get.RecloseIntervals(obj)
             % (read-only) Array of Doubles: reclose intervals, s, between shots.
-            calllib('dss_capi_v7', 'Reclosers_Get_RecloseIntervals_GR');
+            calllib(obj.libname, 'Reclosers_Get_RecloseIntervals_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Shots(obj)
             % Number of shots to lockout (fast + delayed)
-            result = calllib('dss_capi_v7', 'Reclosers_Get_Shots');
+            result = calllib(obj.libname, 'Reclosers_Get_Shots');
+            obj.CheckForError();
         end
         function obj = set.Shots(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_Shots', Value);
+            calllib(obj.libname, 'Reclosers_Set_Shots', Value);
             obj.CheckForError();
         end
 
         function result = get.SwitchedObj(obj)
             % Full name of the circuit element that is being switched by the Recloser.
-            result = calllib('dss_capi_v7', 'Reclosers_Get_SwitchedObj');
+            result = calllib(obj.libname, 'Reclosers_Get_SwitchedObj');
+            obj.CheckForError();
         end
         function obj = set.SwitchedObj(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_SwitchedObj', Value);
+            calllib(obj.libname, 'Reclosers_Set_SwitchedObj', Value);
             obj.CheckForError();
         end
 
         function result = get.SwitchedTerm(obj)
             % Terminal number of the controlled device being switched by the Recloser
-            result = calllib('dss_capi_v7', 'Reclosers_Get_SwitchedTerm');
+            result = calllib(obj.libname, 'Reclosers_Get_SwitchedTerm');
+            obj.CheckForError();
         end
         function obj = set.SwitchedTerm(obj, Value)
-            calllib('dss_capi_v7', 'Reclosers_Set_SwitchedTerm', Value);
+            calllib(obj.libname, 'Reclosers_Set_SwitchedTerm', Value);
             obj.CheckForError();
         end
     end

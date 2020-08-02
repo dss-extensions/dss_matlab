@@ -1,13 +1,9 @@
 classdef (CaseInsensitiveProperties) IDSSEvents < DSS_MATLAB.Base
     % IDSSEvents: DSS MATLAB interface class to DSS C-API
 
-    properties (Access = protected)
-        apiutil
-    end
-
-    methods
+    methods (Access = public)
         function obj = IDSSEvents(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
     end
     

@@ -34,10 +34,6 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
     %    SaveAll - 
     %    Show - 
 
-    properties (Access = protected)
-        apiutil
-    end
-    
     properties
         AllNames
         ByteStream
@@ -67,13 +63,13 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
                 result = 0;
                 return
             end
-            result = DSS_MATLAB.get_float64_array('Monitors_Get_Channel', Index);
+            result = obj.apiutil.get_float64_array('Monitors_Get_Channel', Index);
             obj.CheckForError();
         end
 
         function result = AsMatrix(obj)
             % Matrix of the active monitor, containing the hour vector, seconds vector, and all channels (index 3 = channel 1)
-            buffer = DSS_MATLAB.get_int8_array('Monitors_Get_ByteStream');
+            buffer = obj.apiutil.get_int8_array('Monitors_Get_ByteStream');
             obj.CheckForError();
             if (numel(buffer) <= 1)
                 result = 0;
@@ -87,152 +83,152 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
         end
 
         function obj = Process(obj)
-            calllib('dss_capi_v7', 'Monitors_Process');
+            calllib(obj.libname, 'Monitors_Process');
         end
 
         function obj = ProcessAll(obj)
-            calllib('dss_capi_v7', 'Monitors_ProcessAll');
+            calllib(obj.libname, 'Monitors_ProcessAll');
         end
 
         function obj = Reset(obj)
-            calllib('dss_capi_v7', 'Monitors_Reset');
+            calllib(obj.libname, 'Monitors_Reset');
         end
 
         function obj = ResetAll(obj)
-            calllib('dss_capi_v7', 'Monitors_ResetAll');
+            calllib(obj.libname, 'Monitors_ResetAll');
         end
 
         function obj = Sample(obj)
-            calllib('dss_capi_v7', 'Monitors_Sample');
+            calllib(obj.libname, 'Monitors_Sample');
         end
 
         function obj = SampleAll(obj)
-            calllib('dss_capi_v7', 'Monitors_SampleAll');
+            calllib(obj.libname, 'Monitors_SampleAll');
         end
 
         function obj = Save(obj)
-            calllib('dss_capi_v7', 'Monitors_Save');
+            calllib(obj.libname, 'Monitors_Save');
         end
 
         function obj = SaveAll(obj)
-            calllib('dss_capi_v7', 'Monitors_SaveAll');
+            calllib(obj.libname, 'Monitors_SaveAll');
         end
 
         function obj = Show(obj)
-            calllib('dss_capi_v7', 'Monitors_Show');
+            calllib(obj.libname, 'Monitors_Show');
         end
 
     end
     methods
         function obj = IMonitors(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
         function result = get.AllNames(obj)
             % Array of strings with all Monitor names
-            result = DSS_MATLAB.get_string_array('Monitors_Get_AllNames');
+            result = obj.apiutil.get_string_array('Monitors_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of Monitor objects
-            result = calllib('dss_capi_v7', 'Monitors_Get_Count');
+            result = calllib(obj.libname, 'Monitors_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of Monitor; returns 0 if none.
-            result = calllib('dss_capi_v7', 'Monitors_Get_First');
+            result = calllib(obj.libname, 'Monitors_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Monitor
-            result = calllib('dss_capi_v7', 'Monitors_Get_Name');
+            result = calllib(obj.libname, 'Monitors_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Monitors_Set_Name', Value);
+            calllib(obj.libname, 'Monitors_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Monitor active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'Monitors_Get_Next');
+            result = calllib(obj.libname, 'Monitors_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active Monitor by index;  1..Count
-            result = calllib('dss_capi_v7', 'Monitors_Get_idx');
+            result = calllib(obj.libname, 'Monitors_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'Monitors_Set_idx', Value);
+            calllib(obj.libname, 'Monitors_Set_idx', Value);
             obj.CheckForError();
         end
 
 
         function result = get.ByteStream(obj)
             % (read-only) Byte Array containing monitor stream values. Make sure a "save" is done first (standard solution modes do this automatically)
-            result = DSS_MATLAB.get_int8_array('Monitors_Get_ByteStream');
+            result = obj.apiutil.get_int8_array('Monitors_Get_ByteStream');
         end
 
         function result = get.Element(obj)
             % Full object name of element being monitored.
-            result = calllib('dss_capi_v7', 'Monitors_Get_Element');
+            result = calllib(obj.libname, 'Monitors_Get_Element');
         end
         function obj = set.Element(obj, Value)
-            calllib('dss_capi_v7', 'Monitors_Set_Element', Value);
+            calllib(obj.libname, 'Monitors_Set_Element', Value);
         end
 
         function result = get.FileName(obj)
             % (read-only) Name of CSV file associated with active Monitor.
-            result = calllib('dss_capi_v7', 'Monitors_Get_FileName');
+            result = calllib(obj.libname, 'Monitors_Get_FileName');
         end
 
         function result = get.FileVersion(obj)
             % (read-only) Monitor File Version (integer)
-            result = calllib('dss_capi_v7', 'Monitors_Get_FileVersion');
+            result = calllib(obj.libname, 'Monitors_Get_FileVersion');
         end
 
         function result = get.Header(obj)
             % (read-only) Header string;  Array of strings containing Channel names
-            result = DSS_MATLAB.get_string_array('Monitors_Get_Header');
+            result = obj.apiutil.get_string_array('Monitors_Get_Header');
         end
 
         function result = get.Mode(obj)
             % Set Monitor mode (bitmask integer - see DSS Help)
-            result = calllib('dss_capi_v7', 'Monitors_Get_Mode');
+            result = calllib(obj.libname, 'Monitors_Get_Mode');
         end
         function obj = set.Mode(obj, Value)
-            calllib('dss_capi_v7', 'Monitors_Set_Mode', Value);
+            calllib(obj.libname, 'Monitors_Set_Mode', Value);
         end
 
         function result = get.NumChannels(obj)
             % (read-only) Number of Channels in the active Monitor
-            result = calllib('dss_capi_v7', 'Monitors_Get_NumChannels');
+            result = calllib(obj.libname, 'Monitors_Get_NumChannels');
         end
 
         function result = get.RecordSize(obj)
             % (read-only) Size of each record in ByteStream (Integer). Same as NumChannels.
-            result = calllib('dss_capi_v7', 'Monitors_Get_RecordSize');
+            result = calllib(obj.libname, 'Monitors_Get_RecordSize');
         end
 
         function result = get.SampleCount(obj)
             % (read-only) Number of Samples in Monitor at Present
-            result = calllib('dss_capi_v7', 'Monitors_Get_SampleCount');
+            result = calllib(obj.libname, 'Monitors_Get_SampleCount');
         end
 
         function result = get.Terminal(obj)
             % Terminal number of element being monitored.
-            result = calllib('dss_capi_v7', 'Monitors_Get_Terminal');
+            result = calllib(obj.libname, 'Monitors_Get_Terminal');
         end
         function obj = set.Terminal(obj, Value)
-            calllib('dss_capi_v7', 'Monitors_Set_Terminal', Value);
+            calllib(obj.libname, 'Monitors_Set_Terminal', Value);
         end
 
         function result = get.dblFreq(obj)
             % (read-only) Array of doubles containing frequency values for harmonics mode solutions; Empty for time mode solutions (use dblHour)
-            result = DSS_MATLAB.get_float64_array('Monitors_Get_dblFreq');
+            result = obj.apiutil.get_float64_array('Monitors_Get_dblFreq');
         end
 
         function result = get.dblHour(obj)
             % (read-only) Array of doubles containgin time value in hours for time-sampled monitor values; Empty if frequency-sampled values for harmonics solution  (see dblFreq)
-            result = DSS_MATLAB.get_float64_array('Monitors_Get_dblHour');
+            result = obj.apiutil.get_float64_array('Monitors_Get_dblHour');
         end
     end
 end

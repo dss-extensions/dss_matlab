@@ -6,10 +6,6 @@ classdef (CaseInsensitiveProperties) IDSSProperty < DSS_MATLAB.Base
     %    Name - Name of Property
     %    Val - 
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         Description
         Name
@@ -18,7 +14,7 @@ classdef (CaseInsensitiveProperties) IDSSProperty < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IDSSProperty(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
     end
@@ -26,19 +22,22 @@ classdef (CaseInsensitiveProperties) IDSSProperty < DSS_MATLAB.Base
 
         function result = get.Description(obj)
             % (read-only) Description of the property.
-            result = calllib('dss_capi_v7', 'DSSProperty_Get_Description');
+            result = calllib(obj.libname, 'DSSProperty_Get_Description');
+            obj.CheckForError();
         end
 
         function result = get.Name(obj)
             % (read-only) Name of Property
-            result = calllib('dss_capi_v7', 'DSSProperty_Get_Name');
+            result = calllib(obj.libname, 'DSSProperty_Get_Name');
+            obj.CheckForError();
         end
 
         function result = get.Val(obj)
-            result = calllib('dss_capi_v7', 'DSSProperty_Get_Val');
+            result = calllib(obj.libname, 'DSSProperty_Get_Val');
+            obj.CheckForError();
         end
         function obj = set.Val(obj, Value)
-            calllib('dss_capi_v7', 'DSSProperty_Set_Val', Value);
+            calllib(obj.libname, 'DSSProperty_Set_Val', Value);
             obj.CheckForError();
         end
     end

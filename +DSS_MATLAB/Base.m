@@ -1,4 +1,9 @@
 classdef Base < handle & matlab.mixin.CustomDisplay & matlab.mixin.SetGet
+    properties (Access = protected, Hidden = true)
+        apiutil
+        libname
+    end
+
     methods (Access = protected)
         function propgrp = getPropertyGroups(obj)
             propgrp = matlab.mixin.util.PropertyGroup();
@@ -16,17 +21,27 @@ classdef Base < handle & matlab.mixin.CustomDisplay & matlab.mixin.SetGet
     end
 
     methods (Access = public)
+        function obj = Base(apiutil)
+            obj.apiutil = apiutil;
+            obj.libname = apiutil.libname;
+        end
 
     end
 
     methods
 
-        function obj = CheckForError(obj)
-            error = calllib('dss_capi_v7', 'Error_Get_Number');
+        function varargout = CheckForError(obj, varargin)
+            error = calllib(obj.libname, 'Error_Get_Number');
             if error ~= 0
-                ME = MException(['DSS_MATLAB:Error' int2str(error)], strrep(calllib('dss_capi_v7', 'Error_Get_Description'), '\', '\\'));
+                ME = MException(['DSS_MATLAB:Error' int2str(error)], strrep(calllib(obj.libname, 'Error_Get_Description'), '\', '\\'));
                 throw(ME);
             end
+            varargout = varargin;
+        end
+        
+        function obj = clear_api_buffers(obj)
+            calllib(obj.libname, 'DSS_DisposeGRData');
+            calllib(obj.libname, 'DSS_ResetStringBuffer');
         end
     end
 end

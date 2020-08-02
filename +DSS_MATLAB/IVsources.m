@@ -12,11 +12,7 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
     %    BasekV - Source voltage in kV
     %    Frequency - Source frequency in Hz
     %    Phases - Number of phases
-    %    pu - (read) Source pu voltage.  (write) Per-unit value of source voltage based on kV
-
-    properties (Access = protected)
-        apiutil
-    end
+    %    pu - Per-unit value of source voltage
 
     properties
         AllNames
@@ -34,7 +30,7 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IVsources(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
     end
@@ -42,86 +38,90 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Vsource names
-            result = DSS_MATLAB.get_string_array('Vsources_Get_AllNames');
+            result = obj.apiutil.get_string_array('Vsources_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of Vsource objects
-            result = calllib('dss_capi_v7', 'Vsources_Get_Count');
+            result = calllib(obj.libname, 'Vsources_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of Vsource; returns 0 if none.
-            result = calllib('dss_capi_v7', 'Vsources_Get_First');
+            result = calllib(obj.libname, 'Vsources_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Vsource
-            result = calllib('dss_capi_v7', 'Vsources_Get_Name');
+            result = calllib(obj.libname, 'Vsources_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Vsources_Set_Name', Value);
+            calllib(obj.libname, 'Vsources_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Vsource active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'Vsources_Get_Next');
+            result = calllib(obj.libname, 'Vsources_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active Vsource by index;  1..Count
-            result = calllib('dss_capi_v7', 'Vsources_Get_idx');
+            result = calllib(obj.libname, 'Vsources_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'Vsources_Set_idx', Value);
+            calllib(obj.libname, 'Vsources_Set_idx', Value);
             obj.CheckForError();
         end
 
 
         function result = get.AngleDeg(obj)
             % Phase angle of first phase in degrees
-            result = calllib('dss_capi_v7', 'Vsources_Get_AngleDeg');
+            result = calllib(obj.libname, 'Vsources_Get_AngleDeg');
+            obj.CheckForError();
         end
         function obj = set.AngleDeg(obj, Value)
-            calllib('dss_capi_v7', 'Vsources_Set_AngleDeg', Value);
+            calllib(obj.libname, 'Vsources_Set_AngleDeg', Value);
             obj.CheckForError();
         end
 
         function result = get.BasekV(obj)
             % Source voltage in kV
-            result = calllib('dss_capi_v7', 'Vsources_Get_BasekV');
+            result = calllib(obj.libname, 'Vsources_Get_BasekV');
+            obj.CheckForError();
         end
         function obj = set.BasekV(obj, Value)
-            calllib('dss_capi_v7', 'Vsources_Set_BasekV', Value);
+            calllib(obj.libname, 'Vsources_Set_BasekV', Value);
             obj.CheckForError();
         end
 
         function result = get.Frequency(obj)
             % Source frequency in Hz
-            result = calllib('dss_capi_v7', 'Vsources_Get_Frequency');
+            result = calllib(obj.libname, 'Vsources_Get_Frequency');
+            obj.CheckForError();
         end
         function obj = set.Frequency(obj, Value)
-            calllib('dss_capi_v7', 'Vsources_Set_Frequency', Value);
+            calllib(obj.libname, 'Vsources_Set_Frequency', Value);
             obj.CheckForError();
         end
 
         function result = get.Phases(obj)
             % Number of phases
-            result = calllib('dss_capi_v7', 'Vsources_Get_Phases');
+            result = calllib(obj.libname, 'Vsources_Get_Phases');
+            obj.CheckForError();
         end
         function obj = set.Phases(obj, Value)
-            calllib('dss_capi_v7', 'Vsources_Set_Phases', Value);
+            calllib(obj.libname, 'Vsources_Set_Phases', Value);
             obj.CheckForError();
         end
 
         function result = get.pu(obj)
-            % (read) Source pu voltage.
-            % (write) Per-unit value of source voltage based on kV
-            result = calllib('dss_capi_v7', 'Vsources_Get_pu');
+            % Per-unit value of source voltage
+            result = calllib(obj.libname, 'Vsources_Get_pu');
+            obj.CheckForError();
         end
         function obj = set.pu(obj, Value)
-            calllib('dss_capi_v7', 'Vsources_Set_pu', Value);
+            calllib(obj.libname, 'Vsources_Set_pu', Value);
             obj.CheckForError();
         end
     end

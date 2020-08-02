@@ -11,10 +11,6 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
     %    NumElements - Number of elements in this class. Same as Count property.
     %    ActiveClassParent - Get the name of the parent class of the active class
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         ActiveClassName
         AllNames
@@ -28,7 +24,7 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IActiveClass(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
     end
@@ -36,46 +32,54 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
 
         function result = get.ActiveClassName(obj)
             % (read-only) Returns name of active class.
-            result = calllib('dss_capi_v7', 'ActiveClass_Get_ActiveClassName');
+            result = calllib(obj.libname, 'ActiveClass_Get_ActiveClassName');
+            obj.CheckForError();
         end
 
         function result = get.AllNames(obj)
             % (read-only) Array of strings consisting of all element names in the active class.
-            result = DSS_MATLAB.get_string_array('ActiveClass_Get_AllNames');
+            result = obj.apiutil.get_string_array('ActiveClass_Get_AllNames');
+            obj.CheckForError();
         end
 
         function result = get.Count(obj)
             % (read-only) Number of elements in Active Class. Same as NumElements Property.
-            result = calllib('dss_capi_v7', 'ActiveClass_Get_Count');
+            result = calllib(obj.libname, 'ActiveClass_Get_Count');
+            obj.CheckForError();
         end
 
         function result = get.First(obj)
             % (read-only) Sets first element in the active class to be the active DSS object. If object is a CktElement, ActiveCktELment also points to this element. Returns 0 if none.
-            result = calllib('dss_capi_v7', 'ActiveClass_Get_First');
+            result = calllib(obj.libname, 'ActiveClass_Get_First');
+            obj.CheckForError();
         end
 
         function result = get.Name(obj)
             % Name of the Active Element of the Active Class
-            result = calllib('dss_capi_v7', 'ActiveClass_Get_Name');
+            result = calllib(obj.libname, 'ActiveClass_Get_Name');
+            obj.CheckForError();
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'ActiveClass_Set_Name', Value);
+            calllib(obj.libname, 'ActiveClass_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % (read-only) Sets next element in active class to be the active DSS object. If object is a CktElement, ActiveCktElement also points to this element.  Returns 0 if no more.
-            result = calllib('dss_capi_v7', 'ActiveClass_Get_Next');
+            result = calllib(obj.libname, 'ActiveClass_Get_Next');
+            obj.CheckForError();
         end
 
         function result = get.NumElements(obj)
             % (read-only) Number of elements in this class. Same as Count property.
-            result = calllib('dss_capi_v7', 'ActiveClass_Get_NumElements');
+            result = calllib(obj.libname, 'ActiveClass_Get_NumElements');
+            obj.CheckForError();
         end
 
         function result = get.ActiveClassParent(obj)
             % Get the name of the parent class of the active class
-            result = calllib('dss_capi_v7', 'ActiveClass_Get_ActiveClassParent');
+            result = calllib(obj.libname, 'ActiveClass_Get_ActiveClassParent');
+            obj.CheckForError();
         end
     end
 end

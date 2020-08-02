@@ -19,10 +19,6 @@ classdef (CaseInsensitiveProperties) IReduceCkt < DSS_MATLAB.Base
     %    Do1phLaterals - 
     %    DoBranchRemove - 
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         Zmag
         KeepLoad
@@ -33,90 +29,109 @@ classdef (CaseInsensitiveProperties) IReduceCkt < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IReduceCkt(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
         function obj = SaveCircuit(obj, CktName)
             % Save present (reduced) circuit
             % Filename is listed in the Text Result interface
-            calllib('dss_capi_v7', 'ReduceCkt_SaveCircuit', CktName);
+            calllib(obj.libname, 'ReduceCkt_SaveCircuit', CktName);
+            obj.CheckForError();
         end
 
         function obj = DoDefault(obj)
             % Do Default Reduction algorithm
-            calllib('dss_capi_v7', 'ReduceCkt_DoDefault');
+            calllib(obj.libname, 'ReduceCkt_DoDefault');
+            obj.CheckForError();
         end
 
         function obj = DoShortLines(obj)
             % Do ShortLines algorithm: Set Zmag first if you don't want the default
-            calllib('dss_capi_v7', 'ReduceCkt_DoShortLines');
+            calllib(obj.libname, 'ReduceCkt_DoShortLines');
+            obj.CheckForError();
         end
 
         function obj = DoDangling(obj)
             % Reduce Dangling Algorithm; branches with nothing connected
-            calllib('dss_capi_v7', 'ReduceCkt_DoDangling');
+            calllib(obj.libname, 'ReduceCkt_DoDangling');
+            obj.CheckForError();
         end
 
         function obj = DoLoopBreak(obj)
-            calllib('dss_capi_v7', 'ReduceCkt_DoLoopBreak');
+            calllib(obj.libname, 'ReduceCkt_DoLoopBreak');
+            obj.CheckForError();
         end
 
         function obj = DoParallelLines(obj)
-            calllib('dss_capi_v7', 'ReduceCkt_DoParallelLines');
+            calllib(obj.libname, 'ReduceCkt_DoParallelLines');
+            obj.CheckForError();
         end
 
         function obj = DoSwitches(obj)
-            calllib('dss_capi_v7', 'ReduceCkt_DoSwitches');
+            calllib(obj.libname, 'ReduceCkt_DoSwitches');
+            obj.CheckForError();
         end
 
         function obj = Do1phLaterals(obj)
-            calllib('dss_capi_v7', 'ReduceCkt_Do1phLaterals');
+            calllib(obj.libname, 'ReduceCkt_Do1phLaterals');
+            obj.CheckForError();
         end
 
         function obj = DoBranchRemove(obj)
-            calllib('dss_capi_v7', 'ReduceCkt_DoBranchRemove');
+            calllib(obj.libname, 'ReduceCkt_DoBranchRemove');
+            obj.CheckForError();
         end
     end
     methods
 
         function result = get.Zmag(obj)
             % Zmag (ohms) for Reduce Option for Z of short lines
-            result = calllib('dss_capi_v7', 'ReduceCkt_Get_Zmag');
+            result = calllib(obj.libname, 'ReduceCkt_Get_Zmag');
+            obj.CheckForError();
         end
         function obj = set.Zmag(obj, Value)
-            ReduceCkt_Set_Zmag(Value);
+            calllib(obj.libname, 'ReduceCkt_Set_Zmag', Value);
+            obj.CheckForError();
         end
 
         function result = get.KeepLoad(obj)
             % Keep load flag (T/F) for Reduction options that remove branches
-            result = (calllib('dss_capi_v7', 'ReduceCkt_Get_KeepLoad') ~= 0);
+            result = (calllib(obj.libname, 'ReduceCkt_Get_KeepLoad') ~= 0);
+            obj.CheckForError();
         end
         function obj = set.KeepLoad(obj, Value)
-            calllib('dss_capi_v7', 'ReduceCkt_Set_KeepLoad', bool(Value));
+            calllib(obj.libname, 'ReduceCkt_Set_KeepLoad', bool(Value));
+            obj.CheckForError();
         end
 
         function result = get.EditString(obj)
             % Edit String for RemoveBranches functions
-            result = calllib('dss_capi_v7', 'ReduceCkt_Get_EditString');
+            result = calllib(obj.libname, 'ReduceCkt_Get_EditString');
+            obj.CheckForError();
         end
         function obj = set.EditString(obj, Value)
-            calllib('dss_capi_v7', 'ReduceCkt_Set_EditString', Value);
+            calllib(obj.libname, 'ReduceCkt_Set_EditString', Value);
+            obj.CheckForError();
         end
 
         function result = get.StartPDElement(obj)
             % Start element for Remove Branch function
-            result = calllib('dss_capi_v7', 'ReduceCkt_Get_StartPDElement');
+            result = calllib(obj.libname, 'ReduceCkt_Get_StartPDElement');
+            obj.CheckForError();
         end
         function obj = set.StartPDElement(obj, Value)
-            calllib('dss_capi_v7', 'ReduceCkt_Set_StartPDElement', Value);
+            calllib(obj.libname, 'ReduceCkt_Set_StartPDElement', Value);
+            obj.CheckForError();
         end
 
         function result = get.EnergyMeter(obj)
             % Name of Energymeter to use for reduction
-            result = calllib('dss_capi_v7', 'ReduceCkt_Get_EnergyMeter');
+            result = calllib(obj.libname, 'ReduceCkt_Get_EnergyMeter');
+            obj.CheckForError();
         end
         function obj = set.EnergyMeter(obj, Value)
-            calllib('dss_capi_v7', 'ReduceCkt_Set_EnergyMeter', Value);
+            calllib(obj.libname, 'ReduceCkt_Set_EnergyMeter', Value);
+            obj.CheckForError();
         end
 
     end

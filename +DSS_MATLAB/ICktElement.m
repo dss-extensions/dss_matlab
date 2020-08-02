@@ -2,10 +2,11 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     % ICktElement: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
+    %    Properties - 
     %    AllPropertyNames - Array containing all property names of the active device.
     %    AllVariableNames - Array of strings listing all the published variable names, if a PCElement. Otherwise, null string.
     %    AllVariableValues - Array of doubles. Values of state variables of active element if PC element.
-    %    BusNames - (read) Array of strings. Get  Bus definitions to which each terminal is connected. 0-based array.  (write) Array of strings. Set Bus definitions for each terminal is connected.
+    %    BusNames - Array of strings. Get  Bus definitions to which each terminal is connected. 0-based array.
     %    CplxSeqCurrents - Complex double array of Sequence Currents for all conductors of all terminals of active circuit element.
     %    CplxSeqVoltages - Complex double array of Sequence Voltage for all terminals of active circuit element.
     %    Currents - Complex array of currents into each conductor of each terminal
@@ -24,7 +25,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     %    NodeOrder - Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal.
     %    NormalAmps - Normal ampere rating for PD Elements
     %    NumConductors - Number of Conductors per Terminal
-    %    NumControls - Number of controls connected to this device. Use to determine valid range for index into Controller array.
+    %    NumControls - Number of controls connected to this device.   Use to determine valid range for index into Controller array.
     %    NumPhases - Number of Phases
     %    NumProperties - Number of Properties this Circuit Element.
     %    NumTerminals - Number of Terminals this Circuit Element
@@ -48,14 +49,9 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     %    Variablei - Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
     %    IsOpen - 
     %    Open - 
-    %    Properties - 
-
-    properties (Access = protected)
-        apiutil
-        PropertiesRef
-    end
 
     properties
+        Properties
         AllPropertyNames
         AllVariableNames
         AllVariableValues
@@ -98,44 +94,44 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = ICktElement(apiutil)
-            obj.apiutil = apiutil;
-            obj.PropertiesRef = DSS_MATLAB.IDSSProperty(obj.apiutil);
+            obj@DSS_MATLAB.Base(apiutil);
+            obj.Properties = DSS_MATLAB.IDSSProperty(obj.apiutil);
         end
 
         function obj = Close(obj, Term, Phs)
-            calllib('dss_capi_v7', 'CktElement_Close', Term, Phs);
+            calllib(obj.libname, 'CktElement_Close', Term, Phs);
             obj.CheckForError();
         end
 
         function result = Controller(obj, idx)
             % (read-only) Full name of the i-th controller attached to this element. Ex: str = Controller(2).  See NumControls to determine valid index range
-            result = calllib('dss_capi_v7', 'CktElement_Get_Controller', idx);
+            result = calllib(obj.libname, 'CktElement_Get_Controller', idx);
             obj.CheckForError();
         end
 
         function result = Variable(obj, MyVarName)
             % (read-only) Returns (value, Code). For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
-            CodePtr = libpointer('int32Ptr', [0]);
-            result = calllib('dss_capi_v7', 'CktElement_Get_Variable', MyVarName, CodePtr);
+            Code = libpointer('int32Ptr', [0]);
+            result = calllib(obj.libname, 'CktElement_Get_Variable', MyVarName, Code);
             obj.CheckForError();
-            result = [result, CodePtr.Value(1)];
+            result = [result, Code.Value(1)];
         end
 
         function result = Variablei(obj, Idx)
             % (read-only) Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
-            CodePtr = libpointer('int32Ptr', [0]);
-            result = calllib('dss_capi_v7', 'CktElement_Get_Variablei', Idx, CodePtr);
+            Code = libpointer('int32Ptr', [0]);
+            result = calllib(obj.libname, 'CktElement_Get_Variablei', Idx, Code);
             obj.CheckForError();
-            result = [result, CodePtr.Value(1)];
+            result = [result, Code.Value(1)];
         end
 
         function result = IsOpen(obj, Term, Phs)
-            result = (calllib('dss_capi_v7', 'CktElement_IsOpen', Term, Phs) ~= 0);
+            result = (calllib(obj.libname, 'CktElement_IsOpen', Term, Phs) ~= 0);
             obj.CheckForError();
         end
 
         function obj = Open(obj, Term, Phs)
-            calllib('dss_capi_v7', 'CktElement_Open', Term, Phs);
+            calllib(obj.libname, 'CktElement_Open', Term, Phs);
             obj.CheckForError();
         end
 
@@ -156,231 +152,268 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
         function result = get.AllPropertyNames(obj)
             % (read-only) Array containing all property names of the active device.
-            result = DSS_MATLAB.get_string_array('CktElement_Get_AllPropertyNames');
+            result = obj.apiutil.get_string_array('CktElement_Get_AllPropertyNames');
+            obj.CheckForError();
         end
 
         function result = get.AllVariableNames(obj)
             % (read-only) Array of strings listing all the published variable names, if a PCElement. Otherwise, null string.
-            result = DSS_MATLAB.get_string_array('CktElement_Get_AllVariableNames');
+            result = obj.apiutil.get_string_array('CktElement_Get_AllVariableNames');
+            obj.CheckForError();
         end
 
         function result = get.AllVariableValues(obj)
             % (read-only) Array of doubles. Values of state variables of active element if PC element.
-            calllib('dss_capi_v7', 'CktElement_Get_AllVariableValues_GR');
+            calllib(obj.libname, 'CktElement_Get_AllVariableValues_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.BusNames(obj)
-            % (read) Array of strings. Get  Bus definitions to which each terminal is connected. 0-based array.
-            % (write) Array of strings. Set Bus definitions for each terminal is connected.
-            result = DSS_MATLAB.get_string_array('CktElement_Get_BusNames');
+            % Array of strings. Get  Bus definitions to which each terminal is connected. 0-based array.
+            result = obj.apiutil.get_string_array('CktElement_Get_BusNames');
+            obj.CheckForError();
         end
         function obj = set.BusNames(obj, Value)
-            calllib('dss_capi_v7', 'CktElement_Set_BusNames', Value, numel(Value));
+            calllib(obj.libname, 'CktElement_Set_BusNames', Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.CplxSeqCurrents(obj)
             % (read-only) Complex double array of Sequence Currents for all conductors of all terminals of active circuit element.
-            calllib('dss_capi_v7', 'CktElement_Get_CplxSeqCurrents_GR');
+            calllib(obj.libname, 'CktElement_Get_CplxSeqCurrents_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.CplxSeqVoltages(obj)
             % (read-only) Complex double array of Sequence Voltage for all terminals of active circuit element.
-            calllib('dss_capi_v7', 'CktElement_Get_CplxSeqVoltages_GR');
+            calllib(obj.libname, 'CktElement_Get_CplxSeqVoltages_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Currents(obj)
             % (read-only) Complex array of currents into each conductor of each terminal
-            calllib('dss_capi_v7', 'CktElement_Get_Currents_GR');
+            calllib(obj.libname, 'CktElement_Get_Currents_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.CurrentsMagAng(obj)
             % (read-only) Currents in magnitude, angle format as a array of doubles.
-            calllib('dss_capi_v7', 'CktElement_Get_CurrentsMagAng_GR');
+            calllib(obj.libname, 'CktElement_Get_CurrentsMagAng_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.DisplayName(obj)
             % Display name of the object (not necessarily unique)
-            result = calllib('dss_capi_v7', 'CktElement_Get_DisplayName');
+            result = calllib(obj.libname, 'CktElement_Get_DisplayName');
+            obj.CheckForError();
         end
         function obj = set.DisplayName(obj, Value)
-            calllib('dss_capi_v7', 'CktElement_Set_DisplayName', Value);
+            calllib(obj.libname, 'CktElement_Set_DisplayName', Value);
             obj.CheckForError();
         end
 
         function result = get.EmergAmps(obj)
             % Emergency Ampere Rating for PD elements
-            result = calllib('dss_capi_v7', 'CktElement_Get_EmergAmps');
+            result = calllib(obj.libname, 'CktElement_Get_EmergAmps');
+            obj.CheckForError();
         end
         function obj = set.EmergAmps(obj, Value)
-            calllib('dss_capi_v7', 'CktElement_Set_EmergAmps', Value);
+            calllib(obj.libname, 'CktElement_Set_EmergAmps', Value);
             obj.CheckForError();
         end
 
         function result = get.Enabled(obj)
             % Boolean indicating that element is currently in the circuit.
-            result = (calllib('dss_capi_v7', 'CktElement_Get_Enabled') ~= 0);
+            result = (calllib(obj.libname, 'CktElement_Get_Enabled') ~= 0);
+            obj.CheckForError();
         end
         function obj = set.Enabled(obj, Value)
-            calllib('dss_capi_v7', 'CktElement_Set_Enabled', Value);
+            calllib(obj.libname, 'CktElement_Set_Enabled', Value);
             obj.CheckForError();
         end
 
         function result = get.EnergyMeter(obj)
             % (read-only) Name of the Energy Meter this element is assigned to.
-            result = calllib('dss_capi_v7', 'CktElement_Get_EnergyMeter');
+            result = calllib(obj.libname, 'CktElement_Get_EnergyMeter');
+            obj.CheckForError();
         end
 
         function result = get.GUID(obj)
             % (read-only) globally unique identifier for this object
-            result = calllib('dss_capi_v7', 'CktElement_Get_GUID');
+            result = calllib(obj.libname, 'CktElement_Get_GUID');
+            obj.CheckForError();
         end
 
         function result = get.Handle(obj)
             % (read-only) Pointer to this object
-            result = calllib('dss_capi_v7', 'CktElement_Get_Handle');
+            result = calllib(obj.libname, 'CktElement_Get_Handle');
+            obj.CheckForError();
         end
 
         function result = get.HasOCPDevice(obj)
             % (read-only) True if a recloser, relay, or fuse controlling this ckt element. OCP = Overcurrent Protection
-            result = (calllib('dss_capi_v7', 'CktElement_Get_HasOCPDevice') ~= 0);
+            result = (calllib(obj.libname, 'CktElement_Get_HasOCPDevice') ~= 0);
+            obj.CheckForError();
         end
 
         function result = get.HasSwitchControl(obj)
             % (read-only) This element has a SwtControl attached.
-            result = (calllib('dss_capi_v7', 'CktElement_Get_HasSwitchControl') ~= 0);
+            result = (calllib(obj.libname, 'CktElement_Get_HasSwitchControl') ~= 0);
+            obj.CheckForError();
         end
 
         function result = get.HasVoltControl(obj)
             % (read-only) This element has a CapControl or RegControl attached.
-            result = (calllib('dss_capi_v7', 'CktElement_Get_HasVoltControl') ~= 0);
+            result = (calllib(obj.libname, 'CktElement_Get_HasVoltControl') ~= 0);
+            obj.CheckForError();
         end
 
         function result = get.Losses(obj)
             % (read-only) Total losses in the element: two-element complex array
-            calllib('dss_capi_v7', 'CktElement_Get_Losses_GR');
+            calllib(obj.libname, 'CktElement_Get_Losses_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Name(obj)
             % (read-only) Full Name of Active Circuit Element
-            result = calllib('dss_capi_v7', 'CktElement_Get_Name');
+            result = calllib(obj.libname, 'CktElement_Get_Name');
+            obj.CheckForError();
         end
 
         function result = get.NodeOrder(obj)
             % (read-only) Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal.
-            calllib('dss_capi_v7', 'CktElement_Get_NodeOrder_GR');
+            calllib(obj.libname, 'CktElement_Get_NodeOrder_GR');
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
         end
 
         function result = get.NormalAmps(obj)
             % Normal ampere rating for PD Elements
-            result = calllib('dss_capi_v7', 'CktElement_Get_NormalAmps');
+            result = calllib(obj.libname, 'CktElement_Get_NormalAmps');
+            obj.CheckForError();
         end
         function obj = set.NormalAmps(obj, Value)
-            calllib('dss_capi_v7', 'CktElement_Set_NormalAmps', Value);
+            calllib(obj.libname, 'CktElement_Set_NormalAmps', Value);
             obj.CheckForError();
         end
 
         function result = get.NumConductors(obj)
             % (read-only) Number of Conductors per Terminal
-            result = calllib('dss_capi_v7', 'CktElement_Get_NumConductors');
+            result = calllib(obj.libname, 'CktElement_Get_NumConductors');
+            obj.CheckForError();
         end
 
         function result = get.NumControls(obj)
-            % (read-only) Number of controls connected to this device. Use to determine valid range for index into Controller array.
-            result = calllib('dss_capi_v7', 'CktElement_Get_NumControls');
+            % (read-only) Number of controls connected to this device. 
+            % Use to determine valid range for index into Controller array.
+            result = calllib(obj.libname, 'CktElement_Get_NumControls');
+            obj.CheckForError();
         end
 
         function result = get.NumPhases(obj)
             % (read-only) Number of Phases
-            result = calllib('dss_capi_v7', 'CktElement_Get_NumPhases');
+            result = calllib(obj.libname, 'CktElement_Get_NumPhases');
+            obj.CheckForError();
         end
 
         function result = get.NumProperties(obj)
             % (read-only) Number of Properties this Circuit Element.
-            result = calllib('dss_capi_v7', 'CktElement_Get_NumProperties');
+            result = calllib(obj.libname, 'CktElement_Get_NumProperties');
+            obj.CheckForError();
         end
 
         function result = get.NumTerminals(obj)
             % (read-only) Number of Terminals this Circuit Element
-            result = calllib('dss_capi_v7', 'CktElement_Get_NumTerminals');
+            result = calllib(obj.libname, 'CktElement_Get_NumTerminals');
+            obj.CheckForError();
         end
 
         function result = get.OCPDevIndex(obj)
             % (read-only) Index into Controller list of OCP Device controlling this CktElement
-            result = calllib('dss_capi_v7', 'CktElement_Get_OCPDevIndex');
+            result = calllib(obj.libname, 'CktElement_Get_OCPDevIndex');
+            obj.CheckForError();
         end
 
         function result = get.OCPDevType(obj)
             % (read-only) 0=None; 1=Fuse; 2=Recloser; 3=Relay;  Type of OCP controller device
-            result = calllib('dss_capi_v7', 'CktElement_Get_OCPDevType');
+            result = calllib(obj.libname, 'CktElement_Get_OCPDevType');
+            obj.CheckForError();
         end
 
         function result = get.PhaseLosses(obj)
             % (read-only) Complex array of losses by phase
-            calllib('dss_capi_v7', 'CktElement_Get_PhaseLosses_GR');
+            calllib(obj.libname, 'CktElement_Get_PhaseLosses_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Powers(obj)
             % (read-only) Complex array of powers into each conductor of each terminal
-            calllib('dss_capi_v7', 'CktElement_Get_Powers_GR');
+            calllib(obj.libname, 'CktElement_Get_Powers_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Residuals(obj)
             % (read-only) Residual currents for each terminal: (mag, angle)
-            calllib('dss_capi_v7', 'CktElement_Get_Residuals_GR');
+            calllib(obj.libname, 'CktElement_Get_Residuals_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SeqCurrents(obj)
             % (read-only) Double array of symmetrical component currents into each 3-phase terminal
-            calllib('dss_capi_v7', 'CktElement_Get_SeqCurrents_GR');
+            calllib(obj.libname, 'CktElement_Get_SeqCurrents_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SeqPowers(obj)
             % (read-only) Double array of sequence powers into each 3-phase teminal
-            calllib('dss_capi_v7', 'CktElement_Get_SeqPowers_GR');
+            calllib(obj.libname, 'CktElement_Get_SeqPowers_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SeqVoltages(obj)
             % (read-only) Double array of symmetrical component voltages at each 3-phase terminal
-            calllib('dss_capi_v7', 'CktElement_Get_SeqVoltages_GR');
+            calllib(obj.libname, 'CktElement_Get_SeqVoltages_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Voltages(obj)
             % (read-only) Complex array of voltages at terminals
-            calllib('dss_capi_v7', 'CktElement_Get_Voltages_GR');
+            calllib(obj.libname, 'CktElement_Get_Voltages_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.VoltagesMagAng(obj)
             % (read-only) Voltages at each conductor in magnitude, angle form as array of doubles.
-            calllib('dss_capi_v7', 'CktElement_Get_VoltagesMagAng_GR');
+            calllib(obj.libname, 'CktElement_Get_VoltagesMagAng_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Yprim(obj)
             % (read-only) YPrim matrix, column order, complex numbers (paired)
-            calllib('dss_capi_v7', 'CktElement_Get_Yprim_GR');
+            calllib(obj.libname, 'CktElement_Get_Yprim_GR');
+            obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.IsIsolated(obj)
             % Returns true if the current active element is isolated.
             % Note that this only fetches the current value. See also the Topology interface.
-            result = (calllib('dss_capi_v7', 'CktElement_Get_IsIsolated') ~= 0);
+            result = (calllib(obj.libname, 'CktElement_Get_IsIsolated') ~= 0);
+            obj.CheckForError();
         end
     end
 end

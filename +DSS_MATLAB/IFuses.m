@@ -22,10 +22,6 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
     %    IsBlown - 
     %    Open - 
 
-    properties (Access = protected)
-        apiutil
-    end
-
     properties
         AllNames
         Count
@@ -45,19 +41,22 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
 
     methods (Access = public)
         function obj = IFuses(apiutil)
-            obj.apiutil = apiutil;
+            obj@DSS_MATLAB.Base(apiutil);
         end
 
         function obj = Close(obj)
-            calllib('dss_capi_v7', 'Fuses_Close');
+            calllib(obj.libname, 'Fuses_Close');
+            obj.CheckForError();
         end
 
         function result = IsBlown(obj)
-            result = (calllib('dss_capi_v7', 'Fuses_IsBlown') ~= 0);
+            result = (calllib(obj.libname, 'Fuses_IsBlown') ~= 0);
+            obj.CheckForError();
         end
 
         function obj = Open(obj)
-            calllib('dss_capi_v7', 'Fuses_Open');
+            calllib(obj.libname, 'Fuses_Open');
+            obj.CheckForError();
         end
 
     end
@@ -65,39 +64,39 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Fuse names
-            result = DSS_MATLAB.get_string_array('Fuses_Get_AllNames');
+            result = obj.apiutil.get_string_array('Fuses_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of Fuse objects
-            result = calllib('dss_capi_v7', 'Fuses_Get_Count');
+            result = calllib(obj.libname, 'Fuses_Get_Count');
         end
 
         function result = get.First(obj)
             % Set first object of Fuse; returns 0 if none.
-            result = calllib('dss_capi_v7', 'Fuses_Get_First');
+            result = calllib(obj.libname, 'Fuses_Get_First');
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Fuse
-            result = calllib('dss_capi_v7', 'Fuses_Get_Name');
+            result = calllib(obj.libname, 'Fuses_Get_Name');
         end
         function obj = set.Name(obj, Value)
-            calllib('dss_capi_v7', 'Fuses_Set_Name', Value);
+            calllib(obj.libname, 'Fuses_Set_Name', Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Fuse active; returns 0 if no more.
-            result = calllib('dss_capi_v7', 'Fuses_Get_Next');
+            result = calllib(obj.libname, 'Fuses_Get_Next');
         end
 
         function result = get.idx(obj)
             % Get/set active Fuse by index;  1..Count
-            result = calllib('dss_capi_v7', 'Fuses_Get_idx');
+            result = calllib(obj.libname, 'Fuses_Get_idx');
         end
         function obj = set.idx(obj, Value)
-            calllib('dss_capi_v7', 'Fuses_Set_idx', Value);
+            calllib(obj.libname, 'Fuses_Set_idx', Value);
             obj.CheckForError();
         end
 
@@ -105,71 +104,79 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
         function result = get.Delay(obj)
             % A fixed delay time in seconds added to the fuse blowing time determined by the TCC curve. Default is 0.
             % This represents a fuse clear or other delay.
-            result = calllib('dss_capi_v7', 'Fuses_Get_Delay');
+            result = calllib(obj.libname, 'Fuses_Get_Delay');
+            obj.CheckForError();
         end
         function obj = set.Delay(obj, Value)
-            calllib('dss_capi_v7', 'Fuses_Set_Delay', Value);
+            calllib(obj.libname, 'Fuses_Set_Delay', Value);
             obj.CheckForError();
         end
 
         function result = get.MonitoredObj(obj)
             % Full name of the circuit element to which the fuse is connected.
-            result = calllib('dss_capi_v7', 'Fuses_Get_MonitoredObj');
+            result = calllib(obj.libname, 'Fuses_Get_MonitoredObj');
+            obj.CheckForError();
         end
         function obj = set.MonitoredObj(obj, Value)
-            calllib('dss_capi_v7', 'Fuses_Set_MonitoredObj', Value);
+            calllib(obj.libname, 'Fuses_Set_MonitoredObj', Value);
             obj.CheckForError();
         end
 
         function result = get.MonitoredTerm(obj)
             % Terminal number to which the fuse is connected.
-            result = calllib('dss_capi_v7', 'Fuses_Get_MonitoredTerm');
+            result = calllib(obj.libname, 'Fuses_Get_MonitoredTerm');
+            obj.CheckForError();
         end
         function obj = set.MonitoredTerm(obj, Value)
-            calllib('dss_capi_v7', 'Fuses_Set_MonitoredTerm', Value);
+            calllib(obj.libname, 'Fuses_Set_MonitoredTerm', Value);
             obj.CheckForError();
         end
 
         function result = get.NumPhases(obj)
             % (read-only) Number of phases, this fuse.
-            result = calllib('dss_capi_v7', 'Fuses_Get_NumPhases');
+            result = calllib(obj.libname, 'Fuses_Get_NumPhases');
+            obj.CheckForError();
         end
 
         function result = get.RatedCurrent(obj)
             % Multiplier or actual amps for the TCCcurve object. Defaults to 1.0. 
             % Multiply current values of TCC curve by this to get actual amps.
-            result = calllib('dss_capi_v7', 'Fuses_Get_RatedCurrent');
+            result = calllib(obj.libname, 'Fuses_Get_RatedCurrent');
+            obj.CheckForError();
         end
         function obj = set.RatedCurrent(obj, Value)
-            calllib('dss_capi_v7', 'Fuses_Set_RatedCurrent', Value);
+            calllib(obj.libname, 'Fuses_Set_RatedCurrent', Value);
             obj.CheckForError();
         end
 
         function result = get.SwitchedObj(obj)
             % Full name of the circuit element switch that the fuse controls. 
             % Defaults to the MonitoredObj.
-            result = calllib('dss_capi_v7', 'Fuses_Get_SwitchedObj');
+            result = calllib(obj.libname, 'Fuses_Get_SwitchedObj');
+            obj.CheckForError();
         end
         function obj = set.SwitchedObj(obj, Value)
-            calllib('dss_capi_v7', 'Fuses_Set_SwitchedObj', Value);
+            calllib(obj.libname, 'Fuses_Set_SwitchedObj', Value);
             obj.CheckForError();
         end
 
         function result = get.SwitchedTerm(obj)
             % Number of the terminal of the controlled element containing the switch controlled by the fuse.
-            result = calllib('dss_capi_v7', 'Fuses_Get_SwitchedTerm');
+            result = calllib(obj.libname, 'Fuses_Get_SwitchedTerm');
+            obj.CheckForError();
         end
         function obj = set.SwitchedTerm(obj, Value)
-            calllib('dss_capi_v7', 'Fuses_Set_SwitchedTerm', Value);
+            calllib(obj.libname, 'Fuses_Set_SwitchedTerm', Value);
             obj.CheckForError();
         end
 
         function result = get.TCCcurve(obj)
             % Name of the TCCcurve object that determines fuse blowing.
-            result = calllib('dss_capi_v7', 'Fuses_Get_TCCcurve');
+            result = calllib(obj.libname, 'Fuses_Get_TCCcurve');
+            obj.CheckForError();
         end
         function obj = set.TCCcurve(obj, Value)
-            calllib('dss_capi_v7', 'Fuses_Set_TCCcurve', Value);
+            calllib(obj.libname, 'Fuses_Set_TCCcurve', Value);
             obj.CheckForError();
         end
     end

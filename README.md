@@ -1,14 +1,14 @@
-# DSS MATLAB: an unofficial MATLAB package for EPRI's OpenDSS
+# DSS MATLAB: an unofficial multi-platform MATLAB package for EPRI's OpenDSS
 
 ---
 
 ## **[📦 Downloads available here](https://github.com/dss-extensions/dss_matlab/releases/latest) for Linux, macOS and Windows**
 
-*Note that the repository itself doesn't contain the binaries since this is a multi-platform project. If you download the git repository, you still need the binary files from the DSS C-API library.*
+*Note that the repository itself doesn't contain the binaries since this is a multi-platform project. If you download the Git repository, you still need the binary files from the DSS C-API library.* Please head on to the Releases page for downloads.
 
 ---
 
-This is version of a set of MATLAB classes that expose the DSS C-API library with the same structure as the COM object, with the same as extensions as DSS Python. This is the equivalent of DSS Python and DSS Sharp for MATLAB usage.
+This is version of a set of MATLAB classes that expose the DSS C-API library with the same structure as the COM object, with the same extensions as DSS Python. This is the equivalent of DSS Python and DSS Sharp for MATLAB usage.
 
 Related projects: 
 - [`OpenDSS`](https://sourceforge.net/projects/electricdss/): The main OpenDSS project, maintained by EPRI.
@@ -17,7 +17,14 @@ Related projects:
 - [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): More pythonic bindings and useful tools.
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
-Version 0.10.5, released on 2020-03-14, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project uses the [DSS C-API library version 0.10.5](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0105), based on OpenDSS revision 2836 (which is slightly newer than OpenDSS v8.6.7.1).
+Version 0.10.6, released on 2020-08-02, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project uses the [DSS C-API library version 0.10.6](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0106), based on OpenDSS revision 2909 (which is slightly newer than OpenDSS v9.0.0.6).
+
+## Highlights from 0.10.6
+
+- New `DSSobj.LegacyModels` toggle to activate pre-OpenDSS 9.0 models (`PVSystem`, `Storage`, ...). By default, the new models are used (previously known as `PVSystem2`, `Storage2`, ...).
+- New Extended Errors mechanism, signaling lots previously silent errors due to bad API usage. For backwards compatibility, you can disable it with `DSSobj.Error.ExtendedErrors = 0`.
+
+More at [DSS C-API changelog](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0106).
 
 ## Usage
 
@@ -33,7 +40,7 @@ dss = DSS_MATLAB.IDSS;
 
 4. If you find issues or missing features, feel free to [open an issue ticket on GitHub](https://github.com/dss-extensions/dss_matlab/issues/new) or email me (pmeira at ieee.org).
 
-If you code is based on `DSSStartup.m` from the examples, in general you only need to replace the `Obj = actxserver('OpenDSSEngine.DSS');` line. That is, update `DSSStartup.m` to:
+If your code is based on `DSSStartup.m` from the examples, in general you only need to replace the `Obj = actxserver('OpenDSSEngine.DSS');` line. That is, update `DSSStartup.m` to:
 
 ```matlab
 %--------------------------------------------------------------------------
@@ -57,7 +64,7 @@ If you want more code to play with, you can use the MATLAB examples from the off
 
 [Sandia's GridPV toolbox](https://pvpmc.sandia.gov/applications/gridpv-toolbox/) has been confirmed to work with very minor changes. Note that the toolbox seems to be out-of-date for some features, so don't expect everything to work even with COM (e.g. Google Maps integration seems broken nowadays). 
 
-**As a general advice (valid for COM and DSS_MATLAB), avoid using the `get` function without parameters on OpenDSS classes. Some properties like `First` and `Next` used for iteration of elements change the current active element and can lead to misleading data!**
+**As a general advice (valid for the official COM version and DSS_MATLAB), avoid using the `get` function without parameters on OpenDSS classes. Some properties like `First` and `Next` used for iteration of elements change the current active element and can lead to misleading data!**
 
 ## Known differences and history
 
@@ -67,7 +74,7 @@ https://github.com/dss-extensions/dss_capi/blob/master/docs/known_differences.md
 
 Most of these apply indirectly to DSS_MATLAB.
 
-The [list of important changes](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0105) through development is also useful.
+The [list of important changes](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0106) through development is also useful.
 
 ## Credits / Acknowlegement
 

@@ -2,8 +2,6 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     % ICircuit: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    Buses - 
-    %    CktElements - 
     %    ActiveElement - 
     %    Solution - 
     %    ActiveBus - 
@@ -67,7 +65,9 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    YNodeVarray - Complex array of actual node voltages in same order as SystemY matrix.
     % 
     % Methods:
+    %    Buses - 
     %    Capacity - 
+    %    CktElements - 
     %    Disable - 
     %    Enable - 
     %    EndOfTimeStepUpdate - 
@@ -90,8 +90,6 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    UpdateStorage - 
 
     properties
-        Buses
-        CktElements
         ActiveElement
         Solution
         ActiveBus
@@ -157,8 +155,6 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     methods (Access = public)
         function obj = ICircuit(apiutil)
             obj@DSS_MATLAB.Base(apiutil);
-            obj.Buses = DSS_MATLAB.IBus(obj.apiutil);
-            obj.CktElements = DSS_MATLAB.ICktElement(obj.apiutil);
             obj.ActiveElement = DSS_MATLAB.ICktElement(obj.apiutil);
             obj.Solution = DSS_MATLAB.ISolution(obj.apiutil);
             obj.ActiveBus = DSS_MATLAB.IBus(obj.apiutil);
@@ -308,6 +304,32 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function obj = UpdateStorage(obj)
             calllib(obj.libname, 'Circuit_UpdateStorage');
+            obj.CheckForError();
+        end
+
+        function result = CktElements(obj, NameOrIdx)
+            if ischar(NameOrIdx) | isstring(NameOrIdx)
+                obj.SetActiveElement(NameOrIdx);
+            elseif isinteger(NameOrIdx)
+                calllib('dss_capi_v7', 'Circuit_SetCktElementIndex', FullName);
+                obj.CheckForError();
+            else
+                ME = MException(['DSS_MATLAB:Error'], 'Expected char, string or integer');
+                throw(ME);
+            end
+            result = obj.ActiveCktElement;
+        end
+
+        function result = Buses(obj, NameOrIdx)
+            if ischar(NameOrIdx) | isstring(NameOrIdx)
+                obj.SetActiveBus(NameOrIdx);
+            elseif isinteger(NameOrIdx)
+                obj.SetActiveBusi(NameOrIdx);
+            else
+                ME = MException(['DSS_MATLAB:Error'], 'Expected char, string or integer');
+                throw(ME);
+            end
+            result = obj.ActiveBus;
             obj.CheckForError();
         end
 

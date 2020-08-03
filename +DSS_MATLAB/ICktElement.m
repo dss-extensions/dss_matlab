@@ -2,7 +2,6 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     % ICktElement: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    Properties - 
     %    AllPropertyNames - Array containing all property names of the active device.
     %    AllVariableNames - Array of strings listing all the published variable names, if a PCElement. Otherwise, null string.
     %    AllVariableValues - Array of doubles. Values of state variables of active element if PC element.
@@ -49,9 +48,13 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     %    Variablei - Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
     %    IsOpen - 
     %    Open - 
+    %    Properties - 
+
+    properties (Access = protected)
+        PropertiesRef
+    end
 
     properties
-        Properties
         AllPropertyNames
         AllVariableNames
         AllVariableValues
@@ -95,7 +98,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     methods (Access = public)
         function obj = ICktElement(apiutil)
             obj@DSS_MATLAB.Base(apiutil);
-            obj.Properties = DSS_MATLAB.IDSSProperty(obj.apiutil);
+            obj.PropertiesRef = DSS_MATLAB.IDSSProperty(apiutil);
         end
 
         function obj = Close(obj, Term, Phs)

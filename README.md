@@ -22,7 +22,7 @@ Version 0.10.6, released on 2020-08-02, covers most of the COM functions and cla
 ## Highlights from 0.10.6
 
 - New `DSSobj.LegacyModels` toggle to activate pre-OpenDSS 9.0 models (`PVSystem`, `Storage`, ...). By default, the new models are used (previously known as `PVSystem2`, `Storage2`, ...).
-- New Extended Errors mechanism, signaling lots previously silent errors due to bad API usage. For backwards compatibility, you can disable it with `DSSobj.Error.ExtendedErrors = 0`.
+- New Extended Errors mechanism, signaling lots of previously silent errors due to bad API usage. For backwards compatibility, you can disable it with `DSSobj.Error.ExtendedErrors = 0`.
 
 More at [DSS C-API changelog](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0106).
 

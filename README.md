@@ -17,14 +17,14 @@ Related projects:
 - [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): More pythonic bindings and useful tools.
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
-Version 0.10.6, released on 2020-08-02, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project uses the [DSS C-API library version 0.10.6](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0106), based on OpenDSS revision 2909 (which is slightly newer than OpenDSS v9.0.0.6).
+Version 0.10.7, released on 2020-12-29, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project uses the [DSS C-API library version 0.10.6](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0106), based on OpenDSS revision 2963 (which is slightly newer than OpenDSS v9.1.3.3).
 
-## Highlights from 0.10.6
+## Highlights from 0.10.7
 
-- New `DSSobj.LegacyModels` toggle to activate pre-OpenDSS 9.0 models (`PVSystem`, `Storage`, ...). By default, the new models are used (previously known as `PVSystem2`, `Storage2`, ...).
-- New Extended Errors mechanism, signaling lots of previously silent errors due to bad API usage. For backwards compatibility, you can disable it with `DSSobj.Error.ExtendedErrors = 0`.
+- Includes an important bug fix related to the `CapRadius` DSS property. If your DSS scripts included the pattern `GMRac=... rad=...` or `GMRac=... diam=...` (in this order and without specifying `CapRadius`), you should upgrade and re-evaluate the results. 
+- A reference document listing the DSS commands and properties for all DSS elements is now available at https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/dss_properties.md
 
-More at [DSS C-API changelog](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0106).
+More at [DSS C-API changelog](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0107).
 
 ## Usage
 

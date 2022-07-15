@@ -6,6 +6,9 @@ classdef (CaseInsensitiveProperties) IDSSElement < DSS_MATLAB.Base
     %    AllPropertyNames - Array of strings containing the names of all properties for the active DSS object.
     %    Name - Full Name of Active DSS Object (general element or circuit element).
     %    NumProperties - Number of Properties for the active DSS object.
+    % 
+    % Methods:
+    %    ToJSON - Returns the properties of the active DSS object as a JSON-encoded string.    The `options` parameter contains bit-flags to toggle specific features.  See `Obj_ToJSON` (C-API) for more.    (API Extension)
 
     properties
         Properties
@@ -20,6 +23,20 @@ classdef (CaseInsensitiveProperties) IDSSElement < DSS_MATLAB.Base
             obj.Properties = DSS_MATLAB.IDSSProperty(obj.apiutil);
         end
 
+        function result = ToJSON(obj, options)
+            % Returns the properties of the active DSS object as a JSON-encoded string.
+            % 
+            % The `options` parameter contains bit-flags to toggle specific features.
+            % See `Obj_ToJSON` (C-API) for more.
+            % 
+            % (API Extension)
+            if ~exist('options', 'var')
+                options = 0;
+            end
+
+            result = calllib(obj.libname, 'DSSElement_ToJSON', options);
+            obj.CheckForError();
+        end
     end
     methods
 

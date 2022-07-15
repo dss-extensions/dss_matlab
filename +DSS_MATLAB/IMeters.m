@@ -37,6 +37,7 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
     %    SumBranchFltRates - Sum of the branch fault rates in this section of the meter's zone
     %    TotalCustomers - Total Number of customers in this zone (downline from the EnergyMeter)
     %    Totals - Totals of all registers of all meters
+    %    ZonePCE - Returns the list of all PCE within the area covered by the energy meter
     % 
     % Methods:
     %    CloseAllDIFiles - 
@@ -86,6 +87,7 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
         SumBranchFltRates
         TotalCustomers
         Totals
+        ZonePCE
     end
 
     methods (Access = public)
@@ -386,6 +388,17 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
             calllib(obj.libname, 'Meters_Get_Totals_GR');
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
+        end
+
+        function result = get.ZonePCE(obj)
+            % Returns the list of all PCE within the area covered by the energy meter
+            result = obj.apiutil.get_string_array('Meters_Get_ZonePCE');
+            obj.CheckForError();
+            if (~result)
+                result = [% NONE
+                ];
+            end
+            result = result;
         end
     end
 end

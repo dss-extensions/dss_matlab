@@ -10,6 +10,9 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
     %    Next - Sets next element in active class to be the active DSS object. If object is a CktElement, ActiveCktElement also points to this element.  Returns 0 if no more.
     %    NumElements - Number of elements in this class. Same as Count property.
     %    ActiveClassParent - Get the name of the parent class of the active class
+    % 
+    % Methods:
+    %    ToJSON - Returns the data (as a list) of all elements from the active class as a JSON-encoded string.    The `options` parameter contains bit-flags to toggle specific features.  See `Obj_ToJSON` (C-API) for more.    Additionally, the `ExcludeDisabled` flag can be used to excluded disabled elements from the output.    (API Extension)
 
     properties
         ActiveClassName
@@ -27,6 +30,22 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
             obj@DSS_MATLAB.Base(apiutil);
         end
 
+        function result = ToJSON(obj, options)
+            % Returns the data (as a list) of all elements from the active class as a JSON-encoded string.
+            % 
+            % The `options` parameter contains bit-flags to toggle specific features.
+            % See `Obj_ToJSON` (C-API) for more.
+            % 
+            % Additionally, the `ExcludeDisabled` flag can be used to excluded disabled elements from the output.
+            % 
+            % (API Extension)
+            if ~exist('options', 'var')
+                options = 0;
+            end
+
+            result = calllib(obj.libname, 'ActiveClass_ToJSON', options);
+            obj.CheckForError();
+        end
     end
     methods
 

@@ -4,7 +4,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
     % Properties:
     %    AllowDuplicates - {True | False*} Designates whether to allow duplicate names of objects
     %    AutoBusList - List of Buses or (File=xxxx) syntax for the AutoAdd solution mode.
-    %    CktModel - {dssMultiphase * | dssPositiveSeq} IIndicate if the circuit model is positive sequence.
+    %    CktModel - {dssMultiphase (0) * | dssPositiveSeq (1) } Indicate if the circuit model is positive sequence.
     %    ControlTrace - {True | False*} Denotes whether to trace the control actions to a file.
     %    EmergVmaxpu - Per Unit maximum voltage for Emergency conditions.
     %    EmergVminpu - Per Unit minimum voltage for Emergency conditions.
@@ -21,6 +21,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
     %    ZoneLock - {True | False*}  Locks Zones on energy meters to prevent rebuilding if a circuit change occurs.
     %    AllocationFactors - (write-only) Sets all load allocation factors for all loads defined by XFKVA property to this value.
     %    LoadsTerminalCheck - Controls whether the terminals are checked when updating the currents in Load component. Defaults to True.  If the loads are guaranteed to have their terminals closed throughout the simulation, this can be set to False to save some time.    (API Extension)
+    %    IterateDisabled - Controls whether `First`/`Next` iteration includes or skips disabled circuit elements.  The default behavior from OpenDSS is to skip those. The user can still activate the element by name or index.    The default value for IterateDisabled is 0, keeping the original behavior.  Set it to 1 (or `True`) to include disabled elements.  Other numeric values are reserved for other potential behaviors.    (API Extension)
 
     properties
         AllowDuplicates
@@ -42,6 +43,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
         ZoneLock
         AllocationFactors
         LoadsTerminalCheck
+        IterateDisabled
     end
 
     methods (Access = public)
@@ -73,7 +75,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
         end
 
         function result = get.CktModel(obj)
-            % {dssMultiphase * | dssPositiveSeq} IIndicate if the circuit model is positive sequence.
+            % {dssMultiphase (0) * | dssPositiveSeq (1) } Indicate if the circuit model is positive sequence.
             result = calllib(obj.libname, 'Settings_Get_CktModel');
             obj.CheckForError();
         end
@@ -243,7 +245,24 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
             obj.CheckForError();
         end
         function obj = set.LoadsTerminalCheck(obj, Value)
-            result = calllib(obj.libname, 'Settings_Set_LoadsTerminalCheck', Value);
+            calllib(obj.libname, 'Settings_Set_LoadsTerminalCheck', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.IterateDisabled(obj)
+            % Controls whether `First`/`Next` iteration includes or skips disabled circuit elements.
+            % The default behavior from OpenDSS is to skip those. The user can still activate the element by name or index.
+            % 
+            % The default value for IterateDisabled is 0, keeping the original behavior.
+            % Set it to 1 (or `True`) to include disabled elements.
+            % Other numeric values are reserved for other potential behaviors.
+            % 
+            % (API Extension)
+            result = calllib(obj.libname, 'Settings_Get_IterateDisabled');
+            obj.CheckForError();
+        end
+        function obj = set.IterateDisabled(obj, Value)
+            calllib(obj.libname, 'Settings_Set_IterateDisabled', int32(Value));
             obj.CheckForError();
         end
     end

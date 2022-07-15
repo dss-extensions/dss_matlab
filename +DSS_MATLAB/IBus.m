@@ -34,6 +34,8 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
     %    y - Y coordinate for bus(double)
     %    LoadList - List of strings: Full Names of LOAD elements connected to the active bus.
     %    LineList - List of strings: Full Names of LINE elements connected to the active bus.
+    %    AllPCEatBus - Returns an array with the names of all PCE connected to the active bus
+    %    AllPDEatBus - Returns an array with the names of all PDE connected to the active bus
     % 
     % Methods:
     %    GetUniqueNodeNumber - 
@@ -72,6 +74,8 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
         y
         LoadList
         LineList
+        AllPCEatBus
+        AllPDEatBus
     end
 
     methods (Access = public)
@@ -305,6 +309,28 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
             % List of strings: Full Names of LINE elements connected to the active bus.
             result = obj.apiutil.get_string_array('Bus_Get_LineList');
             obj.CheckForError();
+        end
+
+        function result = get.AllPCEatBus(obj)
+            % Returns an array with the names of all PCE connected to the active bus
+            result = obj.apiutil.get_string_array('Bus_Get_AllPCEatBus');
+            obj.CheckForError();
+            if (~isempty(result))
+                result{end + 1} = '';
+            else
+                result = {};
+            end
+        end
+
+        function result = get.AllPDEatBus(obj)
+            % Returns an array with the names of all PDE connected to the active bus
+            result = obj.apiutil.get_string_array('Bus_Get_AllPDEatBus');
+            obj.CheckForError();
+            if (~isempty(result))
+                result{end + 1} = '';
+            else
+                result = {};
+            end
         end
     end
 end

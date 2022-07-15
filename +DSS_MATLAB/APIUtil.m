@@ -15,28 +15,27 @@ classdef APIUtil < handle
         function obj = APIUtil()
             if getenv('DSS_EXTENSIONS_DEBUG') == '1'
                 warnings.warn('Environment variable DSS_EXTENSIONS_DEBUG=1 is set: loading the debug version of the DSS C-API library')
-                obj.libname = 'dss_capi_v7d';
+                obj.libname = 'dss_capid';
             else
-                obj.libname = 'dss_capi_v7';
+                obj.libname = 'dss_capi';
             end
         
             MfilePath = fileparts(mfilename('fullpath'));
             DLLfilePath = fullfile(MfilePath, obj.libname);
             if libisloaded(obj.libname)
-                return
-            else
-                orig_state = warning;
-                warning('off','all')
-                try
-                    % Try loading using the thunk file, if available
-                    loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7);
-                catch 
-                    % Try loading using the thunk file, otherwise use the dynamic version
-                    loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7_no_thunk);
-                end
-                obj.libraryWasLoaded = 1;
-                warning(orig_state);
+                return;
             end
+            orig_state = warning;
+            warning('off','all')
+            try
+                % Try loading using the thunk file, if available
+                loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7);
+            catch 
+                % Try loading using the thunk file, otherwise use the dynamic version
+                loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7_no_thunk);
+            end
+            obj.libraryWasLoaded = 1;
+            warning(orig_state);
         end
        
         function delete(obj)

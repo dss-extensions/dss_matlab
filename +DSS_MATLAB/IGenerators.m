@@ -20,6 +20,14 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
     %    kVArated - kVA rating of the generator
     %    kW - kW output for the active generator. kvar is updated for current power factor.
     %    kvar - kvar output for the active generator. Updates power factor based on present kW value.
+    %    daily - Name of the loadshape for a daily generation profile.    (API Extension)
+    %    duty - Name of the loadshape for a duty cycle simulation.    (API Extension)
+    %    Yearly - Name of yearly loadshape    (API Extension)
+    %    Status - Response to dispatch multipliers: Fixed=1 (dispatch multipliers do not apply), Variable=0 (follows curves).    Related enumeration: GeneratorStatus    (API Extension)
+    %    IsDelta - Generator connection. True/1 if delta connection, False/0 if wye.    (API Extension)
+    %    kva - kVA rating of electrical machine. Applied to machine or inverter definition for Dynamics mode solutions.    (API Extension)
+    %    Class - An arbitrary integer number representing the class of Generator so that Generator values may be segregated by class.    (API Extension)
+    %    Bus1 - Bus to which the Generator is connected. May include specific node specification.    (API Extension)
 
     properties
         AllNames
@@ -40,6 +48,14 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
         kVArated
         kW
         kvar
+        daily
+        duty
+        Yearly
+        Status
+        IsDelta
+        kva
+        Class
+        Bus1
     end
 
     methods (Access = public)
@@ -199,6 +215,104 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
         end
         function obj = set.kvar(obj, Value)
             calllib(obj.libname, 'Generators_Set_kvar', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.daily(obj)
+            % Name of the loadshape for a daily generation profile.
+            % 
+            % (API Extension)
+            result = calllib(obj.libname, 'Generators_Get_daily');
+            obj.CheckForError();
+        end
+        function obj = set.daily(obj, Value)
+            calllib(obj.libname, 'Generators_Set_daily', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.duty(obj)
+            % Name of the loadshape for a duty cycle simulation.
+            % 
+            % (API Extension)
+            result = calllib(obj.libname, 'Generators_Get_duty');
+            obj.CheckForError();
+        end
+        function obj = set.duty(obj, Value)
+            calllib(obj.libname, 'Generators_Set_duty', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Yearly(obj)
+            % Name of yearly loadshape
+            % 
+            % (API Extension)
+            result = calllib(obj.libname, 'Generators_Get_Yearly');
+            obj.CheckForError();
+        end
+        function obj = set.Yearly(obj, Value)
+            calllib(obj.libname, 'Generators_Set_Yearly', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Status(obj)
+            % Response to dispatch multipliers: Fixed=1 (dispatch multipliers do not apply), Variable=0 (follows curves).
+            % 
+            % Related enumeration: GeneratorStatus
+            % 
+            % (API Extension)
+            result = calllib(obj.libname, 'Generators_Get_Status');
+            obj.CheckForError();
+        end
+        function obj = set.Status(obj, Value)
+            calllib(obj.libname, 'Generators_Set_Status', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.IsDelta(obj)
+            % Generator connection. True/1 if delta connection, False/0 if wye.
+            % 
+            % (API Extension)
+            result = (calllib(obj.libname, 'Generators_Get_IsDelta') ~= 0);
+            obj.CheckForError();
+        end
+        function obj = set.IsDelta(obj, Value)
+            calllib(obj.libname, 'Generators_Set_IsDelta', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.kva(obj)
+            % kVA rating of electrical machine. Applied to machine or inverter definition for Dynamics mode solutions.
+            % 
+            % (API Extension)
+            result = calllib(obj.libname, 'Generators_Get_kva');
+            obj.CheckForError();
+        end
+        function obj = set.kva(obj, Value)
+            calllib(obj.libname, 'Generators_Set_kva', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Class(obj)
+            % An arbitrary integer number representing the class of Generator so that Generator values may be segregated by class.
+            % 
+            % (API Extension)
+            result = calllib(obj.libname, 'Generators_Get_Class_');
+            obj.CheckForError();
+        end
+        function obj = set.Class(obj, Value)
+            calllib(obj.libname, 'Generators_Set_Class_', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Bus1(obj)
+            % Bus to which the Generator is connected. May include specific node specification.
+            % 
+            % (API Extension)
+            result = calllib(obj.libname, 'Generators_Get_Bus1');
+            obj.CheckForError();
+        end
+        function obj = set.Bus1(obj, Value)
+            calllib(obj.libname, 'Generators_Set_Bus1', Value);
             obj.CheckForError();
         end
     end

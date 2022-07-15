@@ -430,8 +430,8 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
             result = calllib(obj.libname, 'Solution_Get_Mode');
             obj.CheckForError();
         end
-        function obj = set.Mode(obj, Mode)
-            calllib(obj.libname, 'Solution_Set_Mode', Mode);
+        function obj = set.Mode(obj, Value)
+            calllib(obj.libname, 'Solution_Set_Mode', Value);
             obj.CheckForError();
         end
 
@@ -468,8 +468,8 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
             result = calllib(obj.libname, 'Solution_Get_Random');
             obj.CheckForError();
         end
-        function obj = set.Random(obj, Random)
-            calllib(obj.libname, 'Solution_Set_Random', Random);
+        function obj = set.Random(obj, Value)
+            calllib(obj.libname, 'Solution_Set_Random', Value);
             obj.CheckForError();
         end
 

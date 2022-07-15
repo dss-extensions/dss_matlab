@@ -8,7 +8,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
     %    Name - Get/sets the name of the current active PVSystem
     %    Next - Sets next PVSystem active; returns 0 if no more.
     %    idx - Sets next PVSystem active; returns 0 if no more.
-    %    Irradiance - Get/set the present value of the Irradiance property in W/m²
+    %    Irradiance - Get/set the present value of the Irradiance property in kW/m²
     %    PF - Get/set the power factor for the active PVSystem
     %    RegisterNames - Array of PVSYSTEM energy meter register names
     %    RegisterValues - Array of doubles containing values in PVSystem registers.
@@ -96,7 +96,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
 
 
         function result = get.Irradiance(obj)
-            % Get/set the present value of the Irradiance property in W/m²
+            % Get/set the present value of the Irradiance property in kW/m²
             result = calllib(obj.libname, 'PVSystems_Get_Irradiance');
             obj.CheckForError();
         end

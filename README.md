@@ -1,4 +1,4 @@
-# DSS MATLAB: an unofficial multi-platform MATLAB package for EPRI's OpenDSS
+# DSS MATLAB: a multi-platform MATLAB package for DSS C-API, an unofficial implementation of EPRI's OpenDSS
 
 ---
 
@@ -10,21 +10,30 @@
 
 This is version of a set of MATLAB classes that expose the DSS C-API library with the same structure as the COM object, with the same extensions as DSS Python. This is the equivalent of DSS Python and DSS Sharp for MATLAB usage.
 
+Please see [https://dss-extensions.org/](https://dss-extensions.org/) for a general introduction and useful links for all projects under DSS Extensions.
+
+A new repository to coordinate documentation and other shared features across all DSS Extensions is now available at [https://github.com/dss-extensions/dss-extensions](https://github.com/dss-extensions/dss-extensions)
+
 Related projects: 
 - [`OpenDSS`](https://sourceforge.net/projects/electricdss/): The main OpenDSS project, maintained by EPRI.
 - [`DSS C-API`](http://github.com/dss-extensions/dss_capi): Custom OpenDSS C-API library, which also includes some patches.
-- [`DSS Python`](http://github.com/dss-extensions/dss_python): Python bindings that mimics the official COM interface.
-- [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): More pythonic bindings and useful tools.
+- [`DSS Python`](http://github.com/dss-extensions/dss_python): Python bindings that mimics the official COM interface (property-style access to items).
+- [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): Function-style bindings and useful tools  (originally based on the DCSL/OpenDSSDirect.DLL).
+- [`OpenDSSDirect.jl`](http://github.com/dss-extensions/OpenDSSDirect.jl): Julia bindings to DSS C-API (originally based on the DCSL/OpenDSSDirect.DLL).
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
-Version 0.10.7, released on 2020-12-29, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project uses the [DSS C-API library version 0.10.6](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0106), based on OpenDSS revision 2963 (which is slightly newer than OpenDSS v9.1.3.3).
+Version 0.12.0, **STILL TO BE RELEASED**, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project uses the [DSS C-API library version 0.12.0](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md#version-0120), based on OpenDSS revision 3460 (few commits after OpenDSS v9.4.1.2).
 
-## Highlights from 0.10.7
+## Highlights from 0.12.0
 
-- Includes an important bug fix related to the `CapRadius` DSS property. If your DSS scripts included the pattern `GMRac=... rad=...` or `GMRac=... diam=...` (in this order and without specifying `CapRadius`), you should upgrade and re-evaluate the results. 
-- A reference document listing the DSS commands and properties for all DSS elements is now available at https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/dss_properties.md
 
-More at [DSS C-API changelog](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0107).
+- **TODO**
+
+- `Parallel` API is now supported. Diakoptics and a few corner features are still disabled (under reimplementation).
+
+- A reference document listing the DSS commands and properties for all DSS elements is now available at https://github.com/dss-extensions/dss_capi/blob/master/docs/dss_properties.md
+
+A long list of changes is available at [DSS C-API changelog](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md#version-0120).
 
 ## Usage
 
@@ -74,7 +83,7 @@ https://github.com/dss-extensions/dss_capi/blob/master/docs/known_differences.md
 
 Most of these apply indirectly to DSS_MATLAB.
 
-The [list of important changes](https://github.com/dss-extensions/dss_capi/blob/0.10.x/docs/changelog.md#version-0106) through development is also useful.
+The [list of important changes](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md#version-0120) through development is also useful.
 
 ## Credits / Acknowlegement
 

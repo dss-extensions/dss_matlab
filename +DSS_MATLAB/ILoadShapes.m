@@ -192,11 +192,11 @@ classdef (CaseInsensitiveProperties) ILoadShapes < DSS_MATLAB.Base
         end
 
         function result = get.sInterval(obj)
-            result = calllib(obj.libname, 'LoadShapes_Get_sInterval');
+            result = calllib(obj.libname, 'LoadShapes_Get_SInterval');
             obj.CheckForError();
         end
         function obj = set.sInterval(obj, Value)
-            calllib(obj.libname, 'LoadShapes_Set_Sinterval', Value);
+            calllib(obj.libname, 'LoadShapes_Set_SInterval', Value);
             obj.CheckForError();
         end
     end

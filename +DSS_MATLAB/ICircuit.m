@@ -59,7 +59,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    ParentPDElement - Sets Parent PD element, if any, to be the active circuit element and returns index>0; Returns 0 if it fails or not applicable.
     %    SubstationLosses - Complex losses in all transformers designated to substations.
     %    SystemY - System Y matrix (after a solution has been performed).   This is deprecated as it returns a dense matrix. Only use it for small systems.  For large scale systems, prefer YMatrix.GetCompressedYMatrix.
-    %    TotalPower - Total power, watts delivered to the circuit
+    %    TotalPower - Total power, kW delivered to the circuit
     %    YCurrents - Array of doubles containing complex injection currents for the present solution. Is is the "I" vector of I=YV
     %    YNodeOrder - Array of strings containing the names of the nodes in the same order as the Y matrix
     %    YNodeVarray - Complex array of actual node voltages in same order as SystemY matrix.
@@ -457,7 +457,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
         end
 
         function result = get.TotalPower(obj)
-            % (read-only) Total power, watts delivered to the circuit
+            % (read-only) Total power, kW delivered to the circuit
             calllib(obj.libname, 'Circuit_Get_TotalPower_GR');
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();

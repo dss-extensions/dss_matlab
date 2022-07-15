@@ -40,12 +40,16 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     %    VoltagesMagAng - Voltages at each conductor in magnitude, angle form as array of doubles.
     %    Yprim - YPrim matrix, column order, complex numbers (paired)
     %    IsIsolated - Returns true if the current active element is isolated.  Note that this only fetches the current value. See also the Topology interface.
+    %    TotalPowers - Returns the total powers (complex) at ALL terminals of the active circuit element.
+    %    NodeRef - Array of integers, a copy of the internal NodeRef of the CktElement.
     % 
     % Methods:
     %    Close - 
     %    Controller - Full name of the i-th controller attached to this element. Ex: str = Controller(2).  See NumControls to determine valid index range
     %    Variable - Returns (value, Code). For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
     %    Variablei - Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
+    %    setVariableByIndex - 
+    %    setVariableByName - 
     %    IsOpen - 
     %    Open - 
     %    Properties - 
@@ -93,6 +97,8 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         VoltagesMagAng
         Yprim
         IsIsolated
+        TotalPowers
+        NodeRef
     end
 
     methods (Access = public)
@@ -126,6 +132,20 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
             result = calllib(obj.libname, 'CktElement_Get_Variablei', Idx, Code);
             obj.CheckForError();
             result = [result, Code.Value(1)];
+        end
+
+        function result = setVariableByIndex(obj, Idx, Value)
+            Code = libpointer('int32Ptr', [0]);
+            calllib(obj.libname, 'CktElement_Set_Variablei', Idx, Code, Value);
+            obj.CheckForError();
+            result = Code(1);
+        end
+
+        function result = setVariableByName(obj, Idx, Value)
+            Code = libpointer('int32Ptr', [0]);
+            calllib(obj.libname, 'CktElement_Set_Variable', Idx, Code, Value);
+            obj.CheckForError();
+            result = Code(1);
         end
 
         function result = IsOpen(obj, Term, Phs)
@@ -417,6 +437,19 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
             % Note that this only fetches the current value. See also the Topology interface.
             result = (calllib(obj.libname, 'CktElement_Get_IsIsolated') ~= 0);
             obj.CheckForError();
+        end
+
+        function result = get.TotalPowers(obj)
+            % Returns the total powers (complex) at ALL terminals of the active circuit element.
+            calllib(obj.libname, 'CktElement_Get_TotalPowers_GR');
+            obj.CheckForError();
+            result = obj.apiutil.get_float64_gr_array();
+        end
+
+        function result = get.NodeRef(obj)
+            % Array of integers, a copy of the internal NodeRef of the CktElement.
+            calllib(obj.libname, 'CktElement_Get_NodeRef_GR');
+            result = obj.apiutil.get_int32_gr_array();
         end
     end
 end

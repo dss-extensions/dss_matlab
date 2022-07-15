@@ -1,7 +1,4 @@
 classdef APIUtil < handle
-    properties (Access = protected)
-        libraryWasLoaded = 0
-    end
     properties
         %DataPtr_PDouble
         %DataPtr_PInteger
@@ -13,6 +10,7 @@ classdef APIUtil < handle
     end
     methods
         function obj = APIUtil()
+            
             if getenv('DSS_EXTENSIONS_DEBUG') == '1'
                 warnings.warn('Environment variable DSS_EXTENSIONS_DEBUG=1 is set: loading the debug version of the DSS C-API library')
                 obj.libname = 'dss_capid';
@@ -23,6 +21,7 @@ classdef APIUtil < handle
             MfilePath = fileparts(mfilename('fullpath'));
             DLLfilePath = fullfile(MfilePath, obj.libname);
             PropertiesMOfilePath = fullfile(MfilePath, 'messages', 'properties-en-US.mo');
+            DSS_MATLAB.librefcount(1);
             if libisloaded(obj.libname)
                 return;
             end
@@ -37,17 +36,18 @@ classdef APIUtil < handle
             end
             calllib(obj.libname, 'DSS_Start', 0);
             calllib(obj.libname, 'DSS_SetPropertiesMO', PropertiesMOfilePath);
-            obj.libraryWasLoaded = 1;
             warning(orig_state);
         end
        
         function delete(obj)
-            % Don't unload the library anymore for better compatibility with 
-            % the COM behavior
-            
-            % if (obj.libraryWasLoaded ~= 0)
-                % unloadlibrary(obj.libname);
-            % end
+            % If nothing is using the library, unload it.
+            % Required to properly exit MATLAB.
+            cnt = DSS_MATLAB.librefcount(-1);
+            if (cnt == 0)
+                calllib(obj.libname, 'Text_Set_Command', 'Set Parallel=no');
+                calllib(obj.libname, 'DSS_ClearAll');
+                unloadlibrary(obj.libname);
+            end
         end
         
         function obj = InitBuffers(obj)

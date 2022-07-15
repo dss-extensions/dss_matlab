@@ -2,8 +2,8 @@ language: generic
 
 env:
     global:
-        - DSS_CAPI_VERSION=0.10.7-1
-        - DSS_MATLAB_VERSION=0.10.7-1
+        - DSS_CAPI_VERSION=0.12.0
+        - DSS_MATLAB_VERSION=0.12.0
 
 matrix:
   include:
@@ -16,8 +16,8 @@ matrix:
         - tar zxf dss_capi.tar.gz
         - mkdir -p release/dss_matlab
         - cp -R "+DSS_MATLAB" "release/dss_matlab/+DSS_MATLAB"
-        - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capi_v7.so "release/dss_matlab/+DSS_MATLAB/dss_capi_v7.so"
-        - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capi_v7d.so "release/dss_matlab/+DSS_MATLAB/dss_capi_v7d.so"
+        - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capi.so "release/dss_matlab/+DSS_MATLAB/dss_capi.so"
+        - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capid.so "release/dss_matlab/+DSS_MATLAB/dss_capid.so"
         - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libklusolve.so "release/dss_matlab/+DSS_MATLAB/"
         - mv dss_capi/KLUSOLVE_LICENSE "release/dss_matlab/"
         - mv dss_capi/OPENDSS_LICENSE "release/dss_matlab/"
@@ -26,8 +26,8 @@ matrix:
         - mv README.md release/dss_matlab/
         - mv examples release/dss_matlab/
         - cd "release/dss_matlab/+DSS_MATLAB"
-        - patchelf --set-rpath '$ORIGIN/.' dss_capi_v7.so
-        - patchelf --set-rpath '$ORIGIN/.' dss_capi_v7d.so
+        - patchelf --set-rpath '$ORIGIN/.' dss_capi.so
+        - patchelf --set-rpath '$ORIGIN/.' dss_capid.so
         - cd ../..
         - tar zcf dss_matlab_v${DSS_MATLAB_VERSION}_${TRAVIS_JOB_NAME}.tar.gz dss_matlab
         - rm -rf dss_matlab
@@ -62,8 +62,8 @@ matrix:
         - tar zxf dss_capi.tar.gz
         - mkdir -p release/dss_matlab
         - cp -R "+DSS_MATLAB" "release/dss_matlab/+DSS_MATLAB"
-        - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capi_v7.dylib "release/dss_matlab/+DSS_MATLAB/dss_capi_v7.dylib"
-        - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capi_v7d.dylib "release/dss_matlab/+DSS_MATLAB/dss_capi_v7d.dylib"
+        - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capi.dylib "release/dss_matlab/+DSS_MATLAB/dss_capi.dylib"
+        - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capid.dylib "release/dss_matlab/+DSS_MATLAB/dss_capid.dylib"
         - mv dss_capi/lib/${TRAVIS_JOB_NAME}/libklusolve.dylib "release/dss_matlab/+DSS_MATLAB/"
         - mv dss_capi/KLUSOLVE_LICENSE "release/dss_matlab/"
         - mv dss_capi/OPENDSS_LICENSE "release/dss_matlab/"

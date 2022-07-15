@@ -105,7 +105,7 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
 
         function result = get.Action(obj)
             % (write-only) Set the active action by index
-            raise AttributeError('This property is write-only!')
+            ME = MException(['DSS_MATLAB:Error'], 'This property is write-only!'); throw(ME);
         end
         function obj = set.Action(obj, Param1)
             calllib(obj.libname, 'CtrlQueue_Set_Action', Param1);

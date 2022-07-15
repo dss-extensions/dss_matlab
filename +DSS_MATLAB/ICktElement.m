@@ -160,9 +160,9 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
         function result = Properties(obj, NameOrIdx)
             if ischar(NameOrIdx) | isstring(NameOrIdx)
-                calllib('dss_capi_v7', 'DSSProperty_Set_Name', NameOrIdx);
+                calllib('dss_capi', 'DSSProperty_Set_Name', NameOrIdx);
             elseif isinteger(NameOrIdx)
-                calllib('dss_capi_v7', 'DSSProperty_Set_Index', NameOrIdx);
+                calllib('dss_capi', 'DSSProperty_Set_Index', NameOrIdx);
             else
                 ME = MException(['DSS_MATLAB:Error'], 'Expected char, string or integer');
                 throw(ME);

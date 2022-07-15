@@ -563,7 +563,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
 
         function result = get.StepsizeHr(obj)
             % (write-only) Set Stepsize in Hr
-            raise AttributeError('This property is write-only!')
+            ME = MException(['DSS_MATLAB:Error'], 'This property is write-only!'); throw(ME);
         end
         function obj = set.StepsizeHr(obj, Value)
             calllib(obj.libname, 'Solution_Set_StepsizeHr', Value);
@@ -572,7 +572,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
 
         function result = get.StepsizeMin(obj)
             % (write-only) Set Stepsize in minutes
-            raise AttributeError('This property is write-only!')
+            ME = MException(['DSS_MATLAB:Error'], 'This property is write-only!'); throw(ME);
         end
         function obj = set.StepsizeMin(obj, Value)
             calllib(obj.libname, 'Solution_Set_StepsizeMin', Value);

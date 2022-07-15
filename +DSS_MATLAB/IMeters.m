@@ -395,8 +395,7 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
             result = obj.apiutil.get_string_array('Meters_Get_ZonePCE');
             obj.CheckForError();
             if (~result)
-                result = [% NONE
-                ];
+                result = {};
             end
             result = result;
         end

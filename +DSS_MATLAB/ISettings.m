@@ -229,7 +229,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
 
         function result = get.AllocationFactors(obj)
             % (write-only) Sets all load allocation factors for all loads defined by XFKVA property to this value.
-            raise AttributeError('This property is write-only!')
+            ME = MException(['DSS_MATLAB:Error'], 'This property is write-only!'); throw(ME);
         end
         function obj = set.AllocationFactors(obj, Value)
             calllib(obj.libname, 'Settings_Set_AllocationFactors', Value);

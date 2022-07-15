@@ -22,6 +22,7 @@ classdef APIUtil < handle
         
             MfilePath = fileparts(mfilename('fullpath'));
             DLLfilePath = fullfile(MfilePath, obj.libname);
+            PropertiesMOfilePath = fullfile(MfilePath, 'messages', 'properties-en-US.mo');
             if libisloaded(obj.libname)
                 return;
             end
@@ -34,6 +35,8 @@ classdef APIUtil < handle
                 % Try loading using the thunk file, otherwise use the dynamic version
                 loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_no_thunk);
             end
+            calllib(obj.libname, 'DSS_Start', 0);
+            calllib(obj.libname, 'DSS_SetPropertiesMO', PropertiesMOfilePath);
             obj.libraryWasLoaded = 1;
             warning(orig_state);
         end

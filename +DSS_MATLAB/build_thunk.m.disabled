@@ -6,19 +6,19 @@ original_folder = pwd;
 try
     MfilePath = fileparts(mfilename('fullpath'));
     
-    if libisloaded('dss_capi_v7')
-        unloadlibrary('dss_capi_v7');
+    if libisloaded('dss_capi')
+        unloadlibrary('dss_capi');
     end
     
     cd(MfilePath);
-    DLLfilePath = fullfile(MfilePath, 'dss_capi_v7');
+    DLLfilePath = fullfile(MfilePath, 'dss_capi');
     try
-        loadlibrary(DLLfilePath, 'dss_capi.h', 'mfilename', 'dss_capi_v7');
+        loadlibrary(DLLfilePath, 'dss_capi.h', 'mfilename', 'dss_capi');
     catch err
         % ignored
     end
 
-    loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7);
+    loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi);
     disp('Thunk file for DSS_MATLAB was build successfully!');
 
 catch err

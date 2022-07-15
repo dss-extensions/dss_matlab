@@ -40,6 +40,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    TSData - 
     %    Reactors - 
     %    ReduceCkt - 
+    %    Storages - 
     %    Parallel - 
     %    AllBusDistances - Returns distance from each bus to parent EnergyMeter. Corresponds to sequence in AllBusNames.
     %    AllBusNames - Array of strings containing names of all buses in circuit (see AllNodeNames).
@@ -128,6 +129,8 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
         TSData
         Reactors
         ReduceCkt
+        Storages
+        Parallel
         AllBusDistances
         AllBusNames
         AllBusVmag
@@ -193,6 +196,8 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
             obj.TSData = DSS_MATLAB.ITSData(obj.apiutil);
             obj.Reactors = DSS_MATLAB.IReactors(obj.apiutil);
             obj.ReduceCkt = DSS_MATLAB.IReduceCkt(obj.apiutil);
+            obj.Storages = DSS_MATLAB.IStorages(obj.apiutil);
+            obj.Parallel = DSS_MATLAB.IParallel(obj.apiutil);
         end
 
         function result = Capacity(obj, Start, Increment)
@@ -311,7 +316,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
             if ischar(NameOrIdx) | isstring(NameOrIdx)
                 obj.SetActiveElement(NameOrIdx);
             elseif isinteger(NameOrIdx)
-                calllib('dss_capi_v7', 'Circuit_SetCktElementIndex', FullName);
+                calllib(obj.libname, 'Circuit_SetCktElementIndex', FullName);
                 obj.CheckForError();
             else
                 ME = MException(['DSS_MATLAB:Error'], 'Expected char, string or integer');

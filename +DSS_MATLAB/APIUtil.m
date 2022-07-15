@@ -29,10 +29,10 @@ classdef APIUtil < handle
             warning('off','all')
             try
                 % Try loading using the thunk file, if available
-                loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7);
+                loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi);
             catch 
                 % Try loading using the thunk file, otherwise use the dynamic version
-                loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_v7_no_thunk);
+                loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_no_thunk);
             end
             obj.libraryWasLoaded = 1;
             warning(orig_state);
@@ -108,6 +108,7 @@ classdef APIUtil < handle
             setdatatype(dataPointer.Value, 'int8Ptr', 1, countPointer.Value(1));
             result = dataPointer.Value;
             calllib(obj.libname, 'DSS_Dispose_PByte', dataPointer);
+            obj.CheckForError();
         end   
         
         function result = get_int32_array(obj, funcname, varargin)

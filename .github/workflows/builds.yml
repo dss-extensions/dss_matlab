@@ -1,0 +1,134 @@
+name: "Build packages"
+
+on: 
+  # release:
+  #   types: [created]
+  push:
+
+env:
+    DSS_CAPI_VERSION: '0.12.1'
+    DSS_MATLAB_VERSION: '0.12.1'
+
+jobs:
+  linux_x64:
+    runs-on: ubuntu-latest
+    env:
+      TRAVIS_JOB_NAME: "linux_x64"
+    steps:
+      - name: Install requirements
+        run: |
+          sudo apt-get install patchelf
+      - name: 'Checkout'
+        run: |
+          git clone $GITHUB_SERVER_URL/$GITHUB_REPOSITORY dss_matlab
+          cd dss_matlab
+          git checkout $GITHUB_SHA          
+      - name: Package
+        run: |
+          cd dss_matlab
+          wget "https://github.com/dss-extensions/dss_capi/releases/download/${DSS_CAPI_VERSION}/dss_capi_${DSS_CAPI_VERSION}_${TRAVIS_JOB_NAME}.tar.gz" -Odss_capi.tar.gz -q
+          tar zxf dss_capi.tar.gz
+          wget "https://github.com/dss-extensions/dss_capi/releases/download/${DSS_CAPI_VERSION}/messages.tar.gz" -Omessages.tar.gz -q
+          tar zxf messages.tar.gz
+          mkdir -p release/dss_matlab
+          cp -R "+DSS_MATLAB" "release/dss_matlab/+DSS_MATLAB"
+          mv messages "release/dss_matlab/+DSS_MATLAB/"
+          mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capi.so "release/dss_matlab/+DSS_MATLAB/dss_capi.so"
+          mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capid.so "release/dss_matlab/+DSS_MATLAB/dss_capid.so"
+          mv dss_capi/lib/${TRAVIS_JOB_NAME}/libklusolvex.so "release/dss_matlab/+DSS_MATLAB/"
+          mv dss_capi/LICENSE "release/dss_matlab/DSS_C-API_LICENSE"
+          mv dss_capi/*LICENSE "release/dss_matlab/"
+          mv LICENSE release/dss_matlab/
+          mv README.md release/dss_matlab/
+          mv examples release/dss_matlab/
+          cd "release/dss_matlab/+DSS_MATLAB"
+          patchelf --set-rpath '$ORIGIN/.' dss_capi.so
+          patchelf --set-rpath '$ORIGIN/.' dss_capid.so
+          cd ../..
+          tar zcf dss_matlab_v${DSS_MATLAB_VERSION}_${TRAVIS_JOB_NAME}.tar.gz dss_matlab
+          rm -rf dss_matlab
+          ls -l
+          cd ..
+      - name: 'Upload artifacts'
+        uses: "actions/upload-artifact@v2"
+        with:
+          name: 'packages'
+          path: '${{ github.workspace }}/dss_matlab/release'
+
+  win_x64:
+    runs-on: ubuntu-latest
+    env:
+      TRAVIS_JOB_NAME: "win_x64"
+    steps:
+      - name: 'Checkout'
+        run: |
+          git clone $GITHUB_SERVER_URL/$GITHUB_REPOSITORY dss_matlab
+          cd dss_matlab
+          git checkout $GITHUB_SHA          
+      - name: Package
+        run: |
+          cd dss_matlab
+          wget "https://github.com/dss-extensions/dss_capi/releases/download/${DSS_CAPI_VERSION}/dss_capi_${DSS_CAPI_VERSION}_${TRAVIS_JOB_NAME}.zip" -Odss_capi.zip -q
+          unzip dss_capi.zip
+          wget "https://github.com/dss-extensions/dss_capi/releases/download/${DSS_CAPI_VERSION}/messages.tar.gz" -Omessages.tar.gz -q
+          tar zxf messages.tar.gz
+          rm -f dss_capi/lib/${TRAVIS_JOB_NAME}/*_v8.dll
+          mkdir -p release/dss_matlab
+          cp -R "+DSS_MATLAB" "release/dss_matlab/+DSS_MATLAB"
+          mv messages "release/dss_matlab/+DSS_MATLAB/"
+          mv dss_capi/lib/${TRAVIS_JOB_NAME}/*.dll "release/dss_matlab/+DSS_MATLAB/"
+          mv dss_capi/LICENSE "release/dss_matlab/DSS_C-API_LICENSE"
+          mv dss_capi/*LICENSE "release/dss_matlab/"
+          mv LICENSE release/dss_matlab/
+          mv README.md release/dss_matlab/
+          mv examples release/dss_matlab/
+          cd release
+          zip -r dss_matlab_v${DSS_MATLAB_VERSION}_${TRAVIS_JOB_NAME}.zip dss_matlab
+          rm -rf dss_matlab
+          ls -l
+          cd ..
+      - name: 'Upload artifacts'
+        uses: "actions/upload-artifact@v2"
+        with:
+          name: 'packages'
+          path: '${{ github.workspace }}/dss_matlab/release'
+
+  darwin_x64:
+    runs-on: 'macos-12'
+    env:
+      TRAVIS_JOB_NAME: "darwin_x64"
+    steps:
+      - name: 'Checkout'
+        run: |
+          git clone $GITHUB_SERVER_URL/$GITHUB_REPOSITORY dss_matlab
+          cd dss_matlab
+          git checkout $GITHUB_SHA          
+      - name: Package
+        run: |
+          cd dss_matlab
+          wget "https://github.com/dss-extensions/dss_capi/releases/download/${DSS_CAPI_VERSION}/dss_capi_${DSS_CAPI_VERSION}_${TRAVIS_JOB_NAME}.tar.gz" -Odss_capi.tar.gz -q
+          tar zxf dss_capi.tar.gz
+          wget "https://github.com/dss-extensions/dss_capi/releases/download/${DSS_CAPI_VERSION}/messages.tar.gz" -Omessages.tar.gz -q
+          tar zxf messages.tar.gz
+          mkdir -p release/dss_matlab
+          cp -R "+DSS_MATLAB" "release/dss_matlab/+DSS_MATLAB"
+          mv messages "release/dss_matlab/+DSS_MATLAB/"
+          mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capi.dylib "release/dss_matlab/+DSS_MATLAB/dss_capi.dylib"
+          mv dss_capi/lib/${TRAVIS_JOB_NAME}/libdss_capid.dylib "release/dss_matlab/+DSS_MATLAB/dss_capid.dylib"
+          mv dss_capi/lib/${TRAVIS_JOB_NAME}/libklusolvex.dylib "release/dss_matlab/+DSS_MATLAB/"
+          mv dss_capi/LICENSE "release/dss_matlab/DSS_C-API_LICENSE"
+          mv dss_capi/*LICENSE "release/dss_matlab/"
+          mv LICENSE release/dss_matlab/
+          mv README.md release/dss_matlab/
+          mv examples release/dss_matlab/
+          cd release
+          tar zcf dss_matlab_v${DSS_MATLAB_VERSION}_macos_x64.tar.gz dss_matlab
+          rm -rf dss_matlab
+          ls -l
+          cd ..
+      - name: 'Upload artifacts'
+        uses: "actions/upload-artifact@v2"
+        with:
+          name: 'packages'
+          path: '${{ github.workspace }}/dss_matlab/release'
+

@@ -22,14 +22,21 @@ Related projects:
 - [`OpenDSSDirect.jl`](http://github.com/dss-extensions/OpenDSSDirect.jl): Julia bindings to DSS C-API (originally based on the DCSL/OpenDSSDirect.DLL).
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
-Version 0.12.0, **STILL TO BE RELEASED**, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project uses the [DSS C-API library version 0.12.0](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md#version-0120), based on OpenDSS revision 3460 (few commits after OpenDSS v9.4.1.2).
+Version 0.12.1, released on 2022-07-16, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project uses the [DSS C-API library version 0.12.1](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md#version-0121), based on OpenDSS revision 3460 (few commits after OpenDSS v9.4.1.2).
 
-## Highlights from 0.12.0
-
-
-- **TODO**
+## Highlights from 0.12.1
 
 - `Parallel` API is now supported. Diakoptics and a few corner features are still disabled (under reimplementation).
+
+- `Storage` API added.
+
+- Support for ZIP files
+
+- Several new functions across the different classes
+
+- Initial support for exporting JSON data
+
+- Better error messages
 
 - A reference document listing the DSS commands and properties for all DSS elements is now available at https://github.com/dss-extensions/dss_capi/blob/master/docs/dss_properties.md
 

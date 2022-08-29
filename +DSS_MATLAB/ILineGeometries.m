@@ -80,7 +80,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all LineGeometrie names
-            result = obj.apiutil.get_string_array('ctx_LineGeometries_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_LineGeometries_Get_AllNames');
         end
 
         function result = get.Count(obj)
@@ -119,7 +119,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
 
         function result = get.Conductors(obj)
             % (read-only) Array of strings with names of all conductors in the active LineGeometry object
-            result = obj.apiutil.get_string_array('ctx_LineGeometries_Get_Conductors', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_LineGeometries_Get_Conductors');
             obj.CheckForError();
         end
 

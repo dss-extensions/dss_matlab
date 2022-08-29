@@ -34,7 +34,7 @@ classdef (CaseInsensitiveProperties) IISources < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all ISource names
-            result = obj.apiutil.get_string_array('ctx_ISources_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_ISources_Get_AllNames');
         end
 
         function result = get.Count(obj)

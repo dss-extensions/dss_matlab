@@ -350,7 +350,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.AllBusNames(obj)
             % (read-only) Array of strings containing names of all buses in circuit (see AllNodeNames).
-            result = obj.apiutil.get_string_array('ctx_Circuit_Get_AllBusNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Circuit_Get_AllBusNames');
             obj.CheckForError();
         end
 
@@ -384,7 +384,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.AllElementNames(obj)
             % (read-only) Array of strings containing Full Name of all elements.
-            result = obj.apiutil.get_string_array('ctx_Circuit_Get_AllElementNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Circuit_Get_AllElementNames');
             obj.CheckForError();
         end
 
@@ -397,7 +397,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.AllNodeNames(obj)
             % (read-only) Array of strings containing full name of each node in system in same order as returned by AllBusVolts, etc.
-            result = obj.apiutil.get_string_array('ctx_Circuit_Get_AllNodeNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Circuit_Get_AllNodeNames');
             obj.CheckForError();
         end
 
@@ -477,7 +477,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = get.YNodeOrder(obj)
             % (read-only) Array of strings containing the names of the nodes in the same order as the Y matrix
-            result = obj.apiutil.get_string_array('ctx_Circuit_Get_YNodeOrder', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Circuit_Get_YNodeOrder');
             obj.CheckForError();
         end
 

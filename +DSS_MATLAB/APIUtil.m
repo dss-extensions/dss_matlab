@@ -122,7 +122,7 @@ classdef APIUtil < handle
         function result = get_string_array(obj, funcname, varargin)
             dataPointer = libpointer('voidPtr', 0);
             countPointer = libpointer('int32Ptr', [0, 0]);
-            calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
+            calllib(obj.libname, funcname, obj.dssctx, dataPointer, countPointer, varargin{:});
             result = cell(countPointer.Value(1), 1);
             for i=1:countPointer.Value(1)
                 result(i) = cellstr(calllib(obj.libname, 'DSS_Get_PAnsiChar', dataPointer, i - 1));
@@ -130,34 +130,34 @@ classdef APIUtil < handle
             calllib(obj.libname, 'DSS_Dispose_PPAnsiChar', dataPointer, countPointer.Value(2));
         end
    
-        function result = get_int8_array(obj, funcname, varargin)
-            dataPointer = libpointer('int8PtrPtr');
-            countPointer = libpointer('int32Ptr', [0, 0]);
-            calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
-            dataPointer.Value
-            setdatatype(dataPointer.Value, 'int8Ptr', 1, countPointer.Value(1));
-            result = dataPointer.Value;
-            calllib(obj.libname, 'DSS_Dispose_PByte', dataPointer);
-            obj.CheckForError();
-        end   
+        % function result = get_int8_array(obj, funcname, varargin)
+        %     dataPointer = libpointer('int8PtrPtr');
+        %     countPointer = libpointer('int32Ptr', [0, 0]);
+        %     calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
+        %     dataPointer.Value
+        %     setdatatype(dataPointer.Value, 'int8Ptr', 1, countPointer.Value(1));
+        %     result = dataPointer.Value;
+        %     calllib(obj.libname, 'DSS_Dispose_PByte', dataPointer);
+        %     obj.CheckForError();
+        % end   
         
-        function result = get_int32_array(obj, funcname, varargin)
-            dataPointer = libpointer('int32PtrPtr');
-            countPointer = libpointer('int32Ptr', [0, 0]);
-            calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
-            setdatatype(dataPointer.Value, 'int32Ptr', 1, countPointer.Value(1));
-            result = dataPointer.Value;
-            calllib(obj.libname, 'DSS_Dispose_PInteger', dataPointer);
-        end
+        % function result = get_int32_array(obj, funcname, varargin)
+        %     dataPointer = libpointer('int32PtrPtr');
+        %     countPointer = libpointer('int32Ptr', [0, 0]);
+        %     calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
+        %     setdatatype(dataPointer.Value, 'int32Ptr', 1, countPointer.Value(1));
+        %     result = dataPointer.Value;
+        %     calllib(obj.libname, 'DSS_Dispose_PInteger', dataPointer);
+        % end
    
-        function result = get_float64_array(obj, funcname, varargin)
-            dataPointer = libpointer('doublePtrPtr');
-            countPointer = libpointer('int32Ptr', [0, 0]);
-            calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
-            setdatatype(dataPointer.Value, 'doublePtr', 1, countPointer.Value(1));
-            result = dataPointer.Value;
-            calllib(obj.libname, 'DSS_Dispose_PDouble', dataPointer);
-        end
+        % function result = get_float64_array(obj, funcname, varargin)
+        %     dataPointer = libpointer('doublePtrPtr');
+        %     countPointer = libpointer('int32Ptr', [0, 0]);
+        %     calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
+        %     setdatatype(dataPointer.Value, 'doublePtr', 1, countPointer.Value(1));
+        %     result = dataPointer.Value;
+        %     calllib(obj.libname, 'DSS_Dispose_PDouble', dataPointer);
+        % end
    
     end
 end

@@ -42,7 +42,7 @@ classdef (CaseInsensitiveProperties) IDSSElement < DSS_MATLAB.Base
 
         function result = get.AllPropertyNames(obj)
             % (read-only) Array of strings containing the names of all properties for the active DSS object.
-            result = obj.apiutil.get_string_array('ctx_DSSElement_Get_AllPropertyNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_DSSElement_Get_AllPropertyNames');
             obj.CheckForError();
         end
 

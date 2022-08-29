@@ -58,7 +58,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all PVSystem names
-            result = obj.apiutil.get_string_array('ctx_PVSystems_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_PVSystems_Get_AllNames');
         end
 
         function result = get.Count(obj)
@@ -117,7 +117,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
 
         function result = get.RegisterNames(obj)
             % (read-only) Array of PVSYSTEM energy meter register names
-            result = obj.apiutil.get_string_array('ctx_PVSystems_Get_RegisterNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_PVSystems_Get_RegisterNames');
             obj.CheckForError();
         end
 

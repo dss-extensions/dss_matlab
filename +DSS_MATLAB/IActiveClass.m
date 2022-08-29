@@ -57,7 +57,7 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % (read-only) Array of strings consisting of all element names in the active class.
-            result = obj.apiutil.get_string_array('ctx_ActiveClass_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_ActiveClass_Get_AllNames');
             obj.CheckForError();
         end
 

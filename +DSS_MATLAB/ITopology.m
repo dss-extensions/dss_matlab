@@ -64,19 +64,19 @@ classdef (CaseInsensitiveProperties) ITopology < DSS_MATLAB.Base
 
         function result = get.AllIsolatedBranches(obj)
             % (read-only) Array of all isolated branch names.
-            result = obj.apiutil.get_string_array('ctx_Topology_Get_AllIsolatedBranches', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Topology_Get_AllIsolatedBranches');
             obj.CheckForError();
         end
 
         function result = get.AllIsolatedLoads(obj)
             % (read-only) Array of all isolated load names.
-            result = obj.apiutil.get_string_array('ctx_Topology_Get_AllIsolatedLoads', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Topology_Get_AllIsolatedLoads');
             obj.CheckForError();
         end
 
         function result = get.AllLoopedPairs(obj)
             % (read-only) Array of all looped element names, by pairs.
-            result = obj.apiutil.get_string_array('ctx_Topology_Get_AllLoopedPairs', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Topology_Get_AllLoopedPairs');
             obj.CheckForError();
         end
 

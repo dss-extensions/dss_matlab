@@ -50,7 +50,7 @@ classdef (CaseInsensitiveProperties) ISwtControls < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all SwtControl names
-            result = obj.apiutil.get_string_array('ctx_SwtControls_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_SwtControls_Get_AllNames');
         end
 
         function result = get.Count(obj)

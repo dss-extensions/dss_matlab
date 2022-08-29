@@ -38,7 +38,7 @@ classdef (CaseInsensitiveProperties) IVsources < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Vsource names
-            result = obj.apiutil.get_string_array('ctx_Vsources_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Vsources_Get_AllNames');
         end
 
         function result = get.Count(obj)

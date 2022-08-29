@@ -258,7 +258,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Array of strings consisting of all PD element names.
             % 
             % (API Extension)
-            result = obj.apiutil.get_string_array('ctx_PDElements_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_PDElements_Get_AllNames');
             obj.CheckForError();
         end
 

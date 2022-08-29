@@ -175,13 +175,13 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
         function result = get.AllPropertyNames(obj)
             % (read-only) Array containing all property names of the active device.
-            result = obj.apiutil.get_string_array('ctx_CktElement_Get_AllPropertyNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_CktElement_Get_AllPropertyNames');
             obj.CheckForError();
         end
 
         function result = get.AllVariableNames(obj)
             % (read-only) Array of strings listing all the published variable names, if a PCElement. Otherwise, null string.
-            result = obj.apiutil.get_string_array('ctx_CktElement_Get_AllVariableNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_CktElement_Get_AllVariableNames');
             obj.CheckForError();
         end
 
@@ -194,7 +194,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
 
         function result = get.BusNames(obj)
             % Array of strings. Get  Bus definitions to which each terminal is connected. 0-based array.
-            result = obj.apiutil.get_string_array('ctx_CktElement_Get_BusNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_CktElement_Get_BusNames');
             obj.CheckForError();
         end
         function obj = set.BusNames(obj, Value)

@@ -68,7 +68,7 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Generator names
-            result = obj.apiutil.get_string_array('ctx_Generators_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Generators_Get_AllNames');
         end
 
         function result = get.Count(obj)
@@ -147,7 +147,7 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
 
         function result = get.RegisterNames(obj)
             % (read-only) Array of Names of all generator energy meter registers
-            result = obj.apiutil.get_string_array('ctx_Generators_Get_RegisterNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Generators_Get_RegisterNames');
             obj.CheckForError();
         end
 

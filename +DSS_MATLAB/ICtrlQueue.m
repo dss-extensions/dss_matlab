@@ -93,7 +93,7 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
 
         function result = get.Queue(obj)
             % (read-only) Array of strings containing the entire queue in CSV format
-            result = obj.apiutil.get_string_array('ctx_CtrlQueue_Get_Queue', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_CtrlQueue_Get_Queue');
             obj.CheckForError();
         end
 

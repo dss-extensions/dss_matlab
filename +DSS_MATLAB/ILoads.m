@@ -98,7 +98,7 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Load names
-            result = obj.apiutil.get_string_array('ctx_Loads_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Loads_Get_AllNames');
         end
 
         function result = get.Count(obj)

@@ -126,7 +126,7 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
 
         function result = get.Classes(obj)
             % (read-only) List of DSS intrinsic classes (names of the classes)
-            result = obj.apiutil.get_string_array('ctx_DSS_Get_Classes', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_DSS_Get_Classes');
             obj.CheckForError();
         end
 
@@ -166,7 +166,7 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
 
         function result = get.UserClasses(obj)
             % (read-only) List of user-defined classes
-            result = obj.apiutil.get_string_array('ctx_DSS_Get_UserClasses', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_DSS_Get_UserClasses');
             obj.CheckForError();
         end
 

@@ -301,19 +301,19 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
 
         function result = get.LoadList(obj)
             % List of strings: Full Names of LOAD elements connected to the active bus.
-            result = obj.apiutil.get_string_array('ctx_Bus_Get_LoadList', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Bus_Get_LoadList');
             obj.CheckForError();
         end
 
         function result = get.LineList(obj)
             % List of strings: Full Names of LINE elements connected to the active bus.
-            result = obj.apiutil.get_string_array('ctx_Bus_Get_LineList', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Bus_Get_LineList');
             obj.CheckForError();
         end
 
         function result = get.AllPCEatBus(obj)
             % Returns an array with the names of all PCE connected to the active bus
-            result = obj.apiutil.get_string_array('ctx_Bus_Get_AllPCEatBus', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Bus_Get_AllPCEatBus');
             obj.CheckForError();
             if (~isempty(result))
                 result{end + 1} = '';
@@ -324,7 +324,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
 
         function result = get.AllPDEatBus(obj)
             % Returns an array with the names of all PDE connected to the active bus
-            result = obj.apiutil.get_string_array('ctx_Bus_Get_AllPDEatBus', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Bus_Get_AllPDEatBus');
             obj.CheckForError();
             if (~isempty(result))
                 result{end + 1} = '';

@@ -49,7 +49,9 @@ classdef (CaseInsensitiveProperties) IZIP < DSS_MATLAB.Base
             % Returns a byte-string.
             % 
             % (API Extension)
-            result = obj.apiutil.get_int8_array('ctx_ZIP_Extract_GR', obj.dssctx, FileName);
+            calllib(obj.libname, 'ctx_ZIP_Extract_GR', obj.dssctx, FileName);
+            obj.CheckForError();
+            result = obj.apiutil.get_int8_gr_array();
         end
 
         function result = List(obj, regexp)

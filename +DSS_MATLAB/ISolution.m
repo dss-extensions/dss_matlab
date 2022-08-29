@@ -295,7 +295,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
 
         function result = get.EventLog(obj)
             % (read-only) Array of strings containing the Event Log
-            result = obj.apiutil.get_string_array('ctx_Solution_Get_EventLog', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Solution_Get_EventLog');
             obj.CheckForError();
         end
 
@@ -592,12 +592,12 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.IncMatrixCols(obj)
-            result = obj.apiutil.get_string_array('ctx_Solution_Get_IncMatrixCols', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Solution_Get_IncMatrixCols');
             obj.CheckForError();
         end
 
         function result = get.IncMatrixRows(obj)
-            result = obj.apiutil.get_string_array('ctx_Solution_Get_IncMatrixRows', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Solution_Get_IncMatrixRows');
             obj.CheckForError();
         end
 

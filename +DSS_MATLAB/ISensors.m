@@ -64,7 +64,7 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Sensor names
-            result = obj.apiutil.get_string_array('ctx_Sensors_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Sensors_Get_AllNames');
         end
 
         function result = get.Count(obj)

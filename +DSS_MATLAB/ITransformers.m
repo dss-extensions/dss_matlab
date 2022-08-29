@@ -74,7 +74,7 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Transformer names
-            result = obj.apiutil.get_string_array('ctx_Transformers_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Transformers_Get_AllNames');
         end
 
         function result = get.Count(obj)

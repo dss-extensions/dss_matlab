@@ -36,7 +36,7 @@ classdef (CaseInsensitiveProperties) IStorages < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Storage names
-            result = obj.apiutil.get_string_array('ctx_Storages_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Storages_Get_AllNames');
         end
 
         function result = get.Count(obj)
@@ -97,7 +97,7 @@ classdef (CaseInsensitiveProperties) IStorages < DSS_MATLAB.Base
 
         function result = get.RegisterNames(obj)
             % Array of Names of all Storage energy meter registers
-            result = obj.apiutil.get_string_array('ctx_Storages_Get_RegisterNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Storages_Get_RegisterNames');
             obj.CheckForError();
         end
 

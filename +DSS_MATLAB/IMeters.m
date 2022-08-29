@@ -150,7 +150,7 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Meter names
-            result = obj.apiutil.get_string_array('ctx_Meters_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_AllNames');
         end
 
         function result = get.Count(obj)
@@ -189,13 +189,13 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.AllBranchesInZone(obj)
             % (read-only) Wide string list of all branches in zone of the active energymeter object.
-            result = obj.apiutil.get_string_array('ctx_Meters_Get_AllBranchesInZone', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_AllBranchesInZone');
             obj.CheckForError();
         end
 
         function result = get.AllEndElements(obj)
             % (read-only) Array of names of all zone end elements.
-            result = obj.apiutil.get_string_array('ctx_Meters_Get_AllEndElements', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_AllEndElements');
             obj.CheckForError();
         end
 
@@ -314,7 +314,7 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.RegisterNames(obj)
             % (read-only) Array of strings containing the names of the registers.
-            result = obj.apiutil.get_string_array('ctx_Meters_Get_RegisterNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_RegisterNames');
             obj.CheckForError();
         end
 
@@ -392,7 +392,7 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.ZonePCE(obj)
             % Returns the list of all PCE within the area covered by the energy meter
-            result = obj.apiutil.get_string_array('ctx_Meters_Get_ZonePCE', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_ZonePCE');
             obj.CheckForError();
             if (~result)
                 result = {};

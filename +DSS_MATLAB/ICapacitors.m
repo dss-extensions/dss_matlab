@@ -66,7 +66,7 @@ classdef (CaseInsensitiveProperties) ICapacitors < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Capacitor names
-            result = obj.apiutil.get_string_array('ctx_Capacitors_Get_AllNames', obj.dssctx);
+            result = obj.apiutil.get_string_array('ctx_Capacitors_Get_AllNames');
         end
 
         function result = get.Count(obj)

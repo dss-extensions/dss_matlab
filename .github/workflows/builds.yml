@@ -7,7 +7,7 @@ on:
 
 env:
     DSS_CAPI_VERSION: '0.12.1'
-    DSS_MATLAB_VERSION: '0.12.1'
+    DSS_MATLAB_VERSION: '0.12.2'
 
 jobs:
   linux_x64:

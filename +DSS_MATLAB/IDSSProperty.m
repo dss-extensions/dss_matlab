@@ -22,22 +22,22 @@ classdef (CaseInsensitiveProperties) IDSSProperty < DSS_MATLAB.Base
 
         function result = get.Description(obj)
             % (read-only) Description of the property.
-            result = calllib(obj.libname, 'DSSProperty_Get_Description');
+            result = calllib(obj.libname, 'ctx_DSSProperty_Get_Description', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Name(obj)
             % (read-only) Name of Property
-            result = calllib(obj.libname, 'DSSProperty_Get_Name');
+            result = calllib(obj.libname, 'ctx_DSSProperty_Get_Name', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Val(obj)
-            result = calllib(obj.libname, 'DSSProperty_Get_Val');
+            result = calllib(obj.libname, 'ctx_DSSProperty_Get_Val', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Val(obj, Value)
-            calllib(obj.libname, 'DSSProperty_Set_Val', Value);
+            calllib(obj.libname, 'ctx_DSSProperty_Set_Val', obj.dssctx, Value);
             obj.CheckForError();
         end
     end

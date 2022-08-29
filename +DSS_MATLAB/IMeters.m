@@ -96,52 +96,52 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
         end
 
         function obj = CloseAllDIFiles(obj)
-            calllib(obj.libname, 'Meters_CloseAllDIFiles');
+            calllib(obj.libname, 'ctx_Meters_CloseAllDIFiles', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = DoReliabilityCalc(obj, AssumeRestoration)
-            calllib(obj.libname, 'Meters_DoReliabilityCalc', AssumeRestoration);
+            calllib(obj.libname, 'ctx_Meters_DoReliabilityCalc', obj.dssctx, AssumeRestoration);
             obj.CheckForError();
         end
 
         function obj = OpenAllDIFiles(obj)
-            calllib(obj.libname, 'Meters_OpenAllDIFiles');
+            calllib(obj.libname, 'ctx_Meters_OpenAllDIFiles', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = Reset(obj)
-            calllib(obj.libname, 'Meters_Reset');
+            calllib(obj.libname, 'ctx_Meters_Reset', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = ResetAll(obj)
-            calllib(obj.libname, 'Meters_ResetAll');
+            calllib(obj.libname, 'ctx_Meters_ResetAll', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = Sample(obj)
-            calllib(obj.libname, 'Meters_Sample');
+            calllib(obj.libname, 'ctx_Meters_Sample', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = SampleAll(obj)
-            calllib(obj.libname, 'Meters_SampleAll');
+            calllib(obj.libname, 'ctx_Meters_SampleAll', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = Save(obj)
-            calllib(obj.libname, 'Meters_Save');
+            calllib(obj.libname, 'ctx_Meters_Save', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = SaveAll(obj)
-            calllib(obj.libname, 'Meters_SaveAll');
+            calllib(obj.libname, 'ctx_Meters_SaveAll', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = SetActiveSection(obj, SectIdx)
-            calllib(obj.libname, 'Meters_SetActiveSection', SectIdx);
+            calllib(obj.libname, 'ctx_Meters_SetActiveSection', obj.dssctx, SectIdx);
             obj.CheckForError();
         end
 
@@ -150,254 +150,253 @@ classdef (CaseInsensitiveProperties) IMeters < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Meter names
-            result = obj.apiutil.get_string_array('Meters_Get_AllNames');
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_AllNames', obj.dssctx);
         end
 
         function result = get.Count(obj)
             % Number of Meter objects
-            result = calllib(obj.libname, 'Meters_Get_Count');
+            result = calllib(obj.libname, 'ctx_Meters_Get_Count', obj.dssctx);
         end
 
         function result = get.First(obj)
             % Set first object of Meter; returns 0 if none.
-            result = calllib(obj.libname, 'Meters_Get_First');
+            result = calllib(obj.libname, 'ctx_Meters_Get_First', obj.dssctx);
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Meter
-            result = calllib(obj.libname, 'Meters_Get_Name');
+            result = calllib(obj.libname, 'ctx_Meters_Get_Name', obj.dssctx);
         end
         function obj = set.Name(obj, Value)
-            calllib(obj.libname, 'Meters_Set_Name', Value);
+            calllib(obj.libname, 'ctx_Meters_Set_Name', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Meter active; returns 0 if no more.
-            result = calllib(obj.libname, 'Meters_Get_Next');
+            result = calllib(obj.libname, 'ctx_Meters_Get_Next', obj.dssctx);
         end
 
         function result = get.idx(obj)
             % Get/set active Meter by index;  1..Count
-            result = calllib(obj.libname, 'Meters_Get_idx');
+            result = calllib(obj.libname, 'ctx_Meters_Get_idx', obj.dssctx);
         end
         function obj = set.idx(obj, Value)
-            calllib(obj.libname, 'Meters_Set_idx', Value);
+            calllib(obj.libname, 'ctx_Meters_Set_idx', obj.dssctx, Value);
             obj.CheckForError();
         end
 
 
         function result = get.AllBranchesInZone(obj)
             % (read-only) Wide string list of all branches in zone of the active energymeter object.
-            result = obj.apiutil.get_string_array('Meters_Get_AllBranchesInZone');
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_AllBranchesInZone', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.AllEndElements(obj)
             % (read-only) Array of names of all zone end elements.
-            result = obj.apiutil.get_string_array('Meters_Get_AllEndElements');
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_AllEndElements', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.AllocFactors(obj)
             % Array of doubles: set the phase allocation factors for the active meter.
-            calllib(obj.libname, 'Meters_Get_AllocFactors_GR');
+            calllib(obj.libname, 'ctx_Meters_Get_AllocFactors_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.AllocFactors(obj, Value)
-            calllib(obj.libname, 'Meters_Set_AllocFactors', Value, numel(Value));
+            calllib(obj.libname, 'ctx_Meters_Set_AllocFactors', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.AvgRepairTime(obj)
             % (read-only) Average Repair time in this section of the meter zone
-            result = calllib(obj.libname, 'Meters_Get_AvgRepairTime');
+            result = calllib(obj.libname, 'ctx_Meters_Get_AvgRepairTime', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.CalcCurrent(obj)
             % Set the magnitude of the real part of the Calculated Current (normally determined by solution) for the Meter to force some behavior on Load Allocation
-            calllib(obj.libname, 'Meters_Get_CalcCurrent_GR');
+            calllib(obj.libname, 'ctx_Meters_Get_CalcCurrent_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.CalcCurrent(obj, Value)
-            calllib(obj.libname, 'Meters_Set_CalcCurrent', Value, numel(Value));
+            calllib(obj.libname, 'ctx_Meters_Set_CalcCurrent', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.CountBranches(obj)
             % (read-only) Number of branches in Active energymeter zone. (Same as sequencelist size)
-            result = calllib(obj.libname, 'Meters_Get_CountBranches');
+            result = calllib(obj.libname, 'ctx_Meters_Get_CountBranches', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.CountEndElements(obj)
             % (read-only) Number of zone end elements in the active meter zone.
-            result = calllib(obj.libname, 'Meters_Get_CountEndElements');
+            result = calllib(obj.libname, 'ctx_Meters_Get_CountEndElements', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.CustInterrupts(obj)
             % (read-only) Total customer interruptions for this Meter zone based on reliability calcs.
-            result = calllib(obj.libname, 'Meters_Get_CustInterrupts');
+            result = calllib(obj.libname, 'ctx_Meters_Get_CustInterrupts', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.DIFilesAreOpen(obj)
             % (read-only) Global Flag in the DSS to indicate if Demand Interval (DI) files have been properly opened.
-            result = (calllib(obj.libname, 'Meters_Get_DIFilesAreOpen') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Meters_Get_DIFilesAreOpen', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
 
         function result = get.FaultRateXRepairHrs(obj)
             % (read-only) Sum of Fault Rate time Repair Hrs in this section of the meter zone
-            result = calllib(obj.libname, 'Meters_Get_FaultRateXRepairHrs');
+            result = calllib(obj.libname, 'ctx_Meters_Get_FaultRateXRepairHrs', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.MeteredElement(obj)
             % Set Name of metered element
-            result = calllib(obj.libname, 'Meters_Get_MeteredElement');
+            result = calllib(obj.libname, 'ctx_Meters_Get_MeteredElement', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.MeteredElement(obj, Value)
-            calllib(obj.libname, 'Meters_Set_MeteredElement', Value);
+            calllib(obj.libname, 'ctx_Meters_Set_MeteredElement', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.MeteredTerminal(obj)
             % set Number of Metered Terminal
-            result = calllib(obj.libname, 'Meters_Get_MeteredTerminal');
+            result = calllib(obj.libname, 'ctx_Meters_Get_MeteredTerminal', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.MeteredTerminal(obj, Value)
-            calllib(obj.libname, 'Meters_Set_MeteredTerminal', Value);
+            calllib(obj.libname, 'ctx_Meters_Set_MeteredTerminal', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.NumSectionBranches(obj)
             % (read-only) Number of branches (lines) in this section
-            result = calllib(obj.libname, 'Meters_Get_NumSectionBranches');
+            result = calllib(obj.libname, 'ctx_Meters_Get_NumSectionBranches', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumSectionCustomers(obj)
             % (read-only) Number of Customers in the active section.
-            result = calllib(obj.libname, 'Meters_Get_NumSectionCustomers');
+            result = calllib(obj.libname, 'ctx_Meters_Get_NumSectionCustomers', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumSections(obj)
             % (read-only) Number of feeder sections in this meter's zone
-            result = calllib(obj.libname, 'Meters_Get_NumSections');
+            result = calllib(obj.libname, 'ctx_Meters_Get_NumSections', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.OCPDeviceType(obj)
             % (read-only) Type of OCP device. 1=Fuse; 2=Recloser; 3=Relay
-            result = calllib(obj.libname, 'Meters_Get_OCPDeviceType');
+            result = calllib(obj.libname, 'ctx_Meters_Get_OCPDeviceType', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Peakcurrent(obj)
             % Array of doubles to set values of Peak Current property
-            calllib(obj.libname, 'Meters_Get_Peakcurrent_GR');
+            calllib(obj.libname, 'ctx_Meters_Get_Peakcurrent_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Peakcurrent(obj, Value)
-            calllib(obj.libname, 'Meters_Set_Peakcurrent', Value, numel(Value));
+            calllib(obj.libname, 'ctx_Meters_Set_Peakcurrent', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.RegisterNames(obj)
             % (read-only) Array of strings containing the names of the registers.
-            result = obj.apiutil.get_string_array('Meters_Get_RegisterNames');
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_RegisterNames', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.RegisterValues(obj)
             % (read-only) Array of all the values contained in the Meter registers for the active Meter.
-            calllib(obj.libname, 'Meters_Get_RegisterValues_GR');
+            calllib(obj.libname, 'ctx_Meters_Get_RegisterValues_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SAIDI(obj)
             % (read-only) SAIDI for this meter's zone. Execute DoReliabilityCalc first.
-            result = calllib(obj.libname, 'Meters_Get_SAIDI');
+            result = calllib(obj.libname, 'ctx_Meters_Get_SAIDI', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.SAIFI(obj)
             % (read-only) Returns SAIFI for this meter's Zone. Execute Reliability Calc method first.
-            result = calllib(obj.libname, 'Meters_Get_SAIFI');
+            result = calllib(obj.libname, 'ctx_Meters_Get_SAIFI', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.SAIFIKW(obj)
             % (read-only) SAIFI based on kW rather than number of customers. Get after reliability calcs.
-            result = calllib(obj.libname, 'Meters_Get_SAIFIKW');
+            result = calllib(obj.libname, 'ctx_Meters_Get_SAIFIKW', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.SectSeqIdx(obj)
             % (read-only) SequenceIndex of the branch at the head of this section
-            result = calllib(obj.libname, 'Meters_Get_SectSeqIdx');
+            result = calllib(obj.libname, 'ctx_Meters_Get_SectSeqIdx', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.SectTotalCust(obj)
             % (read-only) Total Customers downline from this section
-            result = calllib(obj.libname, 'Meters_Get_SectTotalCust');
+            result = calllib(obj.libname, 'ctx_Meters_Get_SectTotalCust', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.SeqListSize(obj)
             % (read-only) Size of Sequence List
-            result = calllib(obj.libname, 'Meters_Get_SeqListSize');
+            result = calllib(obj.libname, 'ctx_Meters_Get_SeqListSize', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.SequenceIndex(obj)
             % Get/set Index into Meter's SequenceList that contains branch pointers in lexical order. Earlier index guaranteed to be upline from later index. Sets PDelement active.
-            result = calllib(obj.libname, 'Meters_Get_SequenceIndex');
+            result = calllib(obj.libname, 'ctx_Meters_Get_SequenceIndex', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.SequenceIndex(obj, Value)
-            calllib(obj.libname, 'Meters_Set_SequenceIndex', Value);
+            calllib(obj.libname, 'ctx_Meters_Set_SequenceIndex', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.SumBranchFltRates(obj)
             % (read-only) Sum of the branch fault rates in this section of the meter's zone
-            result = calllib(obj.libname, 'Meters_Get_SumBranchFltRates');
+            result = calllib(obj.libname, 'ctx_Meters_Get_SumBranchFltRates', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.TotalCustomers(obj)
             % (read-only) Total Number of customers in this zone (downline from the EnergyMeter)
-            result = calllib(obj.libname, 'Meters_Get_TotalCustomers');
+            result = calllib(obj.libname, 'ctx_Meters_Get_TotalCustomers', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Totals(obj)
             % (read-only) Totals of all registers of all meters
-            calllib(obj.libname, 'Meters_Get_Totals_GR');
+            calllib(obj.libname, 'ctx_Meters_Get_Totals_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.ZonePCE(obj)
             % Returns the list of all PCE within the area covered by the energy meter
-            result = obj.apiutil.get_string_array('Meters_Get_ZonePCE');
+            result = obj.apiutil.get_string_array('ctx_Meters_Get_ZonePCE', obj.dssctx);
             obj.CheckForError();
             if (~result)
                 result = {};
             end
-            result = result;
         end
     end
 end

@@ -21,7 +21,7 @@ classdef (CaseInsensitiveProperties) IZIP < DSS_MATLAB.Base
             % The limitations should be removed in a future revision.
             % 
             % (API Extension)
-            calllib(obj.libname, 'ZIP_Open', FileName);
+            calllib(obj.libname, 'ctx_ZIP_Open', obj.dssctx, FileName);
             obj.CheckForError();
         end
 
@@ -29,7 +29,7 @@ classdef (CaseInsensitiveProperties) IZIP < DSS_MATLAB.Base
             % Closes the current open ZIP file
             % 
             % (API Extension)
-            calllib(obj.libname, 'ZIP_Close');
+            calllib(obj.libname, 'ctx_ZIP_Close', obj.dssctx);
             obj.CheckForError();
         end
 
@@ -40,7 +40,7 @@ classdef (CaseInsensitiveProperties) IZIP < DSS_MATLAB.Base
             % memory-mapped files.
             % 
             % (API Extension)
-            calllib(obj.libname, 'ZIP_Redirect', FileInZip);
+            calllib(obj.libname, 'ctx_ZIP_Redirect', obj.dssctx, FileInZip);
             obj.CheckForError();
         end
 
@@ -49,7 +49,7 @@ classdef (CaseInsensitiveProperties) IZIP < DSS_MATLAB.Base
             % Returns a byte-string.
             % 
             % (API Extension)
-            result = obj.apiutil.get_int8_array('ZIP_Extract_GR', FileName);
+            result = obj.apiutil.get_int8_array('ctx_ZIP_Extract_GR', obj.dssctx, FileName);
         end
 
         function result = List(obj, regexp)
@@ -63,7 +63,7 @@ classdef (CaseInsensitiveProperties) IZIP < DSS_MATLAB.Base
             if ~exist('regexp', 'var')
                 regexp = [];
             end
-            result = obj.apiutil.get_string_array('ZIP_List', regexp);
+            result = obj.apiutil.get_string_array('ctx_ZIP_List', obj.dssctx, regexp);
             obj.CheckForError();
         end
 
@@ -71,7 +71,7 @@ classdef (CaseInsensitiveProperties) IZIP < DSS_MATLAB.Base
             % Check if the given path name is present in the current ZIP file.
             % 
             % (API Extension)
-            result = (calllib(obj.libname, 'ZIP_Contains', Name) ~= 0);
+            result = (calllib(obj.libname, 'ctx_ZIP_Contains', obj.dssctx, Name) ~= 0);
             obj.CheckForError();
         end
     end

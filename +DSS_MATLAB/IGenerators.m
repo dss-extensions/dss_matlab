@@ -68,153 +68,153 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Generator names
-            result = obj.apiutil.get_string_array('Generators_Get_AllNames');
+            result = obj.apiutil.get_string_array('ctx_Generators_Get_AllNames', obj.dssctx);
         end
 
         function result = get.Count(obj)
             % Number of Generator objects
-            result = calllib(obj.libname, 'Generators_Get_Count');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Count', obj.dssctx);
         end
 
         function result = get.First(obj)
             % Set first object of Generator; returns 0 if none.
-            result = calllib(obj.libname, 'Generators_Get_First');
+            result = calllib(obj.libname, 'ctx_Generators_Get_First', obj.dssctx);
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Generator
-            result = calllib(obj.libname, 'Generators_Get_Name');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Name', obj.dssctx);
         end
         function obj = set.Name(obj, Value)
-            calllib(obj.libname, 'Generators_Set_Name', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_Name', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Generator active; returns 0 if no more.
-            result = calllib(obj.libname, 'Generators_Get_Next');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Next', obj.dssctx);
         end
 
         function result = get.idx(obj)
             % Get/set active Generator by index;  1..Count
-            result = calllib(obj.libname, 'Generators_Get_idx');
+            result = calllib(obj.libname, 'ctx_Generators_Get_idx', obj.dssctx);
         end
         function obj = set.idx(obj, Value)
-            calllib(obj.libname, 'Generators_Set_idx', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_idx', obj.dssctx, Value);
             obj.CheckForError();
         end
 
 
         function result = get.ForcedON(obj)
             % Indicates whether the generator is forced ON regardles of other dispatch criteria.
-            result = (calllib(obj.libname, 'Generators_Get_ForcedON') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Generators_Get_ForcedON', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.ForcedON(obj, Value)
-            calllib(obj.libname, 'Generators_Set_ForcedON', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_ForcedON', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Model(obj)
             % Generator Model
-            result = calllib(obj.libname, 'Generators_Get_Model');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Model', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Model(obj, Value)
-            calllib(obj.libname, 'Generators_Set_Model', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_Model', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.PF(obj)
             % Power factor (pos. = producing vars). Updates kvar based on present kW value.
-            result = calllib(obj.libname, 'Generators_Get_PF');
+            result = calllib(obj.libname, 'ctx_Generators_Get_PF', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.PF(obj, Value)
-            calllib(obj.libname, 'Generators_Set_PF', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_PF', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Phases(obj)
             % Number of phases
-            result = calllib(obj.libname, 'Generators_Get_Phases');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Phases', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Phases(obj, Value)
-            calllib(obj.libname, 'Generators_Set_Phases', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_Phases', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.RegisterNames(obj)
             % (read-only) Array of Names of all generator energy meter registers
-            result = obj.apiutil.get_string_array('Generators_Get_RegisterNames');
+            result = obj.apiutil.get_string_array('ctx_Generators_Get_RegisterNames', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.RegisterValues(obj)
             % (read-only) Array of valus in generator energy meter registers.
-            calllib(obj.libname, 'Generators_Get_RegisterValues_GR');
+            calllib(obj.libname, 'ctx_Generators_Get_RegisterValues_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Vmaxpu(obj)
             % Vmaxpu for generator model
-            result = calllib(obj.libname, 'Generators_Get_Vmaxpu');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Vmaxpu', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Vmaxpu(obj, Value)
-            calllib(obj.libname, 'Generators_Set_Vmaxpu', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_Vmaxpu', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Vminpu(obj)
             % Vminpu for Generator model
-            result = calllib(obj.libname, 'Generators_Get_Vminpu');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Vminpu', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Vminpu(obj, Value)
-            calllib(obj.libname, 'Generators_Set_Vminpu', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_Vminpu', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.kV(obj)
             % Voltage base for the active generator, kV
-            result = calllib(obj.libname, 'Generators_Get_kV');
+            result = calllib(obj.libname, 'ctx_Generators_Get_kV', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.kV(obj, Value)
-            calllib(obj.libname, 'Generators_Set_kV', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_kV', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.kVArated(obj)
             % kVA rating of the generator
-            result = calllib(obj.libname, 'Generators_Get_kVArated');
+            result = calllib(obj.libname, 'ctx_Generators_Get_kVArated', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.kVArated(obj, Value)
-            calllib(obj.libname, 'Generators_Set_kVArated', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_kVArated', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.kW(obj)
             % kW output for the active generator. kvar is updated for current power factor.
-            result = calllib(obj.libname, 'Generators_Get_kW');
+            result = calllib(obj.libname, 'ctx_Generators_Get_kW', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.kW(obj, Value)
-            calllib(obj.libname, 'Generators_Set_kW', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_kW', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.kvar(obj)
             % kvar output for the active generator. Updates power factor based on present kW value.
-            result = calllib(obj.libname, 'Generators_Get_kvar');
+            result = calllib(obj.libname, 'ctx_Generators_Get_kvar', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.kvar(obj, Value)
-            calllib(obj.libname, 'Generators_Set_kvar', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_kvar', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -222,11 +222,11 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
             % Name of the loadshape for a daily generation profile.
             % 
             % (API Extension)
-            result = calllib(obj.libname, 'Generators_Get_daily');
+            result = calllib(obj.libname, 'ctx_Generators_Get_daily', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.daily(obj, Value)
-            calllib(obj.libname, 'Generators_Set_daily', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_daily', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -234,11 +234,11 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
             % Name of the loadshape for a duty cycle simulation.
             % 
             % (API Extension)
-            result = calllib(obj.libname, 'Generators_Get_duty');
+            result = calllib(obj.libname, 'ctx_Generators_Get_duty', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.duty(obj, Value)
-            calllib(obj.libname, 'Generators_Set_duty', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_duty', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -246,11 +246,11 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
             % Name of yearly loadshape
             % 
             % (API Extension)
-            result = calllib(obj.libname, 'Generators_Get_Yearly');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Yearly', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Yearly(obj, Value)
-            calllib(obj.libname, 'Generators_Set_Yearly', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_Yearly', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -260,11 +260,11 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
             % Related enumeration: GeneratorStatus
             % 
             % (API Extension)
-            result = calllib(obj.libname, 'Generators_Get_Status');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Status', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Status(obj, Value)
-            calllib(obj.libname, 'Generators_Set_Status', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_Status', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -272,11 +272,11 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
             % Generator connection. True/1 if delta connection, False/0 if wye.
             % 
             % (API Extension)
-            result = (calllib(obj.libname, 'Generators_Get_IsDelta') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Generators_Get_IsDelta', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.IsDelta(obj, Value)
-            calllib(obj.libname, 'Generators_Set_IsDelta', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_IsDelta', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -284,11 +284,11 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
             % kVA rating of electrical machine. Applied to machine or inverter definition for Dynamics mode solutions.
             % 
             % (API Extension)
-            result = calllib(obj.libname, 'Generators_Get_kva');
+            result = calllib(obj.libname, 'ctx_Generators_Get_kva', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.kva(obj, Value)
-            calllib(obj.libname, 'Generators_Set_kva', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_kva', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -296,11 +296,11 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
             % An arbitrary integer number representing the class of Generator so that Generator values may be segregated by class.
             % 
             % (API Extension)
-            result = calllib(obj.libname, 'Generators_Get_Class_');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Class_', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Class(obj, Value)
-            calllib(obj.libname, 'Generators_Set_Class_', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_Class_', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -308,11 +308,11 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
             % Bus to which the Generator is connected. May include specific node specification.
             % 
             % (API Extension)
-            result = calllib(obj.libname, 'Generators_Get_Bus1');
+            result = calllib(obj.libname, 'ctx_Generators_Get_Bus1', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Bus1(obj, Value)
-            calllib(obj.libname, 'Generators_Set_Bus1', Value);
+            calllib(obj.libname, 'ctx_Generators_Set_Bus1', obj.dssctx, Value);
             obj.CheckForError();
         end
     end

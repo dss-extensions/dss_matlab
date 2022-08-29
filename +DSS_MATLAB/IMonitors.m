@@ -63,13 +63,13 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
                 result = 0;
                 return
             end
-            result = obj.apiutil.get_float64_array('Monitors_Get_Channel', Index);
+            result = obj.apiutil.get_float64_array('ctx_Monitors_Get_Channel', obj.dssctx, Index);
             obj.CheckForError();
         end
 
         function result = AsMatrix(obj)
             % Matrix of the active monitor, containing the hour vector, seconds vector, and all channels (index 3 = channel 1)
-            buffer = obj.apiutil.get_int8_array('Monitors_Get_ByteStream');
+            buffer = obj.apiutil.get_int8_array('ctx_Monitors_Get_ByteStream', obj.dssctx);
             obj.CheckForError();
             if (numel(buffer) <= 1)
                 result = 0;
@@ -164,7 +164,7 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
 
         function result = get.ByteStream(obj)
             % (read-only) Byte Array containing monitor stream values. Make sure a "save" is done first (standard solution modes do this automatically)
-            result = obj.apiutil.get_int8_array('Monitors_Get_ByteStream');
+            result = obj.apiutil.get_int8_array('ctx_Monitors_Get_ByteStream', obj.dssctx);
         end
 
         function result = get.Element(obj)

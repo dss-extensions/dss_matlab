@@ -24,31 +24,31 @@ classdef (CaseInsensitiveProperties) IDSS_Executive < DSS_MATLAB.Base
 
         function result = Command(obj, i)
             % (read-only) Get i-th command
-            result = calllib(obj.libname, 'DSS_Executive_Get_Command', i);
+            result = calllib(obj.libname, 'ctx_DSS_Executive_Get_Command', obj.dssctx, i);
             obj.CheckForError();
         end
 
         function result = CommandHelp(obj, i)
             % (read-only) Get help string for i-th command
-            result = calllib(obj.libname, 'DSS_Executive_Get_CommandHelp', i);
+            result = calllib(obj.libname, 'ctx_DSS_Executive_Get_CommandHelp', obj.dssctx, i);
             obj.CheckForError();
         end
 
         function result = Option(obj, i)
             % (read-only) Get i-th option
-            result = calllib(obj.libname, 'DSS_Executive_Get_Option', i);
+            result = calllib(obj.libname, 'ctx_DSS_Executive_Get_Option', obj.dssctx, i);
             obj.CheckForError();
         end
 
         function result = OptionHelp(obj, i)
             % (read-only) Get help string for i-th option
-            result = calllib(obj.libname, 'DSS_Executive_Get_OptionHelp', i);
+            result = calllib(obj.libname, 'ctx_DSS_Executive_Get_OptionHelp', obj.dssctx, i);
             obj.CheckForError();
         end
 
         function result = OptionValue(obj, i)
             % (read-only) Get present value of i-th option
-            result = calllib(obj.libname, 'DSS_Executive_Get_OptionValue', i);
+            result = calllib(obj.libname, 'ctx_DSS_Executive_Get_OptionValue', obj.dssctx, i);
             obj.CheckForError();
         end
 
@@ -57,13 +57,13 @@ classdef (CaseInsensitiveProperties) IDSS_Executive < DSS_MATLAB.Base
 
         function result = get.NumCommands(obj)
             % (read-only) Number of DSS Executive Commands
-            result = calllib(obj.libname, 'DSS_Executive_Get_NumCommands');
+            result = calllib(obj.libname, 'ctx_DSS_Executive_Get_NumCommands', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumOptions(obj)
             % (read-only) Number of DSS Executive Options
-            result = calllib(obj.libname, 'DSS_Executive_Get_NumOptions');
+            result = calllib(obj.libname, 'ctx_DSS_Executive_Get_NumOptions', obj.dssctx);
             obj.CheckForError();
         end
     end

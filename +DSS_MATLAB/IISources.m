@@ -34,70 +34,70 @@ classdef (CaseInsensitiveProperties) IISources < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all ISource names
-            result = obj.apiutil.get_string_array('ISources_Get_AllNames');
+            result = obj.apiutil.get_string_array('ctx_ISources_Get_AllNames', obj.dssctx);
         end
 
         function result = get.Count(obj)
             % Number of ISource objects
-            result = calllib(obj.libname, 'ISources_Get_Count');
+            result = calllib(obj.libname, 'ctx_ISources_Get_Count', obj.dssctx);
         end
 
         function result = get.First(obj)
             % Set first object of ISource; returns 0 if none.
-            result = calllib(obj.libname, 'ISources_Get_First');
+            result = calllib(obj.libname, 'ctx_ISources_Get_First', obj.dssctx);
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active ISource
-            result = calllib(obj.libname, 'ISources_Get_Name');
+            result = calllib(obj.libname, 'ctx_ISources_Get_Name', obj.dssctx);
         end
         function obj = set.Name(obj, Value)
-            calllib(obj.libname, 'ISources_Set_Name', Value);
+            calllib(obj.libname, 'ctx_ISources_Set_Name', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next ISource active; returns 0 if no more.
-            result = calllib(obj.libname, 'ISources_Get_Next');
+            result = calllib(obj.libname, 'ctx_ISources_Get_Next', obj.dssctx);
         end
 
         function result = get.idx(obj)
             % Get/set active ISource by index;  1..Count
-            result = calllib(obj.libname, 'ISources_Get_idx');
+            result = calllib(obj.libname, 'ctx_ISources_Get_idx', obj.dssctx);
         end
         function obj = set.idx(obj, Value)
-            calllib(obj.libname, 'ISources_Set_idx', Value);
+            calllib(obj.libname, 'ctx_ISources_Set_idx', obj.dssctx, Value);
             obj.CheckForError();
         end
 
 
         function result = get.Amps(obj)
             % Magnitude of the ISource in amps
-            result = calllib(obj.libname, 'ISources_Get_Amps');
+            result = calllib(obj.libname, 'ctx_ISources_Get_Amps', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Amps(obj, Value)
-            calllib(obj.libname, 'ISources_Set_Amps', Value);
+            calllib(obj.libname, 'ctx_ISources_Set_Amps', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.AngleDeg(obj)
             % Phase angle for ISource, degrees
-            result = calllib(obj.libname, 'ISources_Get_AngleDeg');
+            result = calllib(obj.libname, 'ctx_ISources_Get_AngleDeg', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.AngleDeg(obj, Value)
-            calllib(obj.libname, 'ISources_Set_AngleDeg', Value);
+            calllib(obj.libname, 'ctx_ISources_Set_AngleDeg', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Frequency(obj)
             % The present frequency of the ISource, Hz
-            result = calllib(obj.libname, 'ISources_Get_Frequency');
+            result = calllib(obj.libname, 'ctx_ISources_Get_Frequency', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Frequency(obj, Value)
-            calllib(obj.libname, 'ISources_Set_Frequency', Value);
+            calllib(obj.libname, 'ctx_ISources_Set_Frequency', obj.dssctx, Value);
             obj.CheckForError();
         end
     end

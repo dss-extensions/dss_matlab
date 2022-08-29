@@ -20,17 +20,17 @@ classdef (CaseInsensitiveProperties) IText < DSS_MATLAB.Base
 
         function result = get.Command(obj)
             % Input command string for the DSS.
-            result = calllib(obj.libname, 'Text_Get_Command');
+            result = calllib(obj.libname, 'ctx_Text_Get_Command', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Command(obj, Value)
-            calllib(obj.libname, 'Text_Set_Command', Value);
+            calllib(obj.libname, 'ctx_Text_Set_Command', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Result(obj)
             % (read-only) Result string for the last command.
-            result = calllib(obj.libname, 'Text_Get_Result');
+            result = calllib(obj.libname, 'ctx_Text_Get_Result', obj.dssctx);
             obj.CheckForError();
         end
     end

@@ -56,174 +56,174 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
 
         function result = get.AllowDuplicates(obj)
             % {True | False*} Designates whether to allow duplicate names of objects
-            result = (calllib(obj.libname, 'Settings_Get_AllowDuplicates') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Settings_Get_AllowDuplicates', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.AllowDuplicates(obj, Value)
-            calllib(obj.libname, 'Settings_Set_AllowDuplicates', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_AllowDuplicates', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.AutoBusList(obj)
             % List of Buses or (File=xxxx) syntax for the AutoAdd solution mode.
-            result = calllib(obj.libname, 'Settings_Get_AutoBusList');
+            result = calllib(obj.libname, 'ctx_Settings_Get_AutoBusList', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.AutoBusList(obj, Value)
-            calllib(obj.libname, 'Settings_Set_AutoBusList', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_AutoBusList', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.CktModel(obj)
             % {dssMultiphase (0) * | dssPositiveSeq (1) } Indicate if the circuit model is positive sequence.
-            result = calllib(obj.libname, 'Settings_Get_CktModel');
+            result = calllib(obj.libname, 'ctx_Settings_Get_CktModel', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.CktModel(obj, Value)
-            calllib(obj.libname, 'Settings_Set_CktModel', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_CktModel', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.ControlTrace(obj)
             % {True | False*} Denotes whether to trace the control actions to a file.
-            result = (calllib(obj.libname, 'Settings_Get_ControlTrace') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Settings_Get_ControlTrace', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.ControlTrace(obj, Value)
-            calllib(obj.libname, 'Settings_Set_ControlTrace', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_ControlTrace', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.EmergVmaxpu(obj)
             % Per Unit maximum voltage for Emergency conditions.
-            result = calllib(obj.libname, 'Settings_Get_EmergVmaxpu');
+            result = calllib(obj.libname, 'ctx_Settings_Get_EmergVmaxpu', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.EmergVmaxpu(obj, Value)
-            calllib(obj.libname, 'Settings_Set_EmergVmaxpu', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_EmergVmaxpu', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.EmergVminpu(obj)
             % Per Unit minimum voltage for Emergency conditions.
-            result = calllib(obj.libname, 'Settings_Get_EmergVminpu');
+            result = calllib(obj.libname, 'ctx_Settings_Get_EmergVminpu', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.EmergVminpu(obj, Value)
-            calllib(obj.libname, 'Settings_Set_EmergVminpu', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_EmergVminpu', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.LossRegs(obj)
             % Integer array defining which energy meter registers to use for computing losses
-            calllib(obj.libname, 'Settings_Get_LossRegs_GR');
+            calllib(obj.libname, 'ctx_Settings_Get_LossRegs_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
         end
         function obj = set.LossRegs(obj, Value)
-            calllib(obj.libname, 'Settings_Set_LossRegs', Value, numel(Value));
+            calllib(obj.libname, 'ctx_Settings_Set_LossRegs', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.LossWeight(obj)
             % Weighting factor applied to Loss register values.
-            result = calllib(obj.libname, 'Settings_Get_LossWeight');
+            result = calllib(obj.libname, 'ctx_Settings_Get_LossWeight', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.LossWeight(obj, Value)
-            calllib(obj.libname, 'Settings_Set_LossWeight', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_LossWeight', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.NormVmaxpu(obj)
             % Per Unit maximum voltage for Normal conditions.
-            result = calllib(obj.libname, 'Settings_Get_NormVmaxpu');
+            result = calllib(obj.libname, 'ctx_Settings_Get_NormVmaxpu', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.NormVmaxpu(obj, Value)
-            calllib(obj.libname, 'Settings_Set_NormVmaxpu', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_NormVmaxpu', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.NormVminpu(obj)
             % Per Unit minimum voltage for Normal conditions.
-            result = calllib(obj.libname, 'Settings_Get_NormVminpu');
+            result = calllib(obj.libname, 'ctx_Settings_Get_NormVminpu', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.NormVminpu(obj, Value)
-            calllib(obj.libname, 'Settings_Set_NormVminpu', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_NormVminpu', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.PriceCurve(obj)
             % Name of LoadShape object that serves as the source of price signal data for yearly simulations, etc.
-            result = calllib(obj.libname, 'Settings_Get_PriceCurve');
+            result = calllib(obj.libname, 'ctx_Settings_Get_PriceCurve', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.PriceCurve(obj, Value)
-            calllib(obj.libname, 'Settings_Set_PriceCurve', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_PriceCurve', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.PriceSignal(obj)
             % Price Signal for the Circuit
-            result = calllib(obj.libname, 'Settings_Get_PriceSignal');
+            result = calllib(obj.libname, 'ctx_Settings_Get_PriceSignal', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.PriceSignal(obj, Value)
-            calllib(obj.libname, 'Settings_Set_PriceSignal', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_PriceSignal', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Trapezoidal(obj)
             % {True | False *} Gets value of trapezoidal integration flag in energy meters.
-            result = (calllib(obj.libname, 'Settings_Get_Trapezoidal') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Settings_Get_Trapezoidal', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.Trapezoidal(obj, Value)
-            calllib(obj.libname, 'Settings_Set_Trapezoidal', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_Trapezoidal', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.UEregs(obj)
             % Array of Integers defining energy meter registers to use for computing UE
-            calllib(obj.libname, 'Settings_Get_UEregs_GR');
+            calllib(obj.libname, 'ctx_Settings_Get_UEregs_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
         end
         function obj = set.UEregs(obj, Value)
-            calllib(obj.libname, 'Settings_Set_UEregs', Value, numel(Value));
+            calllib(obj.libname, 'ctx_Settings_Set_UEregs', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.UEweight(obj)
             % Weighting factor applied to UE register values.
-            result = calllib(obj.libname, 'Settings_Get_UEweight');
+            result = calllib(obj.libname, 'ctx_Settings_Get_UEweight', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.UEweight(obj, Value)
-            calllib(obj.libname, 'Settings_Set_UEweight', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_UEweight', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.VoltageBases(obj)
             % Array of doubles defining the legal voltage bases in kV L-L
-            calllib(obj.libname, 'Settings_Get_VoltageBases_GR');
+            calllib(obj.libname, 'ctx_Settings_Get_VoltageBases_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.VoltageBases(obj, Value)
-            calllib(obj.libname, 'Settings_Set_VoltageBases', Value, numel(Value));
+            calllib(obj.libname, 'ctx_Settings_Set_VoltageBases', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.ZoneLock(obj)
             % {True | False*}  Locks Zones on energy meters to prevent rebuilding if a circuit change occurs.
-            result = (calllib(obj.libname, 'Settings_Get_ZoneLock') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Settings_Get_ZoneLock', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.ZoneLock(obj, Value)
-            calllib(obj.libname, 'Settings_Set_ZoneLock', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_ZoneLock', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -232,7 +232,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
             ME = MException(['DSS_MATLAB:Error'], 'This property is write-only!'); throw(ME);
         end
         function obj = set.AllocationFactors(obj, Value)
-            calllib(obj.libname, 'Settings_Set_AllocationFactors', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_AllocationFactors', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -241,11 +241,11 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
             % If the loads are guaranteed to have their terminals closed throughout the simulation, this can be set to False to save some time.
             % 
             % (API Extension)
-            result = (calllib(obj.libname, 'Settings_Get_LoadsTerminalCheck') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Settings_Get_LoadsTerminalCheck', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.LoadsTerminalCheck(obj, Value)
-            calllib(obj.libname, 'Settings_Set_LoadsTerminalCheck', Value);
+            calllib(obj.libname, 'ctx_Settings_Set_LoadsTerminalCheck', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -258,11 +258,11 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
             % Other numeric values are reserved for other potential behaviors.
             % 
             % (API Extension)
-            result = calllib(obj.libname, 'Settings_Get_IterateDisabled');
+            result = calllib(obj.libname, 'ctx_Settings_Get_IterateDisabled', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.IterateDisabled(obj, Value)
-            calllib(obj.libname, 'Settings_Set_IterateDisabled', int32(Value));
+            calllib(obj.libname, 'ctx_Settings_Set_IterateDisabled', obj.dssctx, Value);
             obj.CheckForError();
         end
     end

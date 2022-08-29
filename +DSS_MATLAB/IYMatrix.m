@@ -39,7 +39,7 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
             ColPtr = libpointer('int32PtrPtr');
             RowIdxPtr = libpointer('int32PtrPtr');
             cValsPtr = libpointer('doublePtrPtr');
-            calllib(obj.libname, 'YMatrix_GetCompressedYMatrix', factor, nBus, nNz, ColPtr, RowIdxPtr, cValsPtr);
+            calllib(obj.libname, 'ctx_YMatrix_GetCompressedYMatrix', obj.dssctx, factor, nBus, nNz, ColPtr, RowIdxPtr, cValsPtr);
             obj.CheckForError;
             if ((~nBus.Value(1) || ~nNz.Value(1)))
                 result = 0;
@@ -65,30 +65,30 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
         end
 
         function obj = ZeroInjCurr(obj)
-            calllib(obj.libname, 'YMatrix_ZeroInjCurr');
+            calllib(obj.libname, 'ctx_YMatrix_ZeroInjCurr', obj.dssctx);
         end
 
         function obj = GetSourceInjCurrents(obj)
-            calllib(obj.libname, 'YMatrix_GetSourceInjCurrents');
+            calllib(obj.libname, 'ctx_YMatrix_GetSourceInjCurrents', obj.dssctx);
         end
 
         function obj = GetPCInjCurr(obj)
-            calllib(obj.libname, 'YMatrix_GetPCInjCurr');
+            calllib(obj.libname, 'ctx_YMatrix_GetPCInjCurr', obj.dssctx);
         end
 
         function obj = BuildYMatrixD(obj, BuildOps, AllocateVI)
-            calllib(obj.libname, 'YMatrix_BuildYMatrixD', BuildOps, AllocateVI);
+            calllib(obj.libname, 'ctx_YMatrix_BuildYMatrixD', obj.dssctx, BuildOps, AllocateVI);
         end
 
         function obj = AddInAuxCurrents(obj, SType)
-            calllib(obj.libname, 'YMatrix_AddInAuxCurrents', SType);
+            calllib(obj.libname, 'ctx_YMatrix_AddInAuxCurrents', obj.dssctx, SType);
         end
 
         function result = GetIPointer(obj)
             % Get access to the internal Current pointer
             IvectorPtr = libpointer('doublePtrPtr');
-            numNodes = (calllib(obj.libname, 'Circuit_Get_NumNodes') + 1) * 2;
-            calllib(obj.libname, 'YMatrix_getIpointer', IvectorPtr);
+            numNodes = (calllib(obj.libname, 'ctx_Circuit_Get_NumNodes', obj.dssctx) + 1) * 2;
+            calllib(obj.libname, 'ctx_YMatrix_getIpointer', obj.dssctx, IvectorPtr);
             setdatatype(IvectorPtr.Value, 'doublePtr', 1, numNodes);
             result = IvectorPtr;
         end
@@ -96,14 +96,14 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
         function result = GetVPointer(obj)
             % Get access to the internal Voltage pointer
             VvectorPtr = libpointer('doublePtrPtr');
-            numNodes = (calllib(obj.libname, 'Circuit_Get_NumNodes') + 1) * 2;
-            calllib(obj.libname, 'YMatrix_getVpointer', VvectorPtr);
+            numNodes = (calllib(obj.libname, 'ctx_Circuit_Get_NumNodes', obj.dssctx) + 1) * 2;
+            calllib(obj.libname, 'ctx_YMatrix_getVpointer', obj.dssctx, VvectorPtr);
             setdatatype(VvectorPtr.Value, 'doublePtr', 1, numNodes);
             result = VvectorPtr;
         end
  
         function result = SolveSystem(obj, NodeV)
-            result = calllib(obj.libname, 'YMatrix_SolveSystem', NodeV);
+            result = calllib(obj.libname, 'ctx_YMatrix_SolveSystem', obj.dssctx, NodeV);
             obj.CheckForError();
         end
 
@@ -125,18 +125,18 @@ classdef (CaseInsensitiveProperties) IYMatrix < DSS_MATLAB.Base
     methods
         
         function result = get.SystemYChanged(obj)
-            result = calllib(obj.libname, 'YMatrix_Get_SystemYChanged') ~= 0;
+            result = calllib(obj.libname, 'ctx_YMatrix_Get_SystemYChanged', obj.dssctx) ~= 0;
         end
         function obj = set.SystemYChanged(obj, value)
-            calllib(obj.libname, 'YMatrix_Set_SystemYChanged', value);
+            calllib(obj.libname, 'ctx_YMatrix_Set_SystemYChanged', obj.dssctx, value);
             obj.CheckForError();
         end
 
         function result = get.UseAuxCurrents(obj)
-            result = calllib(obj.libname, 'YMatrix_Get_UseAuxCurrents') ~= 0;
+            result = calllib(obj.libname, 'ctx_YMatrix_Get_UseAuxCurrents', obj.dssctx) ~= 0;
         end
         function obj = set.UseAuxCurrents(obj, value)
-            calllib(obj.libname, 'YMatrix_Set_UseAuxCurrents', value);
+            calllib(obj.libname, 'ctx_YMatrix_Set_UseAuxCurrents', obj.dssctx, value);
             obj.CheckForError();
         end
         

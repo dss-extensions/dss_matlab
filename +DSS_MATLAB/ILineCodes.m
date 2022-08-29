@@ -56,178 +56,178 @@ classdef (CaseInsensitiveProperties) ILineCodes < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all LineCode names
-            result = obj.apiutil.get_string_array('LineCodes_Get_AllNames');
+            result = obj.apiutil.get_string_array('ctx_LineCodes_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of LineCode objects
-            result = calllib(obj.libname, 'LineCodes_Get_Count');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_Count', obj.dssctx);
         end
 
         function result = get.First(obj)
             % Set first object of LineCode; returns 0 if none.
-            result = calllib(obj.libname, 'LineCodes_Get_First');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_First', obj.dssctx);
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active LineCode
-            result = calllib(obj.libname, 'LineCodes_Get_Name');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_Name', obj.dssctx);
         end
         function obj = set.Name(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_Name', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_Name', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next LineCode active; returns 0 if no more.
-            result = calllib(obj.libname, 'LineCodes_Get_Next');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_Next', obj.dssctx);
         end
 
         function result = get.idx(obj)
             % Get/set active LineCode by index;  1..Count
-            result = calllib(obj.libname, 'LineCodes_Get_idx');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_idx', obj.dssctx);
         end
         function obj = set.idx(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_idx', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_idx', obj.dssctx, Value);
             obj.CheckForError();
         end
 
 
         function result = get.C0(obj)
             % Zero-sequence capacitance, nF per unit length
-            result = calllib(obj.libname, 'LineCodes_Get_C0');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_C0', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.C0(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_C0', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_C0', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.C1(obj)
             % Positive-sequence capacitance, nF per unit length
-            result = calllib(obj.libname, 'LineCodes_Get_C1');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_C1', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.C1(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_C1', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_C1', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Cmatrix(obj)
             % Capacitance matrix, nF per unit length
-            calllib(obj.libname, 'LineCodes_Get_Cmatrix_GR');
+            calllib(obj.libname, 'ctx_LineCodes_Get_Cmatrix_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Cmatrix(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_Cmatrix', Value, numel(Value));
+            calllib(obj.libname, 'ctx_LineCodes_Set_Cmatrix', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.EmergAmps(obj)
             % Emergency ampere rating
-            result = calllib(obj.libname, 'LineCodes_Get_EmergAmps');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_EmergAmps', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.EmergAmps(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_EmergAmps', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_EmergAmps', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.IsZ1Z0(obj)
             % (read-only) Flag denoting whether impedance data were entered in symmetrical components
-            result = (calllib(obj.libname, 'LineCodes_Get_IsZ1Z0') ~= 0);
+            result = (calllib(obj.libname, 'ctx_LineCodes_Get_IsZ1Z0', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
 
         function result = get.NormAmps(obj)
             % Normal Ampere rating
-            result = calllib(obj.libname, 'LineCodes_Get_NormAmps');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_NormAmps', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.NormAmps(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_NormAmps', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_NormAmps', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Phases(obj)
             % Number of Phases
-            result = calllib(obj.libname, 'LineCodes_Get_Phases');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_Phases', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Phases(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_Phases', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_Phases', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.R0(obj)
             % Zero-Sequence Resistance, ohms per unit length
-            result = calllib(obj.libname, 'LineCodes_Get_R0');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_R0', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.R0(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_R0', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_R0', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.R1(obj)
             % Positive-sequence resistance ohms per unit length
-            result = calllib(obj.libname, 'LineCodes_Get_R1');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_R1', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.R1(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_R1', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_R1', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Rmatrix(obj)
             % Resistance matrix, ohms per unit length
-            calllib(obj.libname, 'LineCodes_Get_Rmatrix_GR');
+            calllib(obj.libname, 'ctx_LineCodes_Get_Rmatrix_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Rmatrix(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_Rmatrix', Value, numel(Value));
+            calllib(obj.libname, 'ctx_LineCodes_Set_Rmatrix', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
         end
 
         function result = get.Units(obj)
-            result = calllib(obj.libname, 'LineCodes_Get_Units');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_Units', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Units(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_Units', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_Units', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.X0(obj)
             % Zero Sequence Reactance, Ohms per unit length
-            result = calllib(obj.libname, 'LineCodes_Get_X0');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_X0', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.X0(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_X0', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_X0', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.X1(obj)
             % Posiive-sequence reactance, ohms per unit length
-            result = calllib(obj.libname, 'LineCodes_Get_X1');
+            result = calllib(obj.libname, 'ctx_LineCodes_Get_X1', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.X1(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_X1', Value);
+            calllib(obj.libname, 'ctx_LineCodes_Set_X1', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Xmatrix(obj)
             % Reactance matrix, ohms per unit length
-            calllib(obj.libname, 'LineCodes_Get_Xmatrix_GR');
+            calllib(obj.libname, 'ctx_LineCodes_Get_Xmatrix_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
         function obj = set.Xmatrix(obj, Value)
-            calllib(obj.libname, 'LineCodes_Set_Xmatrix', Value, numel(Value));
+            calllib(obj.libname, 'ctx_LineCodes_Set_Xmatrix', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
         end
     end

@@ -64,8 +64,8 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
     end
 
     methods (Access = public)
-        function obj = IDSS()
-            apiutil = DSS_MATLAB.APIUtil();
+        function obj = IDSS(varargin)
+            apiutil = DSS_MATLAB.APIUtil(varargin{:});
             apiutil.InitBuffers();
             obj@DSS_MATLAB.Base(apiutil);
             obj.ActiveCircuit = DSS_MATLAB.ICircuit(obj.apiutil);
@@ -83,22 +83,22 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
         end
 
         function obj = ClearAll(obj)
-            calllib(obj.libname, 'DSS_ClearAll');
+            calllib(obj.libname, 'ctx_DSS_ClearAll', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = Reset(obj)
-            calllib(obj.libname, 'DSS_Reset');
+            calllib(obj.libname, 'ctx_DSS_Reset', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = SetActiveClass(obj, ClassName)
-            result = calllib(obj.libname, 'DSS_SetActiveClass', ClassName);
+            result = calllib(obj.libname, 'ctx_DSS_SetActiveClass', obj.dssctx, ClassName);
             obj.CheckForError();
         end
 
         function result = Start(obj, code)
-            result = (calllib(obj.libname, 'DSS_Start', code) ~= 0);
+            result = (calllib(obj.libname, 'ctx_DSS_Start', obj.dssctx, code) ~= 0);
             obj.CheckForError();
         end
 
@@ -107,86 +107,82 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
         end
 
         function result = NewCircuit(obj, name)
-            calllib(obj.libname, 'DSS_NewCircuit', name);
+            calllib(obj.libname, 'ctx_DSS_NewCircuit', obj.dssctx, name);
             obj.CheckForError();
             result = obj.ActiveCircuit;
         end
 
-        % function result = NewContext(obj)
-        %     % Creates a new DSS engine context.
-        %     % A DSS Context encapsulates most of the global state of the original OpenDSS engine,
-        %     % allowing the user to create multiple instances in the same process. By creating contexts
-        %     % manually, the management of threads and potential issues should be handled by the user.
-        %     % 
-        %     % (API Extension)
-        %     ffi = obj._api_util.ffi;
-        %     lib = obj._api_util.lib_unpatched;
-        %     new_ctx = lib.ctx_New();
-        %     new_api_util = CffiApiUtil(ffi, lib, new_ctx);
-        %     result = IDSS(new_api_util);
-        % end
+        function result = NewContext(obj)
+            % Creates a new DSS engine context.
+            % A DSS Context encapsulates most of the global state of the original OpenDSS engine,
+            % allowing the user to create multiple instances in the same process. By creating contexts
+            % manually, the management of threads and potential issues should be handled by the user.
+            % 
+            % (API Extension)
+            result = DSS_MATLAB.IDSS(1);
+        end
     end
     methods
 
         function result = get.Classes(obj)
             % (read-only) List of DSS intrinsic classes (names of the classes)
-            result = obj.apiutil.get_string_array('DSS_Get_Classes');
+            result = obj.apiutil.get_string_array('ctx_DSS_Get_Classes');
             obj.CheckForError();
         end
 
         function result = get.DataPath(obj)
             % DSS Data File Path.  Default path for reports, etc. from DSS
-            result = calllib(obj.libname, 'DSS_Get_DataPath');
+            result = calllib(obj.libname, 'ctx_DSS_Get_DataPath', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.DataPath(obj, Value)
-            calllib(obj.libname, 'DSS_Set_DataPath', Value);
+            calllib(obj.libname, 'ctx_DSS_Set_DataPath', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.DefaultEditor(obj)
             % (read-only) Returns the path name for the default text editor.
-            result = calllib(obj.libname, 'DSS_Get_DefaultEditor');
+            result = calllib(obj.libname, 'ctx_DSS_Get_DefaultEditor', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumCircuits(obj)
             % (read-only) Number of Circuits currently defined
-            result = calllib(obj.libname, 'DSS_Get_NumCircuits');
+            result = calllib(obj.libname, 'ctx_DSS_Get_NumCircuits', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumClasses(obj)
             % (read-only) Number of DSS intrinsic classes
-            result = calllib(obj.libname, 'DSS_Get_NumClasses');
+            result = calllib(obj.libname, 'ctx_DSS_Get_NumClasses', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumUserClasses(obj)
             % (read-only) Number of user-defined classes
-            result = calllib(obj.libname, 'DSS_Get_NumUserClasses');
+            result = calllib(obj.libname, 'ctx_DSS_Get_NumUserClasses', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.UserClasses(obj)
             % (read-only) List of user-defined classes
-            result = obj.apiutil.get_string_array('DSS_Get_UserClasses');
+            result = obj.apiutil.get_string_array('ctx_DSS_Get_UserClasses');
             obj.CheckForError();
         end
 
         function result = get.Version(obj)
             % (read-only) Get version string for the DSS.
-            result = calllib(obj.libname, 'DSS_Get_Version');
+            result = calllib(obj.libname, 'ctx_DSS_Get_Version', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.AllowForms(obj)
             % Gets/sets whether text output is allowed
-            result = (calllib(obj.libname, 'DSS_Get_AllowForms') ~= 0);
+            result = (calllib(obj.libname, 'ctx_DSS_Get_AllowForms', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.AllowForms(obj, value)
-            calllib(obj.libname, 'DSS_Set_AllowForms', value);
+            calllib(obj.libname, 'ctx_DSS_Set_AllowForms', obj.dssctx, value);
             obj.CheckForError();
         end
 
@@ -198,11 +194,11 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
             % such as the creation of files, are not affected.
             % 
             % (API Extension)
-            result = (calllib(obj.libname, 'DSS_Get_AllowEditor') ~= 0);
+            result = (calllib(obj.libname, 'ctx_DSS_Get_AllowEditor', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.AllowEditor(obj, value)
-            calllib(obj.libname, 'DSS_Set_AllowEditor', value);
+            calllib(obj.libname, 'ctx_DSS_Set_AllowEditor', obj.dssctx, value);
             obj.CheckForError();
         end
 
@@ -220,11 +216,11 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
             % NOTE: this option will be removed in a future release.
             % 
             % (API Extension)
-            result = (calllib(obj.libname, 'DSS_Get_LegacyModels') ~= 0);
+            result = (calllib(obj.libname, 'ctx_DSS_Get_LegacyModels', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.LegacyModels(obj, Value)
-            calllib(obj.libname, 'DSS_Set_LegacyModels', int(Value));
+            calllib(obj.libname, 'ctx_DSS_Set_LegacyModels', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -241,11 +237,11 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
             % disallow changing the active working directory.
             % 
             % (API Extension)
-            result = (calllib(obj.libname, 'DSS_Get_AllowChangeDir') ~= 0);
+            result = (calllib(obj.libname, 'ctx_DSS_Get_AllowChangeDir', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.AllowChangeDir(obj, Value)
-            calllib(obj.libname, 'DSS_Set_AllowChangeDir', Value);
+            calllib(obj.libname, 'ctx_DSS_Set_AllowChangeDir', obj.dssctx, Value);
             obj.CheckForError();
         end
 

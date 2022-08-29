@@ -84,7 +84,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
                 AllNodes = 0;
             end
 
-            calllib(obj.libname, 'PDElements_Get_AllMaxCurrents_GR', AllNodes);
+            calllib(obj.libname, 'ctx_PDElements_Get_AllMaxCurrents_GR', obj.dssctx, AllNodes);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -105,7 +105,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
                 AllNodes = 0;
             end
 
-            calllib(obj.libname, 'PDElements_Get_AllPctNorm_GR', AllNodes);
+            calllib(obj.libname, 'ctx_PDElements_Get_AllPctNorm_GR', obj.dssctx, AllNodes);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -126,7 +126,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
                 AllNodes = 0;
             end
 
-            calllib(obj.libname, 'PDElements_Get_AllPctEmerg_GR', AllNodes);
+            calllib(obj.libname, 'ctx_PDElements_Get_AllPctEmerg_GR', obj.dssctx, AllNodes);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -136,38 +136,38 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
 
         function result = get.AccumulatedL(obj)
             % (read-only) accummulated failure rate for this branch on downline
-            result = calllib(obj.libname, 'PDElements_Get_AccumulatedL');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_AccumulatedL', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Count(obj)
             % (read-only) Number of PD elements (including disabled elements)
-            result = calllib(obj.libname, 'PDElements_Get_Count');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_Count', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.FaultRate(obj)
             % Get/Set Number of failures per year. 
             % For LINE elements: Number of failures per unit length per year.
-            result = calllib(obj.libname, 'PDElements_Get_FaultRate');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_FaultRate', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.FaultRate(obj, Value)
-            calllib(obj.libname, 'PDElements_Set_FaultRate', Value);
+            calllib(obj.libname, 'ctx_PDElements_Set_FaultRate', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.First(obj)
             % (read-only) Set the first enabled PD element to be the active element.
             % Returns 0 if none found.
-            result = calllib(obj.libname, 'PDElements_Get_First');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_First', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.FromTerminal(obj)
             % (read-only) Number of the terminal of active PD element that is on the "from" 
             % side. This is set after the meter zone is determined.
-            result = calllib(obj.libname, 'PDElements_Get_FromTerminal');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_FromTerminal', obj.dssctx);
             obj.CheckForError();
         end
 
@@ -175,82 +175,82 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % (read-only) Boolean indicating of PD element should be treated as a shunt 
             % element rather than a series element. Applies to Capacitor and Reactor 
             % elements in particular.
-            result = (calllib(obj.libname, 'PDElements_Get_IsShunt') ~= 0);
+            result = (calllib(obj.libname, 'ctx_PDElements_Get_IsShunt', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
 
         function result = get.Lambda(obj)
             % (read-only) Failure rate for this branch. Faults per year including length of line.
-            result = calllib(obj.libname, 'PDElements_Get_Lambda');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_Lambda', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Name(obj)
             % Get/Set name of active PD Element. Returns null string if active element 
             % is not PDElement type.
-            result = calllib(obj.libname, 'PDElements_Get_Name');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_Name', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Name(obj, Value)
-            calllib(obj.libname, 'PDElements_Set_Name', Value);
+            calllib(obj.libname, 'ctx_PDElements_Set_Name', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % (read-only) Advance to the next PD element in the circuit. Enabled elements 
             % only. Returns 0 when no more elements.
-            result = calllib(obj.libname, 'PDElements_Get_Next');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_Next', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Numcustomers(obj)
             % (read-only) Number of customers, this branch
-            result = calllib(obj.libname, 'PDElements_Get_Numcustomers');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_Numcustomers', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.ParentPDElement(obj)
             % (read-only) Sets the parent PD element to be the active circuit element.
             % Returns 0 if no more elements upline.
-            result = calllib(obj.libname, 'PDElements_Get_ParentPDElement');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_ParentPDElement', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.RepairTime(obj)
             % Average repair time for this element in hours
-            result = calllib(obj.libname, 'PDElements_Get_RepairTime');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_RepairTime', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.RepairTime(obj, Value)
-            calllib(obj.libname, 'PDElements_Set_RepairTime', Value);
+            calllib(obj.libname, 'ctx_PDElements_Set_RepairTime', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.SectionID(obj)
             % (read-only) Integer ID of the feeder section that this PDElement branch is part of
-            result = calllib(obj.libname, 'PDElements_Get_SectionID');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_SectionID', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.TotalMiles(obj)
             % (read-only) Total miles of line from this element to the end of the zone. For recloser siting algorithm.
-            result = calllib(obj.libname, 'PDElements_Get_TotalMiles');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_TotalMiles', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Totalcustomers(obj)
             % (read-only) Total number of customers from this branch to the end of the zone
-            result = calllib(obj.libname, 'PDElements_Get_Totalcustomers');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_Totalcustomers', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.pctPermanent(obj)
             % Get/Set percent of faults that are permanent (require repair). Otherwise, fault is assumed to be transient/temporary.
-            result = calllib(obj.libname, 'PDElements_Get_pctPermanent');
+            result = calllib(obj.libname, 'ctx_PDElements_Get_pctPermanent', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.pctPermanent(obj, Value)
-            calllib(obj.libname, 'PDElements_Set_pctPermanent', Value);
+            calllib(obj.libname, 'ctx_PDElements_Set_pctPermanent', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -258,7 +258,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Array of strings consisting of all PD element names.
             % 
             % (API Extension)
-            result = obj.apiutil.get_string_array('PDElements_Get_AllNames');
+            result = obj.apiutil.get_string_array('ctx_PDElements_Get_AllNames');
             obj.CheckForError();
         end
 
@@ -266,7 +266,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Complex array of currents for all conductors, all terminals, for each PD element.
             % 
             % (API Extension)
-            calllib(obj.libname, 'PDElements_Get_AllCurrents_GR');
+            calllib(obj.libname, 'ctx_PDElements_Get_AllCurrents_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -275,7 +275,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Complex array (magnitude and angle format) of currents for all conductors, all terminals, for each PD element.
             % 
             % (API Extension)
-            calllib(obj.libname, 'PDElements_Get_AllCurrentsMagAng_GR');
+            calllib(obj.libname, 'ctx_PDElements_Get_AllCurrentsMagAng_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -284,7 +284,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Complex double array of Sequence Currents for all conductors of all terminals, for each PD elements.
             % 
             % (API Extension)
-            calllib(obj.libname, 'PDElements_Get_AllCplxSeqCurrents_GR');
+            calllib(obj.libname, 'ctx_PDElements_Get_AllCplxSeqCurrents_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -293,7 +293,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Double array of the symmetrical component currents into each 3-phase terminal, for each PD element.
             % 
             % (API Extension)
-            calllib(obj.libname, 'PDElements_Get_AllSeqCurrents_GR');
+            calllib(obj.libname, 'ctx_PDElements_Get_AllSeqCurrents_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -302,7 +302,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Complex array of powers into each conductor of each terminal, for each PD element.
             % 
             % (API Extension)
-            calllib(obj.libname, 'PDElements_Get_AllPowers_GR');
+            calllib(obj.libname, 'ctx_PDElements_Get_AllPowers_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -311,7 +311,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Double array of sequence powers into each 3-phase teminal, for each PD element
             % 
             % (API Extension)
-            calllib(obj.libname, 'PDElements_Get_AllSeqPowers_GR');
+            calllib(obj.libname, 'ctx_PDElements_Get_AllSeqPowers_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
@@ -320,7 +320,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Integer array listing the number of phases of all PD elements
             % 
             % (API Extension)
-            calllib(obj.libname, 'PDElements_Get_AllNumPhases_GR');
+            calllib(obj.libname, 'ctx_PDElements_Get_AllNumPhases_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
         end
@@ -329,7 +329,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Integer array listing the number of conductors of all PD elements
             % 
             % (API Extension)
-            calllib(obj.libname, 'PDElements_Get_AllNumConductors_GR');
+            calllib(obj.libname, 'ctx_PDElements_Get_AllNumConductors_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
         end
@@ -338,7 +338,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % Integer array listing the number of terminals of all PD elements
             % 
             % (API Extension)
-            calllib(obj.libname, 'PDElements_Get_AllNumTerminals_GR');
+            calllib(obj.libname, 'ctx_PDElements_Get_AllNumTerminals_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
         end

@@ -11,13 +11,13 @@ classdef (CaseInsensitiveProperties) IDSSimComs < DSS_MATLAB.Base
         end
 
         function result = BusVoltage(obj, Index)
-            calllib(obj.libname, 'DSSimComs_BusVoltage_GR', Index);
+            calllib(obj.libname, 'ctx_DSSimComs_BusVoltage_GR', obj.dssctx, Index);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = BusVoltagepu(obj, Index)
-            calllib(obj.libname, 'DSSimComs_BusVoltagepu_GR', Index);
+            calllib(obj.libname, 'ctx_DSSimComs_BusVoltagepu_GR', obj.dssctx, Index);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end

@@ -63,14 +63,16 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
                 result = 0;
                 return
             end
-            result = obj.apiutil.get_float64_array('Monitors_Get_Channel', Index);
+            calllib('ctx_Monitors_Get_Channel_GR', obj.dssctx, Index);
             obj.CheckForError();
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = AsMatrix(obj)
             % Matrix of the active monitor, containing the hour vector, seconds vector, and all channels (index 3 = channel 1)
-            buffer = obj.apiutil.get_int8_array('Monitors_Get_ByteStream');
+            calllib('ctx_Monitors_Get_ByteStream_GR', obj.dssctx);
             obj.CheckForError();
+            buffer = obj.apiutil.get_int8_gr_array();
             if (numel(buffer) <= 1)
                 result = 0;
                 return;
@@ -83,39 +85,39 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
         end
 
         function obj = Process(obj)
-            calllib(obj.libname, 'Monitors_Process');
+            calllib(obj.libname, 'ctx_Monitors_Process', obj.dssctx);
         end
 
         function obj = ProcessAll(obj)
-            calllib(obj.libname, 'Monitors_ProcessAll');
+            calllib(obj.libname, 'ctx_Monitors_ProcessAll', obj.dssctx);
         end
 
         function obj = Reset(obj)
-            calllib(obj.libname, 'Monitors_Reset');
+            calllib(obj.libname, 'ctx_Monitors_Reset', obj.dssctx);
         end
 
         function obj = ResetAll(obj)
-            calllib(obj.libname, 'Monitors_ResetAll');
+            calllib(obj.libname, 'ctx_Monitors_ResetAll', obj.dssctx);
         end
 
         function obj = Sample(obj)
-            calllib(obj.libname, 'Monitors_Sample');
+            calllib(obj.libname, 'ctx_Monitors_Sample', obj.dssctx);
         end
 
         function obj = SampleAll(obj)
-            calllib(obj.libname, 'Monitors_SampleAll');
+            calllib(obj.libname, 'ctx_Monitors_SampleAll', obj.dssctx);
         end
 
         function obj = Save(obj)
-            calllib(obj.libname, 'Monitors_Save');
+            calllib(obj.libname, 'ctx_Monitors_Save', obj.dssctx);
         end
 
         function obj = SaveAll(obj)
-            calllib(obj.libname, 'Monitors_SaveAll');
+            calllib(obj.libname, 'ctx_Monitors_SaveAll', obj.dssctx);
         end
 
         function obj = Show(obj)
-            calllib(obj.libname, 'Monitors_Show');
+            calllib(obj.libname, 'ctx_Monitors_Show', obj.dssctx);
         end
 
     end
@@ -125,110 +127,116 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
         end
         function result = get.AllNames(obj)
             % Array of strings with all Monitor names
-            result = obj.apiutil.get_string_array('Monitors_Get_AllNames');
+            result = obj.apiutil.get_string_array('ctx_Monitors_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of Monitor objects
-            result = calllib(obj.libname, 'Monitors_Get_Count');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_Count', obj.dssctx);
         end
 
         function result = get.First(obj)
             % Set first object of Monitor; returns 0 if none.
-            result = calllib(obj.libname, 'Monitors_Get_First');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_First', obj.dssctx);
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Monitor
-            result = calllib(obj.libname, 'Monitors_Get_Name');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_Name', obj.dssctx);
         end
         function obj = set.Name(obj, Value)
-            calllib(obj.libname, 'Monitors_Set_Name', Value);
+            calllib(obj.libname, 'ctx_Monitors_Set_Name', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Monitor active; returns 0 if no more.
-            result = calllib(obj.libname, 'Monitors_Get_Next');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_Next', obj.dssctx);
         end
 
         function result = get.idx(obj)
             % Get/set active Monitor by index;  1..Count
-            result = calllib(obj.libname, 'Monitors_Get_idx');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_idx', obj.dssctx);
         end
         function obj = set.idx(obj, Value)
-            calllib(obj.libname, 'Monitors_Set_idx', Value);
+            calllib(obj.libname, 'ctx_Monitors_Set_idx', obj.dssctx, Value);
             obj.CheckForError();
         end
 
 
         function result = get.ByteStream(obj)
             % (read-only) Byte Array containing monitor stream values. Make sure a "save" is done first (standard solution modes do this automatically)
-            result = obj.apiutil.get_int8_array('Monitors_Get_ByteStream');
+            calllib(obj.libname, 'ctx_Monitors_Get_ByteStream_GR', obj.dssctx);
+            obj.CheckForError();
+            result = obj.apiutil.get_int8_gr_array();
         end
 
         function result = get.Element(obj)
             % Full object name of element being monitored.
-            result = calllib(obj.libname, 'Monitors_Get_Element');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_Element', obj.dssctx);
         end
         function obj = set.Element(obj, Value)
-            calllib(obj.libname, 'Monitors_Set_Element', Value);
+            calllib(obj.libname, 'ctx_Monitors_Set_Element', obj.dssctx, Value);
         end
 
         function result = get.FileName(obj)
             % (read-only) Name of CSV file associated with active Monitor.
-            result = calllib(obj.libname, 'Monitors_Get_FileName');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_FileName', obj.dssctx);
         end
 
         function result = get.FileVersion(obj)
             % (read-only) Monitor File Version (integer)
-            result = calllib(obj.libname, 'Monitors_Get_FileVersion');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_FileVersion', obj.dssctx);
         end
 
         function result = get.Header(obj)
             % (read-only) Header string;  Array of strings containing Channel names
-            result = obj.apiutil.get_string_array('Monitors_Get_Header');
+            result = obj.apiutil.get_string_array('ctx_Monitors_Get_Header');
         end
 
         function result = get.Mode(obj)
             % Set Monitor mode (bitmask integer - see DSS Help)
-            result = calllib(obj.libname, 'Monitors_Get_Mode');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_Mode', obj.dssctx);
         end
         function obj = set.Mode(obj, Value)
-            calllib(obj.libname, 'Monitors_Set_Mode', Value);
+            calllib(obj.libname, 'ctx_Monitors_Set_Mode', obj.dssctx, Value);
         end
 
         function result = get.NumChannels(obj)
             % (read-only) Number of Channels in the active Monitor
-            result = calllib(obj.libname, 'Monitors_Get_NumChannels');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_NumChannels', obj.dssctx);
         end
 
         function result = get.RecordSize(obj)
             % (read-only) Size of each record in ByteStream (Integer). Same as NumChannels.
-            result = calllib(obj.libname, 'Monitors_Get_RecordSize');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_RecordSize', obj.dssctx);
         end
 
         function result = get.SampleCount(obj)
             % (read-only) Number of Samples in Monitor at Present
-            result = calllib(obj.libname, 'Monitors_Get_SampleCount');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_SampleCount', obj.dssctx);
         end
 
         function result = get.Terminal(obj)
             % Terminal number of element being monitored.
-            result = calllib(obj.libname, 'Monitors_Get_Terminal');
+            result = calllib(obj.libname, 'ctx_Monitors_Get_Terminal', obj.dssctx);
         end
         function obj = set.Terminal(obj, Value)
-            calllib(obj.libname, 'Monitors_Set_Terminal', Value);
+            calllib(obj.libname, 'ctx_Monitors_Set_Terminal', obj.dssctx, Value);
         end
 
         function result = get.dblFreq(obj)
             % (read-only) Array of doubles containing frequency values for harmonics mode solutions; Empty for time mode solutions (use dblHour)
-            result = obj.apiutil.get_float64_array('Monitors_Get_dblFreq');
+            calllib('ctx_Monitors_Get_dblFreq_GR', obj.dssctx);
+            obj.CheckForError();
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.dblHour(obj)
             % (read-only) Array of doubles containgin time value in hours for time-sampled monitor values; Empty if frequency-sampled values for harmonics solution  (see dblFreq)
-            result = obj.apiutil.get_float64_array('Monitors_Get_dblHour');
+            calllib('ctx_Monitors_Get_dblHour_GR', obj.dssctx);
+            obj.CheckForError();
+            result = obj.apiutil.get_float64_gr_array();
         end
     end
 end

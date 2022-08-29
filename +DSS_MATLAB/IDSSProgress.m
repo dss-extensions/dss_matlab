@@ -20,12 +20,12 @@ classdef (CaseInsensitiveProperties) IDSSProgress < DSS_MATLAB.Base
         end
 
         function obj = Close(obj)
-            calllib(obj.libname, 'DSSProgress_Close');
+            calllib(obj.libname, 'ctx_DSSProgress_Close', obj.dssctx);
             obj.CheckForError();
         end
 
         function obj = Show(obj)
-            calllib(obj.libname, 'DSSProgress_Show');
+            calllib(obj.libname, 'ctx_DSSProgress_Show', obj.dssctx);
             obj.CheckForError();
         end
 
@@ -37,7 +37,7 @@ classdef (CaseInsensitiveProperties) IDSSProgress < DSS_MATLAB.Base
             ME = MException(['DSS_MATLAB:Error'], 'This property is write-only!'); throw(ME);
         end
         function obj = set.Caption(obj, Value)
-            calllib(obj.libname, 'DSSProgress_Set_Caption', Value);
+            calllib(obj.libname, 'ctx_DSSProgress_Set_Caption', obj.dssctx, Value);
             obj.CheckForError();
         end
 
@@ -46,7 +46,7 @@ classdef (CaseInsensitiveProperties) IDSSProgress < DSS_MATLAB.Base
             ME = MException(['DSS_MATLAB:Error'], 'This property is write-only!'); throw(ME);
         end
         function obj = set.PctProgress(obj, Value)
-            calllib(obj.libname, 'DSSProgress_Set_PctProgress', Value);
+            calllib(obj.libname, 'ctx_DSSProgress_Set_PctProgress', obj.dssctx, Value);
             obj.CheckForError();
         end
     end

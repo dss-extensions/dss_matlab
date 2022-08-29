@@ -24,22 +24,22 @@ classdef (CaseInsensitiveProperties) IError < DSS_MATLAB.Base
 
         function result = get.Description(obj)
             % (read-only) Description of error for last operation
-            result = calllib(obj.libname, 'Error_Get_Description');
+            result = calllib(obj.libname, 'ctx_Error_Get_Description', obj.dssctx);
         end
 
         function result = get.Number(obj)
             % (read-only) Error Number (returns current value and then resets to zero)
-            result = calllib(obj.libname, 'Error_Get_Number');
+            result = calllib(obj.libname, 'ctx_Error_Get_Number', obj.dssctx);
         end
 
         function result = get.EarlyAbort(obj)
             % EarlyAbort controls whether all errors halts the DSS script processing (Compile/Redirect), defaults to True.
             % 
             % (API Extension)
-            result = (calllib(obj.libname, 'Error_Get_EarlyAbort') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Error_Get_EarlyAbort', obj.dssctx) ~= 0);
         end
         function obj = set.EarlyAbort(obj, Value)
-            calllib(obj.libname, 'Error_Set_EarlyAbort', Value);
+            calllib(obj.libname, 'ctx_Error_Set_EarlyAbort', obj.dssctx, Value);
         end
 
         function result = get.ExtendedErrors(obj)
@@ -62,10 +62,10 @@ classdef (CaseInsensitiveProperties) IError < DSS_MATLAB.Base
             % off to restore the previous behavior.
             % 
             % (API Extension)
-            result = (calllib(obj.libname, 'Error_Get_ExtendedErrors') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Error_Get_ExtendedErrors', obj.dssctx) ~= 0);
         end
         function obj = set.ExtendedErrors(obj, Value)
-            calllib(obj.libname, 'Error_Set_ExtendedErrors', Value);
+            calllib(obj.libname, 'ctx_Error_Set_ExtendedErrors', obj.dssctx, Value);
         end
     end
 end

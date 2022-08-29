@@ -74,253 +74,253 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
 
         function result = get.AllNames(obj)
             % Array of strings with all Transformer names
-            result = obj.apiutil.get_string_array('Transformers_Get_AllNames');
+            result = obj.apiutil.get_string_array('ctx_Transformers_Get_AllNames');
         end
 
         function result = get.Count(obj)
             % Number of Transformer objects
-            result = calllib(obj.libname, 'Transformers_Get_Count');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Count', obj.dssctx);
         end
 
         function result = get.First(obj)
             % Set first object of Transformer; returns 0 if none.
-            result = calllib(obj.libname, 'Transformers_Get_First');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_First', obj.dssctx);
         end
 
         function result = get.Name(obj)
             % Get/sets the name of the current active Transformer
-            result = calllib(obj.libname, 'Transformers_Get_Name');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Name', obj.dssctx);
         end
         function obj = set.Name(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_Name', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_Name', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % Sets next Transformer active; returns 0 if no more.
-            result = calllib(obj.libname, 'Transformers_Get_Next');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Next', obj.dssctx);
         end
 
         function result = get.idx(obj)
             % Get/set active Transformer by index;  1..Count
-            result = calllib(obj.libname, 'Transformers_Get_idx');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_idx', obj.dssctx);
         end
         function obj = set.idx(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_idx', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_idx', obj.dssctx, Value);
             obj.CheckForError();
         end
 
 
         function result = get.IsDelta(obj)
             % Active Winding delta or wye connection?
-            result = (calllib(obj.libname, 'Transformers_Get_IsDelta') ~= 0);
+            result = (calllib(obj.libname, 'ctx_Transformers_Get_IsDelta', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.IsDelta(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_IsDelta', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_IsDelta', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.MaxTap(obj)
             % Active Winding maximum tap in per-unit.
-            result = calllib(obj.libname, 'Transformers_Get_MaxTap');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_MaxTap', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.MaxTap(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_MaxTap', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_MaxTap', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.MinTap(obj)
             % Active Winding minimum tap in per-unit.
-            result = calllib(obj.libname, 'Transformers_Get_MinTap');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_MinTap', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.MinTap(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_MinTap', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_MinTap', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.NumTaps(obj)
             % Active Winding number of tap steps betwein MinTap and MaxTap.
-            result = calllib(obj.libname, 'Transformers_Get_NumTaps');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_NumTaps', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.NumTaps(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_NumTaps', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_NumTaps', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.NumWindings(obj)
             % Number of windings on this transformer. Allocates memory; set or change this property first.
-            result = calllib(obj.libname, 'Transformers_Get_NumWindings');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_NumWindings', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.NumWindings(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_NumWindings', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_NumWindings', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.R(obj)
             % Active Winding resistance in %
-            result = calllib(obj.libname, 'Transformers_Get_R');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_R', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.R(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_R', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_R', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Rneut(obj)
             % Active Winding neutral resistance [ohms] for wye connections. Set less than zero for ungrounded wye.
-            result = calllib(obj.libname, 'Transformers_Get_Rneut');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Rneut', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Rneut(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_Rneut', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_Rneut', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Tap(obj)
             % Active Winding tap in per-unit.
-            result = calllib(obj.libname, 'Transformers_Get_Tap');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Tap', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Tap(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_Tap', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_Tap', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Wdg(obj)
             % Active Winding Number from 1..NumWindings. Update this before reading or setting a sequence of winding properties (R, Tap, kV, kVA, etc.)
-            result = calllib(obj.libname, 'Transformers_Get_Wdg');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Wdg', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Wdg(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_Wdg', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_Wdg', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.XfmrCode(obj)
             % Name of an XfrmCode that supplies electircal parameters for this Transformer.
-            result = calllib(obj.libname, 'Transformers_Get_XfmrCode');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_XfmrCode', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.XfmrCode(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_XfmrCode', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_XfmrCode', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Xhl(obj)
             % Percent reactance between windings 1 and 2, on winding 1 kVA base. Use for 2-winding or 3-winding transformers.
-            result = calllib(obj.libname, 'Transformers_Get_Xhl');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Xhl', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Xhl(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_Xhl', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_Xhl', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Xht(obj)
             % Percent reactance between windigns 1 and 3, on winding 1 kVA base.  Use for 3-winding transformers only.
-            result = calllib(obj.libname, 'Transformers_Get_Xht');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Xht', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Xht(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_Xht', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_Xht', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Xlt(obj)
             % Percent reactance between windings 2 and 3, on winding 1 kVA base. Use for 3-winding transformers only.
-            result = calllib(obj.libname, 'Transformers_Get_Xlt');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Xlt', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Xlt(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_Xlt', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_Xlt', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.Xneut(obj)
             % Active Winding neutral reactance [ohms] for wye connections.
-            result = calllib(obj.libname, 'Transformers_Get_Xneut');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_Xneut', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.Xneut(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_Xneut', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_Xneut', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.kV(obj)
             % Active Winding kV rating.  Phase-phase for 2 or 3 phases, actual winding kV for 1 phase transformer.
-            result = calllib(obj.libname, 'Transformers_Get_kV');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_kV', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.kV(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_kV', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_kV', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.kVA(obj)
             % Active Winding kVA rating. On winding 1, this also determines normal and emergency current ratings for all windings.
-            result = calllib(obj.libname, 'Transformers_Get_kVA');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_kVA', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.kVA(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_kVA', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_kVA', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.WdgVoltages(obj)
             % (read-only) Complex array of voltages for active winding
-            calllib(obj.libname, 'Transformers_Get_WdgVoltages_GR');
+            calllib(obj.libname, 'ctx_Transformers_Get_WdgVoltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.WdgCurrents(obj)
             % (read-only) All Winding currents (ph1, wdg1, wdg2,... ph2, wdg1, wdg2 ...)
-            calllib(obj.libname, 'Transformers_Get_WdgCurrents_GR');
+            calllib(obj.libname, 'ctx_Transformers_Get_WdgCurrents_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.strWdgCurrents(obj)
             % (read-only) All winding currents in CSV string form like the WdgCurrents property
-            result = calllib(obj.libname, 'Transformers_Get_strWdgCurrents');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_strWdgCurrents', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.CoreType(obj)
             % Transformer Core Type: 0=shell;1 = 1-phase; 3= 3-leg; 5= 5-leg
-            result = calllib(obj.libname, 'Transformers_Get_CoreType');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_CoreType', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.CoreType(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_CoreType', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_CoreType', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.RdcOhms(obj)
             % dc Resistance of active winding in ohms for GIC analysis
-            result = calllib(obj.libname, 'Transformers_Get_RdcOhms');
+            result = calllib(obj.libname, 'ctx_Transformers_Get_RdcOhms', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.RdcOhms(obj, Value)
-            calllib(obj.libname, 'Transformers_Set_RdcOhms', Value);
+            calllib(obj.libname, 'ctx_Transformers_Set_RdcOhms', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.LossesByType(obj)
             % Complex array with the losses by type (total losses, load losses, no-load losses), in VA
-            calllib(obj.libname, 'Transformers_Get_LossesByType_GR');
+            calllib(obj.libname, 'ctx_Transformers_Get_LossesByType_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllLossesByType(obj)
             % Complex array with the losses by type (total losses, load losses, no-load losses), in VA, concatenated for ALL transformers
-            calllib(obj.libname, 'Transformers_Get_AllLossesByType_GR');
+            calllib(obj.libname, 'ctx_Transformers_Get_AllLossesByType_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end

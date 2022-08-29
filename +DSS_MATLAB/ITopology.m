@@ -52,117 +52,117 @@ classdef (CaseInsensitiveProperties) ITopology < DSS_MATLAB.Base
 
         function result = get.ActiveBranch(obj)
             % (read-only) Returns index of the active branch
-            result = calllib(obj.libname, 'Topology_Get_ActiveBranch');
+            result = calllib(obj.libname, 'ctx_Topology_Get_ActiveBranch', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.ActiveLevel(obj)
             % (read-only) Topological depth of the active branch
-            result = calllib(obj.libname, 'Topology_Get_ActiveLevel');
+            result = calllib(obj.libname, 'ctx_Topology_Get_ActiveLevel', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.AllIsolatedBranches(obj)
             % (read-only) Array of all isolated branch names.
-            result = obj.apiutil.get_string_array('Topology_Get_AllIsolatedBranches');
+            result = obj.apiutil.get_string_array('ctx_Topology_Get_AllIsolatedBranches');
             obj.CheckForError();
         end
 
         function result = get.AllIsolatedLoads(obj)
             % (read-only) Array of all isolated load names.
-            result = obj.apiutil.get_string_array('Topology_Get_AllIsolatedLoads');
+            result = obj.apiutil.get_string_array('ctx_Topology_Get_AllIsolatedLoads');
             obj.CheckForError();
         end
 
         function result = get.AllLoopedPairs(obj)
             % (read-only) Array of all looped element names, by pairs.
-            result = obj.apiutil.get_string_array('Topology_Get_AllLoopedPairs');
+            result = obj.apiutil.get_string_array('ctx_Topology_Get_AllLoopedPairs');
             obj.CheckForError();
         end
 
         function result = get.BackwardBranch(obj)
             % (read-only) MOve back toward the source, return index of new active branch, or 0 if no more.
-            result = calllib(obj.libname, 'Topology_Get_BackwardBranch');
+            result = calllib(obj.libname, 'ctx_Topology_Get_BackwardBranch', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.BranchName(obj)
             % Name of the active branch.
-            result = calllib(obj.libname, 'Topology_Get_BranchName');
+            result = calllib(obj.libname, 'ctx_Topology_Get_BranchName', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.BranchName(obj, Value)
-            calllib(obj.libname, 'Topology_Set_BranchName', Value);
+            calllib(obj.libname, 'ctx_Topology_Set_BranchName', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.BusName(obj)
             % Set the active branch to one containing this bus, return index or 0 if not found
-            result = calllib(obj.libname, 'Topology_Get_BusName');
+            result = calllib(obj.libname, 'ctx_Topology_Get_BusName', obj.dssctx);
             obj.CheckForError();
         end
         function obj = set.BusName(obj, Value)
-            calllib(obj.libname, 'Topology_Set_BusName', Value);
+            calllib(obj.libname, 'ctx_Topology_Set_BusName', obj.dssctx, Value);
             obj.CheckForError();
         end
 
         function result = get.First(obj)
             % (read-only) Sets the first branch active, returns 0 if none.
-            result = calllib(obj.libname, 'Topology_Get_First');
+            result = calllib(obj.libname, 'ctx_Topology_Get_First', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.FirstLoad(obj)
             % (read-only) First load at the active branch, return index or 0 if none.
-            result = calllib(obj.libname, 'Topology_Get_FirstLoad');
+            result = calllib(obj.libname, 'ctx_Topology_Get_FirstLoad', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.ForwardBranch(obj)
             % (read-only) Move forward in the tree, return index of new active branch or 0 if no more
-            result = calllib(obj.libname, 'Topology_Get_ForwardBranch');
+            result = calllib(obj.libname, 'ctx_Topology_Get_ForwardBranch', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.LoopedBranch(obj)
             % (read-only) Move to looped branch, return index or 0 if none.
-            result = calllib(obj.libname, 'Topology_Get_LoopedBranch');
+            result = calllib(obj.libname, 'ctx_Topology_Get_LoopedBranch', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Next(obj)
             % (read-only) Sets the next branch active, returns 0 if no more.
-            result = calllib(obj.libname, 'Topology_Get_Next');
+            result = calllib(obj.libname, 'ctx_Topology_Get_Next', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NextLoad(obj)
             % (read-only) Next load at the active branch, return index or 0 if no more.
-            result = calllib(obj.libname, 'Topology_Get_NextLoad');
+            result = calllib(obj.libname, 'ctx_Topology_Get_NextLoad', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumIsolatedBranches(obj)
             % (read-only) Number of isolated branches (PD elements and capacitors).
-            result = calllib(obj.libname, 'Topology_Get_NumIsolatedBranches');
+            result = calllib(obj.libname, 'ctx_Topology_Get_NumIsolatedBranches', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumIsolatedLoads(obj)
             % (read-only) Number of isolated loads
-            result = calllib(obj.libname, 'Topology_Get_NumIsolatedLoads');
+            result = calllib(obj.libname, 'ctx_Topology_Get_NumIsolatedLoads', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumLoops(obj)
             % (read-only) Number of loops
-            result = calllib(obj.libname, 'Topology_Get_NumLoops');
+            result = calllib(obj.libname, 'ctx_Topology_Get_NumLoops', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.ParallelBranch(obj)
             % (read-only) Move to directly parallel branch, return index or 0 if none.
-            result = calllib(obj.libname, 'Topology_Get_ParallelBranch');
+            result = calllib(obj.libname, 'ctx_Topology_Get_ParallelBranch', obj.dssctx);
             obj.CheckForError();
         end
     end

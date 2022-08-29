@@ -45,7 +45,6 @@ classdef APIUtil < handle
                 loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_no_thunk);
             end
             calllib(obj.libname, 'DSS_Start', 0);
-            % calllib(obj.libname, 'DSS_SetPropertiesMO', PropertiesMOfilePath);
             if (nargin > 0) && (varargin{1} ~= 0)
                 obj.dssctx = calllib(obj.libname, 'ctx_New');
                 DSS_MATLAB.ctxrefcount(obj.dssctx, 1);
@@ -53,6 +52,7 @@ classdef APIUtil < handle
             else
                 obj.dssctx = calllib(obj.libname, 'ctx_Get_Prime');
                 obj.is_prime = 1;
+                calllib(obj.libname, 'DSS_SetPropertiesMO', PropertiesMOfilePath);
             end
             warning(orig_state);
         end

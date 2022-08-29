@@ -2,6 +2,7 @@ classdef Base < handle & matlab.mixin.CustomDisplay & matlab.mixin.SetGet
     properties (Access = protected, Hidden = true)
         apiutil
         libname
+        dssctx
     end
 
     methods (Access = protected)
@@ -24,6 +25,7 @@ classdef Base < handle & matlab.mixin.CustomDisplay & matlab.mixin.SetGet
         function obj = Base(apiutil)
             obj.apiutil = apiutil;
             obj.libname = apiutil.libname;
+            obj.dssctx = apiutil.dssctx;
         end
 
     end

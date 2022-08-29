@@ -11,7 +11,7 @@ classdef APIUtil < handle
         is_prime
     end
     methods
-        function obj = APIUtil(create)
+        function obj = APIUtil(varargin)
             
             if getenv('DSS_EXTENSIONS_DEBUG') == '1'
                 warnings.warn('Environment variable DSS_EXTENSIONS_DEBUG=1 is set: loading the debug version of the DSS C-API library')
@@ -25,8 +25,9 @@ classdef APIUtil < handle
             PropertiesMOfilePath = fullfile(MfilePath, 'messages', 'properties-en-US.mo');
             DSS_MATLAB.librefcount(1);
             if libisloaded(obj.libname)
-                if (nargin > 0) && (create ~= 0)
+                if (nargin > 0) && (varargin{1} ~= 0)
                     obj.dssctx = calllib(obj.libname, 'ctx_New');
+                    DSS_MATLAB.ctxrefcount(obj.dssctx, 1);
                     obj.is_prime = 0;
                 else
                     obj.dssctx = calllib(obj.libname, 'ctx_Get_Prime');
@@ -44,9 +45,10 @@ classdef APIUtil < handle
                 loadlibrary(DLLfilePath, @DSS_MATLAB.dss_capi_no_thunk);
             end
             calllib(obj.libname, 'DSS_Start', 0);
-            calllib(obj.libname, 'DSS_SetPropertiesMO', PropertiesMOfilePath);
-            if (nargin > 0) && (create ~= 0)
+            % calllib(obj.libname, 'DSS_SetPropertiesMO', PropertiesMOfilePath);
+            if (nargin > 0) && (varargin{1} ~= 0)
                 obj.dssctx = calllib(obj.libname, 'ctx_New');
+                DSS_MATLAB.ctxrefcount(obj.dssctx, 1);
                 obj.is_prime = 0;
             else
                 obj.dssctx = calllib(obj.libname, 'ctx_Get_Prime');
@@ -56,15 +58,19 @@ classdef APIUtil < handle
         end
        
         function delete(obj)
-            if obj.is_prime ~= 0
-                calllib(obj.libname, 'ctx_Dispose', obj.dssctx);
+            
+            if obj.is_prime == 0
+                cnt = DSS_MATLAB.ctxrefcount(obj.dssctx, -1);
+                if cnt == 0
+                    calllib(obj.libname, 'ctx_Dispose', obj.dssctx);
+                end
             end
 
             % If nothing is using the library, unload it.
             % Required to properly exit MATLAB.
             cnt = DSS_MATLAB.librefcount(-1);
             if (cnt == 0)
-                prime_ctx = calllib(obj.libname, 'ctx_Get_Prime')
+                prime_ctx = calllib(obj.libname, 'ctx_Get_Prime');
                 calllib(obj.libname, 'ctx_Text_Set_Command', prime_ctx, 'Set Parallel=no');
                 calllib(obj.libname, 'ctx_DSS_ClearAll', prime_ctx);
                 unloadlibrary(obj.libname);

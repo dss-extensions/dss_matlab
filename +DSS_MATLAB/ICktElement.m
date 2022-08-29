@@ -104,7 +104,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     methods (Access = public)
         function obj = ICktElement(apiutil)
             obj@DSS_MATLAB.Base(apiutil);
-            obj.Properties = DSS_MATLAB.IDSSProperty(obj.apiutil);
+            obj.PropertiesRef = DSS_MATLAB.IDSSProperty(obj.apiutil);
         end
 
         function obj = Close(obj, Term, Phs)

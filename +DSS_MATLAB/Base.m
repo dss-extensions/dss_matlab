@@ -33,17 +33,17 @@ classdef Base < handle & matlab.mixin.CustomDisplay & matlab.mixin.SetGet
     methods
 
         function varargout = CheckForError(obj, varargin)
-            error = calllib(obj.libname, 'Error_Get_Number');
+            error = calllib(obj.libname, 'ctx_Error_Get_Number', obj.dssctx);
             if error ~= 0
-                ME = MException(['DSS_MATLAB:Error' int2str(error)], strrep(calllib(obj.libname, 'Error_Get_Description'), '\', '\\'));
+                ME = MException(['DSS_MATLAB:Error' int2str(error)], strrep(calllib(obj.libname, 'ctx_Error_Get_Description', obj.dssctx), '\', '\\'));
                 throw(ME);
             end
             varargout = varargin;
         end
         
         function obj = clear_api_buffers(obj)
-            calllib(obj.libname, 'DSS_DisposeGRData');
-            calllib(obj.libname, 'DSS_ResetStringBuffer');
+            calllib(obj.libname, 'ctx_DSS_DisposeGRData', obj.dssctx);
+            calllib(obj.libname, 'ctx_DSS_ResetStringBuffer', obj.dssctx);
         end
     end
 end

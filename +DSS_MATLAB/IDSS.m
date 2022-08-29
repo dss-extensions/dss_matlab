@@ -64,8 +64,8 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
     end
 
     methods (Access = public)
-        function obj = IDSS(create)
-            apiutil = DSS_MATLAB.APIUtil(create);
+        function obj = IDSS(varargin)
+            apiutil = DSS_MATLAB.APIUtil(varargin{:});
             apiutil.InitBuffers();
             obj@DSS_MATLAB.Base(apiutil);
             obj.ActiveCircuit = DSS_MATLAB.ICircuit(obj.apiutil);
@@ -119,7 +119,7 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
             % manually, the management of threads and potential issues should be handled by the user.
             % 
             % (API Extension)
-            result = IDSS(1);
+            result = DSS_MATLAB.IDSS(1);
         end
     end
     methods

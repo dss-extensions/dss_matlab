@@ -277,7 +277,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % (API Extension)
             calllib(obj.libname, 'ctx_PDElements_Get_AllCurrentsMagAng_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_complex128_gr_array();
+            result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.AllCplxSeqCurrents(obj)

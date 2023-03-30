@@ -280,11 +280,11 @@ classdef (CaseInsensitiveProperties) IDSS < DSS_MATLAB.Base
             % the legacy/COM behavior. The value can be toggled through the API at any time.
             % 
             % (API Extension)
-            result = (calllib(obj.libname, 'DSS_Get_COMErrorResults') ~= 0);
+            result = (calllib(obj.libname, 'ctx_DSS_Get_COMErrorResults', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
         function obj = set.COMErrorResults(obj, Value)
-            calllib(obj.libname, 'DSS_Set_COMErrorResults', Value);
+            calllib(obj.libname, 'ctx_DSS_Set_COMErrorResults', obj.dssctx, Value);
             obj.CheckForError();
         end
 

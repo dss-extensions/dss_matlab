@@ -1,3 +1,26 @@
+%% About
+
+% This is just a simple example to illustrate the basic usage of the
+% package. DSS_MATLAB is intended to be a drop-in replacement to the
+% official OpenDS COM module distributed by EPRI. Since this uses an
+% alternative engine, it is not supported by EPRI, yet it's very
+% compatible, while being available on Windows, Linux, and macOS, and
+% containing several extensions and code optimizations.
+%
+% For links to docs and more, visit: https://dss-extensions.org/
+% 
+% If you just want the sample/test circuits, you can grab:
+%
+% https://github.com/dss-extensions/electricdss-tst/archive/refs/heads/master.zip
+%
+% Feedback is welcome either at the repository:
+% 
+% https://github.com/dss-extensions/dss_matlab
+%
+% or at the Discussion page (created on March 2023):
+%
+% https://github.com/orgs/dss-extensions/discussions
+
 %% Path setup
 % If you have not already added DSS_MATLAB to your MATLAB path, you can
 % use a command like one of the following -- adjust path as necessary:
@@ -47,7 +70,7 @@ disp(Solution.Converged)
 
 % And plot the voltages for each node
 figure;
-plot(1:Circuit.NumNodes, Circuit.AllBusVmagPu, 'o')
+plot(1:Circuit.NumNodes, Circuit.AllBusVmagPu, 'o-')
 
 xlabel('Node number');
 ylabel('Voltage (pu)');
@@ -66,7 +89,7 @@ Bus.Voltages
 
 idx = Load.First;
 while idx ~= 0
-    fprintf('Load %s - rated power: %g kW, %g kvar', Load.Name, Load.kW, Load.kvar);
+    fprintf('Load %s - rated power: %g kW, %g kvar\n', Load.Name, Load.kW, Load.kvar);
     idx = Load.Next;
 end
 
@@ -92,3 +115,31 @@ xlabel('Bus X coordinate');
 ylabel('Bus Y coordinate');
 ylabel(handle, 'Voltage (pu)');
 
+%% Loading circuits from ZIP files (API extension, not available in the official OpenDSS)
+
+DSS.ClearAll();
+ZIP = DSS.ZIP;
+ZIP.Open('../13Bus.zip')
+
+ZIP.List()
+
+% Running the DSS script directly from the ZIP.
+% This also restricts loading most files only from the ZIP archive,
+% so you have to use relative paths.
+ZIP.Redirect('13Bus/IEEE13Nodeckt.dss')
+
+ZIP.Close()
+
+DSS.ActiveCircuit.NumBuses
+
+%% Activating "AdvancedTypes" (API extension, not available in the official OpenDSS)
+
+DSS.AdvancedTypes = true;
+
+% This is now a complex array, instead of the classic pair-of-reals array
+Circuit.AllBusVolts
+
+% Other data will also be complex, and in matrix form:
+Circuit.Lines.First;
+Circuit.Lines.Name
+Circuit.Lines.Yprim

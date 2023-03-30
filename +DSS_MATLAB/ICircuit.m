@@ -41,6 +41,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    Reactors - 
     %    ReduceCkt - 
     %    Storages - 
+    %    GICSources - 
     %    Parallel - 
     %    AllBusDistances - Returns distance from each bus to parent EnergyMeter. Corresponds to sequence in AllBusNames.
     %    AllBusNames - Array of strings containing names of all buses in circuit (see AllNodeNames).
@@ -59,8 +60,8 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    NumNodes - Total number of nodes in the circuit.
     %    ParentPDElement - Sets Parent PD element, if any, to be the active circuit element and returns index>0; Returns 0 if it fails or not applicable.
     %    SubstationLosses - Complex losses in all transformers designated to substations.
-    %    SystemY - System Y matrix (after a solution has been performed).   This is deprecated as it returns a dense matrix. Only use it for small systems.  For large scale systems, prefer YMatrix.GetCompressedYMatrix.
-    %    TotalPower - Total power, kW delivered to the circuit
+    %    SystemY - System Y matrix (after a solution has been performed).   This is deprecated as it returns a dense matrix. Only use it for small systems.  For large-scale systems, prefer YMatrix.GetCompressedYMatrix.
+    %    TotalPower - Total power (complex), kVA delivered to the circuit
     %    YCurrents - Array of doubles containing complex injection currents for the present solution. Is is the "I" vector of I=YV
     %    YNodeOrder - Array of strings containing the names of the nodes in the same order as the Y matrix
     %    YNodeVarray - Complex array of actual node voltages in same order as SystemY matrix.
@@ -89,6 +90,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
     %    SetActiveClass - 
     %    SetActiveElement - 
     %    UpdateStorage - 
+    %    ElementLosses - Array of total losses (complex) in a selection of elements.  Use the element indices (starting at 1) as parameter. (API Extension)
 
     properties
         ActiveElement
@@ -130,6 +132,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
         Reactors
         ReduceCkt
         Storages
+        GICSources
         Parallel
         AllBusDistances
         AllBusNames
@@ -197,6 +200,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
             obj.Reactors = DSS_MATLAB.IReactors(obj.apiutil);
             obj.ReduceCkt = DSS_MATLAB.IReduceCkt(obj.apiutil);
             obj.Storages = DSS_MATLAB.IStorages(obj.apiutil);
+            obj.GICSources = DSS_MATLAB.IGICSources(obj.apiutil);
             obj.Parallel = DSS_MATLAB.IParallel(obj.apiutil);
         end
 
@@ -244,7 +248,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
 
         function result = AllNodeNamesByPhase(obj, Phase)
             % (read-only) Return array of strings of the node names for the By Phase criteria. Sequence corresponds to other ByPhase properties.
-            result = obj.apiutil.get_string_array('ctx_Circuit_Get_AllNodeNamesByPhase', obj.dssctx, Phase);
+            result = obj.apiutil.get_string_array('ctx_Circuit_Get_AllNodeNamesByPhase', Phase);
             obj.CheckForError();
         end
 
@@ -312,8 +316,18 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
+        function result = ElementLosses(obj, Value)
+            % Array of total losses (complex) in a selection of elements.
+            % Use the element indices (starting at 1) as parameter.
+            % 
+            % (API Extension)
+            calllib(obj.libname, 'ctx_Circuit_Get_ElementLosses_GR', obj.dssctx, Value, numel(Value));
+            obj.CheckForError();
+            result = obj.apiutil.get_complex128_gr_array();
+        end
+
         function result = CktElements(obj, NameOrIdx)
-            if ischar(NameOrIdx) | isstring(NameOrIdx)
+            if ischar(NameOrIdx) || isstring(NameOrIdx)
                 obj.SetActiveElement(NameOrIdx);
             elseif isinteger(NameOrIdx)
                 calllib(obj.libname, 'ctx_Circuit_SetCktElementIndex', obj.dssctx, FullName);
@@ -326,7 +340,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
         end
 
         function result = Buses(obj, NameOrIdx)
-            if ischar(NameOrIdx) | isstring(NameOrIdx)
+            if ischar(NameOrIdx) || isstring(NameOrIdx)
                 obj.SetActiveBus(NameOrIdx);
             elseif isinteger(NameOrIdx)
                 obj.SetActiveBusi(NameOrIdx);
@@ -372,14 +386,14 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
             % (read-only) Complex array of all bus, node voltages from most recent solution
             calllib(obj.libname, 'ctx_Circuit_Get_AllBusVolts_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.AllElementLosses(obj)
             % (read-only) Array of total losses (complex) in each circuit element
             calllib(obj.libname, 'ctx_Circuit_Get_AllElementLosses_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.AllElementNames(obj)
@@ -405,14 +419,14 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
             % (read-only) Complex total line losses in the circuit
             calllib(obj.libname, 'ctx_Circuit_Get_LineLosses_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
 
         function result = get.Losses(obj)
             % (read-only) Total losses in active circuit, complex number (two-element array of double).
             calllib(obj.libname, 'ctx_Circuit_Get_Losses_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
 
         function result = get.Name(obj)
@@ -449,30 +463,30 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
             % (read-only) Complex losses in all transformers designated to substations.
             calllib(obj.libname, 'ctx_Circuit_Get_SubstationLosses_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
 
         function result = get.SystemY(obj)
             % (read-only) System Y matrix (after a solution has been performed). 
             % This is deprecated as it returns a dense matrix. Only use it for small systems.
-            % For large scale systems, prefer YMatrix.GetCompressedYMatrix.
+            % For large-scale systems, prefer YMatrix.GetCompressedYMatrix.
             calllib(obj.libname, 'ctx_Circuit_Get_SystemY_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.TotalPower(obj)
-            % (read-only) Total power, kW delivered to the circuit
+            % (read-only) Total power (complex), kVA delivered to the circuit
             calllib(obj.libname, 'ctx_Circuit_Get_TotalPower_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
 
         function result = get.YCurrents(obj)
             % (read-only) Array of doubles containing complex injection currents for the present solution. Is is the "I" vector of I=YV
             calllib(obj.libname, 'ctx_Circuit_Get_YCurrents_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.YNodeOrder(obj)
@@ -485,7 +499,7 @@ classdef (CaseInsensitiveProperties) ICircuit < DSS_MATLAB.Base
             % (read-only) Complex array of actual node voltages in same order as SystemY matrix.
             calllib(obj.libname, 'ctx_Circuit_Get_YNodeVarray_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
     end
 end

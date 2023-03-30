@@ -8,7 +8,7 @@ classdef (CaseInsensitiveProperties) IDSSElement < DSS_MATLAB.Base
     %    NumProperties - Number of Properties for the active DSS object.
     % 
     % Methods:
-    %    ToJSON - Returns the properties of the active DSS object as a JSON-encoded string.    The `options` parameter contains bit-flags to toggle specific features.  See `Obj_ToJSON` (C-API) for more, or `DSSObj.to_json` in MATLAB.    (API Extension)
+    %    ToJSON - Returns the properties of the active DSS object as a JSON-encoded string.    The `options` parameter contains bit-flags to toggle specific features.  See `Obj_ToJSON` (C-API) for more, or `DSSObj.to_json` in MATLAB. (API Extension)
 
     properties
         Properties

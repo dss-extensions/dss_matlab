@@ -18,6 +18,7 @@ classdef (CaseInsensitiveProperties) IWireData < DSS_MATLAB.Base
     %    RadiusUnits - 
     %    ResistanceUnits - 
     %    Diameter - 
+    %    CapRadius - Equivalent conductor radius for capacitance calcs. Specify this for bundled conductors. Defaults to same value as radius.
 
     properties
         AllNames
@@ -36,6 +37,7 @@ classdef (CaseInsensitiveProperties) IWireData < DSS_MATLAB.Base
         RadiusUnits
         ResistanceUnits
         Diameter
+        CapRadius
     end
 
     methods (Access = public)
@@ -133,7 +135,7 @@ classdef (CaseInsensitiveProperties) IWireData < DSS_MATLAB.Base
         end
 
         function result = get.GMRUnits(obj)
-            result = calllib(obj.libname, 'ctx_WireData_Get_GMRUnits', obj.dssctx);
+            result = DSS_MATLAB.LineUnits(calllib(obj.libname, 'ctx_WireData_Get_GMRUnits', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.GMRUnits(obj, Value)
@@ -160,7 +162,7 @@ classdef (CaseInsensitiveProperties) IWireData < DSS_MATLAB.Base
         end
 
         function result = get.ResistanceUnits(obj)
-            result = calllib(obj.libname, 'ctx_WireData_Get_ResistanceUnits', obj.dssctx);
+            result = DSS_MATLAB.LineUnits(calllib(obj.libname, 'ctx_WireData_Get_ResistanceUnits', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.ResistanceUnits(obj, Value)
@@ -174,6 +176,16 @@ classdef (CaseInsensitiveProperties) IWireData < DSS_MATLAB.Base
         end
         function obj = set.Diameter(obj, Value)
             calllib(obj.libname, 'ctx_WireData_Set_Diameter', obj.dssctx, Value);
+            obj.CheckForError();
+        end
+
+        function result = get.CapRadius(obj)
+            % Equivalent conductor radius for capacitance calcs. Specify this for bundled conductors. Defaults to same value as radius.
+            result = calllib(obj.libname, 'ctx_WireData_Get_CapRadius', obj.dssctx);
+            obj.CheckForError();
+        end
+        function obj = set.CapRadius(obj, Value)
+            calllib(obj.libname, 'ctx_WireData_Set_CapRadius', obj.dssctx, Value);
             obj.CheckForError();
         end
     end

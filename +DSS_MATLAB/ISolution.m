@@ -18,7 +18,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
     %    GenkW - Generator kW for AutoAdd mode
     %    Hour - Set Hour for time series solutions.
     %    IntervalHrs - Get/Set the Solution.IntervalHrs variable used for devices that integrate / custom solution algorithms
-    %    Iterations - Number of iterations taken for last solution. (Same as TotalIterations)
+    %    Iterations - Number of iterations taken for last solution. (Same as Totaliterations)
     %    LDCurve - Load-Duration Curve name for LD modes
     %    LoadModel - Load Model: {dssPowerFlow (default) | dssAdmittance}
     %    LoadMult - Default load multiplier applied to all non-fixed loads
@@ -215,7 +215,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
 
         function result = get.Algorithm(obj)
             % Base Solution algorithm: {dssNormalSolve | dssNewtonSolve}
-            result = calllib(obj.libname, 'ctx_Solution_Get_Algorithm', obj.dssctx);
+            result = DSS_MATLAB.SolutionAlgorithms(calllib(obj.libname, 'ctx_Solution_Get_Algorithm', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.Algorithm(obj, Value)
@@ -255,7 +255,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
 
         function result = get.ControlMode(obj)
             % {dssStatic* | dssEvent | dssTime}  Modes for control devices
-            result = calllib(obj.libname, 'ctx_Solution_Get_ControlMode', obj.dssctx);
+            result = DSS_MATLAB.ControlModes(calllib(obj.libname, 'ctx_Solution_Get_ControlMode', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.ControlMode(obj, Value)
@@ -360,7 +360,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.Iterations(obj)
-            % (read-only) Number of iterations taken for last solution. (Same as TotalIterations)
+            % (read-only) Number of iterations taken for last solution. (Same as Totaliterations)
             result = calllib(obj.libname, 'ctx_Solution_Get_Iterations', obj.dssctx);
             obj.CheckForError();
         end
@@ -427,7 +427,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
 
         function result = get.Mode(obj)
             % Set present solution mode (by a text code - see DSS Help)
-            result = calllib(obj.libname, 'ctx_Solution_Get_Mode', obj.dssctx);
+            result = DSS_MATLAB.SolveModes(calllib(obj.libname, 'ctx_Solution_Get_Mode', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.Mode(obj, Value)

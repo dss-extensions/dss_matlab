@@ -27,10 +27,10 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
     %    WdgVoltages - Complex array of voltages for active winding
     %    WdgCurrents - All Winding currents (ph1, wdg1, wdg2,... ph2, wdg1, wdg2 ...)
     %    strWdgCurrents - All winding currents in CSV string form like the WdgCurrents property
-    %    CoreType - Transformer Core Type: 0=shell;1 = 1-phase; 3= 3-leg; 5= 5-leg
+    %    CoreType - Transformer Core Type: 0=Shell; 1=1ph; 3-3leg; 4=4-Leg; 5=5-leg; 9=Core-1-phase
     %    RdcOhms - dc Resistance of active winding in ohms for GIC analysis
-    %    LossesByType - Complex array with the losses by type (total losses, load losses, no-load losses), in VA
-    %    AllLossesByType - Complex array with the losses by type (total losses, load losses, no-load losses), in VA, concatenated for ALL transformers
+    %    LossesByType - Complex array with the losses by type (total losses, load losses, no-load losses), in VA (API Extension)
+    %    AllLossesByType - Complex array with the losses by type (total losses, load losses, no-load losses), in VA, concatenated for ALL transformers (API Extension)
 
     properties
         AllNames
@@ -275,14 +275,14 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
             % (read-only) Complex array of voltages for active winding
             calllib(obj.libname, 'ctx_Transformers_Get_WdgVoltages_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.WdgCurrents(obj)
             % (read-only) All Winding currents (ph1, wdg1, wdg2,... ph2, wdg1, wdg2 ...)
             calllib(obj.libname, 'ctx_Transformers_Get_WdgCurrents_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.strWdgCurrents(obj)
@@ -292,7 +292,7 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
         end
 
         function result = get.CoreType(obj)
-            % Transformer Core Type: 0=shell;1 = 1-phase; 3= 3-leg; 5= 5-leg
+            % Transformer Core Type: 0=Shell; 1=1ph; 3-3leg; 4=4-Leg; 5=5-leg; 9=Core-1-phase
             result = calllib(obj.libname, 'ctx_Transformers_Get_CoreType', obj.dssctx);
             obj.CheckForError();
         end
@@ -313,16 +313,20 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
 
         function result = get.LossesByType(obj)
             % Complex array with the losses by type (total losses, load losses, no-load losses), in VA
+            % 
+            % (API Extension)
             calllib(obj.libname, 'ctx_Transformers_Get_LossesByType_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.AllLossesByType(obj)
             % Complex array with the losses by type (total losses, load losses, no-load losses), in VA, concatenated for ALL transformers
+            % 
+            % (API Extension)
             calllib(obj.libname, 'ctx_Transformers_Get_AllLossesByType_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
     end
 end

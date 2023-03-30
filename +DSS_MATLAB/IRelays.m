@@ -12,6 +12,13 @@ classdef (CaseInsensitiveProperties) IRelays < DSS_MATLAB.Base
     %    MonitoredTerm - Number of terminal of monitored element that this Relay is monitoring.
     %    SwitchedObj - Full name of element that will be switched when relay trips.
     %    SwitchedTerm - Terminal number of the switched object that will be opened when the relay trips.
+    %    State - Get/Set present state of relay.   If set to open, open relay's controlled element and lock out the relay.   If set to close, close relay's controlled element and resets relay to first operation.
+    %    NormalState - Normal state of relay.
+    % 
+    % Methods:
+    %    Open - Open relay's controlled element and lock out the relay.
+    %    Close - Close the switched object controlled by the relay. Resets relay to first operation.
+    %    Reset - Reset relay to normal state.   If open, lock out the relay.   If closed, resets relay to first operation.
 
     properties
         AllNames
@@ -24,11 +31,33 @@ classdef (CaseInsensitiveProperties) IRelays < DSS_MATLAB.Base
         MonitoredTerm
         SwitchedObj
         SwitchedTerm
+        State
+        NormalState
     end
 
     methods (Access = public)
         function obj = IRelays(apiutil)
             obj@DSS_MATLAB.Base(apiutil);
+        end
+
+        function obj = Open(obj)
+            % Open relay's controlled element and lock out the relay.
+            calllib(obj.libname, 'ctx_Relays_Open', obj.dssctx);
+            obj.CheckForError();
+        end
+
+        function obj = Close(obj)
+            % Close the switched object controlled by the relay. Resets relay to first operation.
+            calllib(obj.libname, 'ctx_Relays_Close', obj.dssctx);
+            obj.CheckForError();
+        end
+
+        function obj = Reset(obj)
+            % Reset relay to normal state. 
+            % If open, lock out the relay. 
+            % If closed, resets relay to first operation.
+            calllib(obj.libname, 'ctx_Relays_Reset', obj.dssctx);
+            obj.CheckForError();
         end
 
     end
@@ -110,6 +139,28 @@ classdef (CaseInsensitiveProperties) IRelays < DSS_MATLAB.Base
         end
         function obj = set.SwitchedTerm(obj, Value)
             calllib(obj.libname, 'ctx_Relays_Set_SwitchedTerm', obj.dssctx, Value);
+            obj.CheckForError();
+        end
+
+        function result = get.State(obj)
+            % Get/Set present state of relay. 
+            % If set to open, open relay's controlled element and lock out the relay. 
+            % If set to close, close relay's controlled element and resets relay to first operation.
+            result = calllib(obj.libname, 'ctx_Relays_Get_State', obj.dssctx);
+            obj.CheckForError();
+        end
+        function obj = set.State(obj, Value)
+            calllib(obj.libname, 'ctx_Relays_Set_State', obj.dssctx, Value);
+            obj.CheckForError();
+        end
+
+        function result = get.NormalState(obj)
+            % Normal state of relay.
+            result = calllib(obj.libname, 'ctx_Relays_Get_NormalState', obj.dssctx);
+            obj.CheckForError();
+        end
+        function obj = set.NormalState(obj, Value)
+            calllib(obj.libname, 'ctx_Relays_Set_NormalState', obj.dssctx, Value);
             obj.CheckForError();
         end
     end

@@ -12,7 +12,7 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
     %    Capacitor - Name of the Capacitor that is controlled.
     %    DeadTime - 
     %    Delay - Time delay [s] to switch on after arming.  Control may reset before actually switching.
-    %    DelayOff - Time delay [s] before swithcing off a step. Control may reset before actually switching.
+    %    DelayOff - Time delay [s] before switching off a step. Control may reset before actually switching.
     %    Mode - Type of automatic controller.
     %    MonitoredObj - Full name of the element that PT and CT are connected to.
     %    MonitoredTerm - Terminal number on the element that PT and CT are connected to.
@@ -141,7 +141,7 @@ classdef (CaseInsensitiveProperties) ICapControls < DSS_MATLAB.Base
         end
 
         function result = get.DelayOff(obj)
-            % Time delay [s] before swithcing off a step. Control may reset before actually switching.
+            % Time delay [s] before switching off a step. Control may reset before actually switching.
             result = calllib(obj.libname, 'ctx_CapControls_Get_DelayOff', obj.dssctx);
             obj.CheckForError();
         end

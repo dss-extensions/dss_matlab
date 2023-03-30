@@ -16,20 +16,21 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
     %    Nodes - Integer Array of Node Numbers defined at the bus in same order as the voltages.
     %    NumNodes - Number of Nodes this bus.
     %    SectionID - Integer ID of the feeder section in which this bus is located.
-    %    SeqVoltages - Double Array of sequence voltages at this bus.
+    %    SeqVoltages - Double Array of sequence voltages at this bus. Magnitudes only.
     %    TotalMiles - Total length of line downline from this bus, in miles. For recloser siting algorithm.
     %    VLL - For 2- and 3-phase buses, returns array of complex numbers represetin L-L voltages in volts. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only first 3.
-    %    VMagAngle - Array of doubles containing voltages in Magnitude (VLN), angle (deg)
+    %    VMagAngle - Array of doubles containing voltages in Magnitude (VLN), angle (degrees)
     %    Voc - Open circuit voltage; Complex array.
     %    Voltages - Complex array of voltages at this bus.
     %    YscMatrix - Complex array of Ysc matrix at bus. Column by column.
     %    Zsc0 - Complex Zero-Sequence short circuit impedance at bus.
-    %    Zsc1 - Complex Positive-Sequence short circuit impedance at bus..
+    %    Zsc1 - Complex Positive-Sequence short circuit impedance at bus.
     %    ZscMatrix - Complex array of Zsc matrix at bus. Column by column.
     %    kVBase - Base voltage at bus in kV
     %    puVLL - Returns Complex array of pu L-L voltages for 2- and 3-phase buses. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only 3 phases.
-    %    puVmagAngle - Array of doubles containig voltage magnitude, angle pairs in per unit
+    %    puVmagAngle - Array of doubles containing voltage magnitude, angle (degrees) pairs in per unit
     %    puVoltages - Complex Array of pu voltages at the bus.
+    %    ZSC012Matrix - Array of doubles (complex) containing the complete 012 Zsc matrix.   Only available after Zsc is computed, either through the "ZscRefresh" command, or running a "FaultStudy" solution.  Only available for buses with 3 nodes.
     %    x - X Coordinate for bus (double)
     %    y - Y coordinate for bus(double)
     %    LoadList - List of strings: Full Names of LOAD elements connected to the active bus.
@@ -70,6 +71,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
         puVLL
         puVmagAngle
         puVoltages
+        ZSC012Matrix
         x
         y
         LoadList
@@ -106,7 +108,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
             % (read-only) Complex Double array of Sequence Voltages (0, 1, 2) at this Bus.
             calllib(obj.libname, 'ctx_Bus_Get_CplxSeqVoltages_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Cust_Duration(obj)
@@ -137,7 +139,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
             % (read-only) Short circuit currents at bus; Complex Array.
             calllib(obj.libname, 'ctx_Bus_Get_Isc_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Lambda(obj)
@@ -184,7 +186,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
         end
 
         function result = get.SeqVoltages(obj)
-            % (read-only) Double Array of sequence voltages at this bus.
+            % (read-only) Double Array of sequence voltages at this bus. Magnitudes only.
             calllib(obj.libname, 'ctx_Bus_Get_SeqVoltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
@@ -200,11 +202,11 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
             % (read-only) For 2- and 3-phase buses, returns array of complex numbers represetin L-L voltages in volts. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only first 3.
             calllib(obj.libname, 'ctx_Bus_Get_VLL_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.VMagAngle(obj)
-            % (read-only) Array of doubles containing voltages in Magnitude (VLN), angle (deg)
+            % (read-only) Array of doubles containing voltages in Magnitude (VLN), angle (degrees)
             calllib(obj.libname, 'ctx_Bus_Get_VMagAngle_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
@@ -214,42 +216,42 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
             % (read-only) Open circuit voltage; Complex array.
             calllib(obj.libname, 'ctx_Bus_Get_Voc_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Voltages(obj)
             % (read-only) Complex array of voltages at this bus.
             calllib(obj.libname, 'ctx_Bus_Get_Voltages_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.YscMatrix(obj)
             % (read-only) Complex array of Ysc matrix at bus. Column by column.
             calllib(obj.libname, 'ctx_Bus_Get_YscMatrix_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Zsc0(obj)
             % (read-only) Complex Zero-Sequence short circuit impedance at bus.
             calllib(obj.libname, 'ctx_Bus_Get_Zsc0_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
 
         function result = get.Zsc1(obj)
-            % (read-only) Complex Positive-Sequence short circuit impedance at bus..
+            % (read-only) Complex Positive-Sequence short circuit impedance at bus.
             calllib(obj.libname, 'ctx_Bus_Get_Zsc1_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
 
         function result = get.ZscMatrix(obj)
             % (read-only) Complex array of Zsc matrix at bus. Column by column.
             calllib(obj.libname, 'ctx_Bus_Get_ZscMatrix_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.kVBase(obj)
@@ -262,11 +264,11 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
             % (read-only) Returns Complex array of pu L-L voltages for 2- and 3-phase buses. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only 3 phases.
             calllib(obj.libname, 'ctx_Bus_Get_puVLL_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.puVmagAngle(obj)
-            % (read-only) Array of doubles containig voltage magnitude, angle pairs in per unit
+            % (read-only) Array of doubles containing voltage magnitude, angle (degrees) pairs in per unit
             calllib(obj.libname, 'ctx_Bus_Get_puVmagAngle_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
@@ -276,7 +278,16 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
             % (read-only) Complex Array of pu voltages at the bus.
             calllib(obj.libname, 'ctx_Bus_Get_puVoltages_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
+        end
+
+        function result = get.ZSC012Matrix(obj)
+            % Array of doubles (complex) containing the complete 012 Zsc matrix. 
+            % Only available after Zsc is computed, either through the "ZscRefresh" command, or running a "FaultStudy" solution.
+            % Only available for buses with 3 nodes.
+            calllib(obj.libname, 'ctx_Bus_Get_ZSC012Matrix_GR', obj.dssctx);
+            obj.CheckForError();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.x(obj)

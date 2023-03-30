@@ -32,10 +32,10 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
     %    X0 - Zero Sequence reactance ohms per unit length.
     %    X1 - Positive Sequence reactance, ohms per unit length.
     %    Xg - Earth return reactance value used to compute line impedances at power frequency
-    %    Xmatrix - 
-    %    Yprim - Yprimitive: Does Nothing at present on Put; Dangerous
+    %    Xmatrix - Reactance matrix (full), ohms per unit length. Array of doubles.
+    %    Yprim - Yprimitive for the active line object (complex array).
     %    SeasonRating - Delivers the rating for the current season (in Amps)  if the "SeasonalRatings" option is active
-    %    IsSwitch - Sets/gets the Line element switch status. Setting it has side-effects to the line parameters.
+    %    IsSwitch - Sets/gets the Line element switch status. Setting it has side-effects to the line parameters. (API Extension)
     % 
     % Methods:
     %    New - 
@@ -319,7 +319,7 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
         end
 
         function result = get.Units(obj)
-            result = calllib(obj.libname, 'ctx_Lines_Get_Units', obj.dssctx);
+            result = DSS_MATLAB.LineUnits(calllib(obj.libname, 'ctx_Lines_Get_Units', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.Units(obj, Value)
@@ -358,6 +358,7 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
         end
 
         function result = get.Xmatrix(obj)
+            % Reactance matrix (full), ohms per unit length. Array of doubles.
             calllib(obj.libname, 'ctx_Lines_Get_Xmatrix_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
@@ -368,10 +369,10 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
         end
 
         function result = get.Yprim(obj)
-            % Yprimitive: Does Nothing at present on Put; Dangerous
+            % Yprimitive for the active line object (complex array).
             calllib(obj.libname, 'ctx_Lines_Get_Yprim_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
         function obj = set.Yprim(obj, Value)
             calllib(obj.libname, 'ctx_Lines_Set_Yprim', obj.dssctx, Value, numel(Value));
@@ -386,6 +387,8 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
 
         function result = get.IsSwitch(obj)
             % Sets/gets the Line element switch status. Setting it has side-effects to the line parameters.
+            % 
+            % (API Extension)
             result = (calllib(obj.libname, 'ctx_Lines_Get_IsSwitch', obj.dssctx) ~= 0);
             obj.CheckForError();
         end

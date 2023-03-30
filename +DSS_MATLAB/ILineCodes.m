@@ -192,7 +192,7 @@ classdef (CaseInsensitiveProperties) ILineCodes < DSS_MATLAB.Base
         end
 
         function result = get.Units(obj)
-            result = calllib(obj.libname, 'ctx_LineCodes_Get_Units', obj.dssctx);
+            result = DSS_MATLAB.LineUnits(calllib(obj.libname, 'ctx_LineCodes_Get_Units', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.Units(obj, Value)

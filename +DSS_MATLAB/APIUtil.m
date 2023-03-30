@@ -9,6 +9,7 @@ classdef APIUtil < handle
         libname
         dssctx
         is_prime
+        allow_complex
     end
     methods
         function obj = APIUtil(varargin)
@@ -19,11 +20,14 @@ classdef APIUtil < handle
             else
                 obj.libname = 'dss_capi';
             end
-
             MfilePath = fileparts(mfilename('fullpath'));
             DLLfilePath = fullfile(MfilePath, obj.libname);
             PropertiesMOfilePath = fullfile(MfilePath, 'messages', 'properties-en-US.mo');
             DSS_MATLAB.librefcount(1);
+            obj.allow_complex = false;
+            if (nargin > 1) && (varargin{2})
+                obj.allow_complex = true;
+            end
             if libisloaded(obj.libname)
                 if (nargin > 0) && (varargin{1} ~= 0)
                     obj.dssctx = calllib(obj.libname, 'ctx_New');
@@ -95,33 +99,83 @@ classdef APIUtil < handle
             % setdatatype(obj.DataPtr_PInteger, 'int32PtrPtr', 1);
             % setdatatype(obj.DataPtr_PByte, 'int8PtrPtr', 1);
             
-            setdatatype(obj.CountPtr_PDouble, 'int32Ptr', 2);
-            setdatatype(obj.CountPtr_PInteger, 'int32Ptr', 2);
-            setdatatype(obj.CountPtr_PByte, 'int32Ptr', 2);
+            setdatatype(obj.CountPtr_PDouble, 'int32Ptr', 4);
+            setdatatype(obj.CountPtr_PInteger, 'int32Ptr', 4);
+            setdatatype(obj.CountPtr_PByte, 'int32Ptr', 4);
         end
         
         
         function result = get_float64_gr_array(obj)
             data = calllib(obj.libname, 'ctx_DSS_GR_DataPtr_PDouble', obj.dssctx);
-            setdatatype(data, 'doublePtr', 1, obj.CountPtr_PDouble.Value(1));
+            cnt = obj.CountPtr_PDouble.Value;
+            setdatatype(data, 'doublePtr', 1, cnt(1));
             result = data.Value;
+            if obj.allow_complex && (cnt(4) ~= 0)
+                % If the last element is filled, we have a matrix.  Otherwise, the 
+                % matrix feature is disabled or the result is indeed a vector
+                result = reshape(result, [cnt(3), cnt(4)]);
+            end
         end
         
+        function result = get_complex128_gr_array(obj)
+            if ~obj.allow_complex
+                result = obj.get_float64_gr_array();
+                return
+            end
+
+            % Currently we use the same as API as get_float64_array, may change later
+            data = calllib(obj.libname, 'ctx_DSS_GR_DataPtr_PDouble', obj.dssctx);
+            cnt = obj.CountPtr_PDouble.Value;
+            setdatatype(data, 'doublePtr', 1, cnt(1));
+            result = data.Value(1:2:end) + 1j * data.Value(2:2:end);
+            if obj.allow_complex && (cnt(4) ~= 0)
+                % If the last element is filled, we have a matrix.  Otherwise, the 
+                % matrix feature is disabled or the result is indeed a vector
+                result = reshape(result, [cnt(3), cnt(4)]);
+            end
+        end
+
+        function result = get_complex128_gr_simple(obj)
+            if ~obj.allow_complex
+                result = obj.get_float64_gr_array();
+                return
+            end
+
+            % Currently we use the same as API as get_float64_array, may change later
+            data = calllib(obj.libname, 'ctx_DSS_GR_DataPtr_PDouble', obj.dssctx);
+            cnt = obj.CountPtr_PDouble.Value;
+            assert(cnt(1) == 2, 'Unexpected number of elements returned by API');
+            setdatatype(data, 'doublePtr', 1, 2);
+            result = data.Value(1) + 1j * data.Value(2);
+        end
+
         function result = get_int32_gr_array(obj)
             data = calllib(obj.libname, 'ctx_DSS_GR_DataPtr_PInteger', obj.dssctx);
-            setdatatype(data, 'int32Ptr', 1, obj.CountPtr_PInteger.Value(1));
+            cnt = obj.CountPtr_PInteger.Value;
+            setdatatype(data, 'int32Ptr', 1, cnt);
             result = data.Value;
+            if obj.allow_complex && (cnt(4) ~= 0)
+                % If the last element is filled, we have a matrix.  Otherwise, the 
+                % matrix feature is disabled or the result is indeed a vector
+                result = reshape(result, [cnt(3), cnt(4)]);
+            end
         end
  
         function result = get_int8_gr_array(obj)
             data = calllib(obj.libname, 'ctx_DSS_GR_DataPtr_PByte', obj.dssctx);
-            setdatatype(data, 'int8Ptr', 1, obj.CountPtr_PByte.Value(1));
+            cnt = obj.CountPtr_PByte.Value;
+            setdatatype(data, 'int8Ptr', 1, cnt(1));
             result = data.Value;
+            if obj.allow_complex && (cnt(4) ~= 0)
+                % If the last element is filled, we have a matrix.  Otherwise, the 
+                % matrix feature is disabled or the result is indeed a vector
+                result = reshape(result, [cnt(3), cnt(4)]);
+            end
         end
         
         function result = get_string_array(obj, funcname, varargin)
             dataPointer = libpointer('voidPtr', 0);
-            countPointer = libpointer('int32Ptr', [0, 0]);
+            countPointer = libpointer('int32Ptr', [0, 0, 0, 0]);
             calllib(obj.libname, funcname, obj.dssctx, dataPointer, countPointer, varargin{:});
             result = cell(countPointer.Value(1), 1);
             for i=1:countPointer.Value(1)
@@ -129,10 +183,27 @@ classdef APIUtil < handle
             end
             calllib(obj.libname, 'DSS_Dispose_PPAnsiChar', dataPointer, countPointer.Value(2));
         end
-   
+
+        function obj = set_string_array(obj, funcname, Value)
+            calllib(obj.libname, funcname, obj.dssctx, Value, numel(Value));
+        end
+
+        function obj = set_complex128_simple(obj, funcname, value)
+            if ~isreal(value)
+                assert(length(value) ~= 1, 'A single complex number or a pair of reals was expected');
+                calllib(obj.libname, funcname, obj.dssctx, value, 2);
+                return
+            end
+            assert((length(value) == 1) || (length(value) == 2), 'A single complex number or a pair of reals was expected');
+            if (length(value) ~= 2)
+                value = [value; 0];
+            end
+            calllib(obj.libname, funcname, obj.dssctx, value, 2);
+        end
+
         % function result = get_int8_array(obj, funcname, varargin)
         %     dataPointer = libpointer('int8PtrPtr');
-        %     countPointer = libpointer('int32Ptr', [0, 0]);
+        %     countPointer = libpointer('int32Ptr', [0, 0, 0, 0]);
         %     calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
         %     dataPointer.Value
         %     setdatatype(dataPointer.Value, 'int8Ptr', 1, countPointer.Value(1));
@@ -143,7 +214,7 @@ classdef APIUtil < handle
         
         % function result = get_int32_array(obj, funcname, varargin)
         %     dataPointer = libpointer('int32PtrPtr');
-        %     countPointer = libpointer('int32Ptr', [0, 0]);
+        %     countPointer = libpointer('int32Ptr', [0, 0, 0, 0]);
         %     calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
         %     setdatatype(dataPointer.Value, 'int32Ptr', 1, countPointer.Value(1));
         %     result = dataPointer.Value;
@@ -152,7 +223,7 @@ classdef APIUtil < handle
    
         % function result = get_float64_array(obj, funcname, varargin)
         %     dataPointer = libpointer('doublePtrPtr');
-        %     countPointer = libpointer('int32Ptr', [0, 0]);
+        %     countPointer = libpointer('int32Ptr', [0, 0, 0, 0]);
         %     calllib(obj.libname, funcname, dataPointer, countPointer, varargin{:});
         %     setdatatype(dataPointer.Value, 'doublePtr', 1, countPointer.Value(1));
         %     result = dataPointer.Value;

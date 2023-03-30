@@ -42,7 +42,8 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
     %    kwhdays - Length of kwh billing period for average demand calculation. Default 30.
     %    pctSeriesRL - Percent of Load that is modeled as series R-L for harmonics studies
     %    xfkVA - Rated service transformer kVA for load allocation, using AllocationFactor. Affects kW, kvar, and pf.
-    %    Phases - Number of phases
+    %    Sensor - Name of the sensor monitoring this load.
+    %    Phases - Number of phases (API Extension)
 
     properties
         AllNames
@@ -85,6 +86,7 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
         kwhdays
         pctSeriesRL
         xfkVA
+        Sensor
         Phases
     end
 
@@ -296,7 +298,7 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
 
         function result = get.Status(obj)
             % Response to load multipliers: Fixed (growth only), Exempt (no LD curve), Variable (all).
-            result = calllib(obj.libname, 'ctx_Loads_Get_Status', obj.dssctx);
+            result = DSS_MATLAB.LoadStatus(calllib(obj.libname, 'ctx_Loads_Get_Status', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.Status(obj, Value)
@@ -475,8 +477,16 @@ classdef (CaseInsensitiveProperties) ILoads < DSS_MATLAB.Base
             obj.CheckForError();
         end
 
+        function result = get.Sensor(obj)
+            % Name of the sensor monitoring this load.
+            result = calllib(obj.libname, 'ctx_Loads_Get_Sensor', obj.dssctx);
+            obj.CheckForError();
+        end
+
         function result = get.Phases(obj)
             % Number of phases
+            % 
+            % (API Extension)
             result = calllib(obj.libname, 'ctx_Loads_Get_Phases', obj.dssctx);
             obj.CheckForError();
         end

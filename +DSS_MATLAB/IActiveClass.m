@@ -12,7 +12,7 @@ classdef (CaseInsensitiveProperties) IActiveClass < DSS_MATLAB.Base
     %    ActiveClassParent - Get the name of the parent class of the active class
     % 
     % Methods:
-    %    ToJSON - Returns the data (as a list) of all elements from the active class as a JSON-encoded string.    The `options` parameter contains bit-flags to toggle specific features.  See `Obj_ToJSON` (C-API) for more.    Additionally, the `ExcludeDisabled` flag can be used to excluded disabled elements from the output.    (API Extension)
+    %    ToJSON - Returns the data (as a list) of all elements from the active class as a JSON-encoded string.    The `options` parameter contains bit-flags to toggle specific features.  See `Obj_ToJSON` (C-API) for more.    Additionally, the `ExcludeDisabled` flag can be used to excluded disabled elements from the output. (API Extension)
 
     properties
         ActiveClassName

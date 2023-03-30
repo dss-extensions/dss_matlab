@@ -11,7 +11,7 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
     %    IntValue - Return next parameter as a long integer.
     %    NextParam - Get next token and return tag name (before = sign) if any. See AutoIncrement.
     %    StrValue - Return next parameter as a string
-    %    WhiteSpace - (read) Get the characters used for White space in the command string.  Default is blank and Tab.  (write) Set the characters used for White space in the command string.  Default is blank and Tab.
+    %    WhiteSpace - Get/set the characters used for White space in the command string.  Default is blank and Tab.
     % 
     % Methods:
     %    Matrix - Use this property to parse a Matrix token in OpenDSS format.  Returns square matrix of order specified. Order same as default Fortran order: column by column.
@@ -141,8 +141,7 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
         end
 
         function result = get.WhiteSpace(obj)
-            % (read) Get the characters used for White space in the command string.  Default is blank and Tab.
-            % (write) Set the characters used for White space in the command string.  Default is blank and Tab.
+            % Get/set the characters used for White space in the command string.  Default is blank and Tab.
             result = calllib(obj.libname, 'ctx_Parser_Get_WhiteSpace', obj.dssctx);
             obj.CheckForError();
         end

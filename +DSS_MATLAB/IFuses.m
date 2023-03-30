@@ -16,11 +16,14 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
     %    SwitchedObj - Full name of the circuit element switch that the fuse controls.   Defaults to the MonitoredObj.
     %    SwitchedTerm - Number of the terminal of the controlled element containing the switch controlled by the fuse.
     %    TCCcurve - Name of the TCCcurve object that determines fuse blowing.
+    %    State - Array of strings indicating the state of each phase of the fuse.
+    %    NormalState - Array of strings indicating the normal state of each phase of the fuse.
     % 
     % Methods:
-    %    Close - 
-    %    IsBlown - 
-    %    Open - 
+    %    Close - Close all phases of the fuse.
+    %    IsBlown - Current state of the fuses. TRUE if any fuse on any phase is blown. Else FALSE.
+    %    Open - Manual opening of all phases of the fuse.
+    %    Reset - Reset fuse to normal state.
 
     properties
         AllNames
@@ -37,6 +40,8 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
         SwitchedObj
         SwitchedTerm
         TCCcurve
+        State
+        NormalState
     end
 
     methods (Access = public)
@@ -45,17 +50,26 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
         end
 
         function obj = Close(obj)
+            % Close all phases of the fuse.
             calllib(obj.libname, 'ctx_Fuses_Close', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = IsBlown(obj)
+            % Current state of the fuses. TRUE if any fuse on any phase is blown. Else FALSE.
             result = (calllib(obj.libname, 'ctx_Fuses_IsBlown', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
 
         function obj = Open(obj)
+            % Manual opening of all phases of the fuse.
             calllib(obj.libname, 'ctx_Fuses_Open', obj.dssctx);
+            obj.CheckForError();
+        end
+
+        function obj = Reset(obj)
+            % Reset fuse to normal state.
+            calllib(obj.libname, 'ctx_Fuses_Reset', obj.dssctx);
             obj.CheckForError();
         end
 
@@ -177,6 +191,26 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
         end
         function obj = set.TCCcurve(obj, Value)
             calllib(obj.libname, 'ctx_Fuses_Set_TCCcurve', obj.dssctx, Value);
+            obj.CheckForError();
+        end
+
+        function result = get.State(obj)
+            % Array of strings indicating the state of each phase of the fuse.
+            result = obj.apiutil.get_string_array('ctx_Fuses_Get_State');
+            obj.CheckForError();
+        end
+        function obj = set.State(obj, Value)
+            obj.apiutil.set_string_array('ctx_Fuses_Set_State', Value);
+            obj.CheckForError();
+        end
+
+        function result = get.NormalState(obj)
+            % Array of strings indicating the normal state of each phase of the fuse.
+            result = obj.apiutil.get_string_array('ctx_Fuses_Get_NormalState');
+            obj.CheckForError();
+        end
+        function obj = set.NormalState(obj, Value)
+            obj.apiutil.set_string_array('ctx_Fuses_Set_NormalState', Value);
             obj.CheckForError();
         end
     end

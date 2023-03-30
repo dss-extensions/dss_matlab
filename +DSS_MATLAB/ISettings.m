@@ -2,7 +2,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
     % ISettings: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllowDuplicates - {True | False*} Designates whether to allow duplicate names of objects
+    %    AllowDuplicates - {True | False*} Designates whether to allow duplicate names of objects    **NOTE**: for DSS Extensions, we are considering removing this option in a future   release since it has performance impacts even when not used.
     %    AutoBusList - List of Buses or (File=xxxx) syntax for the AutoAdd solution mode.
     %    CktModel - {dssMultiphase (0) * | dssPositiveSeq (1) } Indicate if the circuit model is positive sequence.
     %    ControlTrace - {True | False*} Denotes whether to trace the control actions to a file.
@@ -14,14 +14,14 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
     %    NormVminpu - Per Unit minimum voltage for Normal conditions.
     %    PriceCurve - Name of LoadShape object that serves as the source of price signal data for yearly simulations, etc.
     %    PriceSignal - Price Signal for the Circuit
-    %    Trapezoidal - {True | False *} Gets value of trapezoidal integration flag in energy meters.
+    %    Trapezoidal - Gets value of trapezoidal integration flag in energy meters. Defaults to `False`.
     %    UEregs - Array of Integers defining energy meter registers to use for computing UE
     %    UEweight - Weighting factor applied to UE register values.
     %    VoltageBases - Array of doubles defining the legal voltage bases in kV L-L
     %    ZoneLock - {True | False*}  Locks Zones on energy meters to prevent rebuilding if a circuit change occurs.
     %    AllocationFactors - (write-only) Sets all load allocation factors for all loads defined by XFKVA property to this value.
-    %    LoadsTerminalCheck - Controls whether the terminals are checked when updating the currents in Load component. Defaults to True.  If the loads are guaranteed to have their terminals closed throughout the simulation, this can be set to False to save some time.    (API Extension)
-    %    IterateDisabled - Controls whether `First`/`Next` iteration includes or skips disabled circuit elements.  The default behavior from OpenDSS is to skip those. The user can still activate the element by name or index.    The default value for IterateDisabled is 0, keeping the original behavior.  Set it to 1 (or `True`) to include disabled elements.  Other numeric values are reserved for other potential behaviors.    (API Extension)
+    %    LoadsTerminalCheck - Controls whether the terminals are checked when updating the currents in Load component. Defaults to True.  If the loads are guaranteed to have their terminals closed throughout the simulation, this can be set to False to save some time. (API Extension)
+    %    IterateDisabled - Controls whether `First`/`Next` iteration includes or skips disabled circuit elements.  The default behavior from OpenDSS is to skip those. The user can still activate the element by name or index.    The default value for IterateDisabled is 0, keeping the original behavior.  Set it to 1 (or `True`) to include disabled elements.  Other numeric values are reserved for other potential behaviors. (API Extension)
 
     properties
         AllowDuplicates
@@ -56,6 +56,9 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
 
         function result = get.AllowDuplicates(obj)
             % {True | False*} Designates whether to allow duplicate names of objects
+            % 
+            % **NOTE**: for DSS Extensions, we are considering removing this option in a future 
+            % release since it has performance impacts even when not used.
             result = (calllib(obj.libname, 'ctx_Settings_Get_AllowDuplicates', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
@@ -176,7 +179,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
         end
 
         function result = get.Trapezoidal(obj)
-            % {True | False *} Gets value of trapezoidal integration flag in energy meters.
+            % Gets value of trapezoidal integration flag in energy meters. Defaults to `False`.
             result = (calllib(obj.libname, 'ctx_Settings_Get_Trapezoidal', obj.dssctx) ~= 0);
             obj.CheckForError();
         end

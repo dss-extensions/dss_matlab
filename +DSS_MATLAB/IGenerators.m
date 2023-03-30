@@ -20,14 +20,14 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
     %    kVArated - kVA rating of the generator
     %    kW - kW output for the active generator. kvar is updated for current power factor.
     %    kvar - kvar output for the active generator. Updates power factor based on present kW value.
-    %    daily - Name of the loadshape for a daily generation profile.    (API Extension)
-    %    duty - Name of the loadshape for a duty cycle simulation.    (API Extension)
-    %    Yearly - Name of yearly loadshape    (API Extension)
-    %    Status - Response to dispatch multipliers: Fixed=1 (dispatch multipliers do not apply), Variable=0 (follows curves).    Related enumeration: GeneratorStatus    (API Extension)
-    %    IsDelta - Generator connection. True/1 if delta connection, False/0 if wye.    (API Extension)
-    %    kva - kVA rating of electrical machine. Applied to machine or inverter definition for Dynamics mode solutions.    (API Extension)
-    %    Class - An arbitrary integer number representing the class of Generator so that Generator values may be segregated by class.    (API Extension)
-    %    Bus1 - Bus to which the Generator is connected. May include specific node specification.    (API Extension)
+    %    daily - Name of the loadshape for a daily generation profile. (API Extension)
+    %    duty - Name of the loadshape for a duty cycle simulation. (API Extension)
+    %    Yearly - Name of yearly loadshape (API Extension)
+    %    Status - Response to dispatch multipliers: Fixed=1 (dispatch multipliers do not apply), Variable=0 (follows curves).    Related enumeration: GeneratorStatus (API Extension)
+    %    IsDelta - Generator connection. True/1 if delta connection, False/0 if wye. (API Extension)
+    %    kva - kVA rating of electrical machine. Applied to machine or inverter definition for Dynamics mode solutions. (API Extension)
+    %    Class - An arbitrary integer number representing the class of Generator so that Generator values may be segregated by class. (API Extension)
+    %    Bus1 - Bus to which the Generator is connected. May include specific node specification. (API Extension)
 
     properties
         AllNames
@@ -260,7 +260,7 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
             % Related enumeration: GeneratorStatus
             % 
             % (API Extension)
-            result = calllib(obj.libname, 'ctx_Generators_Get_Status', obj.dssctx);
+            result = DSS_MATLAB.GeneratorStatus(calllib(obj.libname, 'ctx_Generators_Get_Status', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.Status(obj, Value)

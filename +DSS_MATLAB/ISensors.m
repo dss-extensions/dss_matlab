@@ -19,6 +19,7 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
     %    kVS - Array of doubles for the LL or LN (depending on Delta connection) voltage measurements.
     %    kVbase - Voltage base for the sensor measurements. LL for 2 and 3-phase sensors, LN for 1-phase sensors.
     %    kWS - Array of doubles for P measurements. Overwrites Currents with a new estimate using kVARS.
+    %    AllocationFactor - Array of doubles for the allocation factors for each phase.
     % 
     % Methods:
     %    Reset - 
@@ -42,6 +43,7 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
         kVS
         kVbase
         kWS
+        AllocationFactor
     end
 
     methods (Access = public)
@@ -213,6 +215,13 @@ classdef (CaseInsensitiveProperties) ISensors < DSS_MATLAB.Base
         function obj = set.kWS(obj, Value)
             calllib(obj.libname, 'ctx_Sensors_Set_kWS', obj.dssctx, Value, numel(Value));
             obj.CheckForError();
+        end
+
+        function result = get.AllocationFactor(obj)
+            % Array of doubles for the allocation factors for each phase.
+            calllib(obj.libname, 'ctx_Sensors_Get_AllocationFactor_GR', obj.dssctx);
+            obj.CheckForError();
+            result = obj.apiutil.get_float64_gr_array();
         end
     end
 end

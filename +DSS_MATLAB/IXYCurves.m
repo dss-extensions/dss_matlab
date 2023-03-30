@@ -14,7 +14,7 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
     %    Xshift - Amount to shift X value from original curve
     %    Yarray - Get/Set Y values in curve; Set Npts to max number expected if setting
     %    Yscale - Factor to scale Y values from original curve
-    %    Yshift - Amount to shift Y valiue from original curve
+    %    Yshift - Amount to shift Y value from original curve
     %    x - Set X value or get interpolated value after setting Y
     %    y - Set Y value or get interpolated Y value after setting X
 
@@ -146,7 +146,7 @@ classdef (CaseInsensitiveProperties) IXYCurves < DSS_MATLAB.Base
         end
 
         function result = get.Yshift(obj)
-            % Amount to shift Y valiue from original curve
+            % Amount to shift Y value from original curve
             result = calllib(obj.libname, 'ctx_XYCurves_Get_Yshift', obj.dssctx);
             obj.CheckForError();
         end

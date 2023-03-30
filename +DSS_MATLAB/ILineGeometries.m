@@ -17,6 +17,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
     %    Units - 
     %    Xcoords - Get/Set the X (horizontal) coordinates of the conductors
     %    Ycoords - Get/Set the Y (vertical/height) coordinates of the conductors
+    %    Nconds - Number of conductors in this geometry. Default is 3. Triggers memory allocations. Define first!
     % 
     % Methods:
     %    Rmatrix - Resistance matrix, ohms
@@ -40,6 +41,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
         Units
         Xcoords
         Ycoords
+        Nconds
     end
 
     methods (Access = public)
@@ -65,7 +67,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
             % (read-only) Complex impedance matrix, ohms
             calllib(obj.libname, 'ctx_LineGeometries_Get_Zmatrix_GR', obj.dssctx, Frequency, Length, Units);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = Cmatrix(obj, Frequency, Length, Units)
@@ -174,7 +176,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
         function result = get.Units(obj)
             calllib(obj.libname, 'ctx_LineGeometries_Get_Units_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_int32_gr_array();
+            result = DSS_MATLAB.LineUnits(obj.apiutil.get_int32_gr_array())
         end
         function obj = set.Units(obj, Value)
             calllib(obj.libname, 'ctx_LineGeometries_Set_Units', obj.dssctx, Value, numel(Value));
@@ -200,6 +202,16 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
         end
         function obj = set.Ycoords(obj, Value)
             calllib(obj.libname, 'ctx_LineGeometries_Set_Ycoords', obj.dssctx, Value, numel(Value));
+            obj.CheckForError();
+        end
+
+        function result = get.Nconds(obj)
+            % Number of conductors in this geometry. Default is 3. Triggers memory allocations. Define first!
+            result = calllib(obj.libname, 'ctx_LineGeometries_Get_Nconds', obj.dssctx);
+            obj.CheckForError();
+        end
+        function obj = set.Nconds(obj, Value)
+            calllib(obj.libname, 'ctx_LineGeometries_Set_Nconds', obj.dssctx, Value);
             obj.CheckForError();
         end
     end

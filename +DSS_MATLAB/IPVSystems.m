@@ -15,14 +15,15 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
     %    kVArated - Get/set Rated kVA of the PVSystem
     %    kW - get kW output
     %    kvar - Get/set kvar output value
-    %    daily - Name of the loadshape for a daily PVSystem profile.
-    %    duty - Name of the load shape to use for duty cycle dispatch simulations such as  for solar ramp rate studies. Must be previously defined as a Loadshape  object. Typically would have time intervals of 1-5 seconds.
-    %    yearly - Dispatch shape to use for yearly simulations. Must be previously defined  as a Loadshape object. If this is not specified, the Daily dispatch shape,  if any, is repeated during Yearly solution modes. In the default dispatch  mode, the PVSystem element uses this loadshape to trigger State changes.
-    %    Tdaily - Temperature shape to use for daily simulations. Must be previously defined  as a TShape object of 24 hrs, typically. The PVSystem element uses this  TShape to determine the Pmpp from the Pmpp vs T curve. Units must agree  with the Pmpp vs T curve.
-    %    Tduty - Temperature shape to use for duty cycle dispatch simulations such as for  solar ramp rate studies. Must be previously defined as a TShape object.  Typically would have time intervals of 1-5 seconds. Designate the number  of points to solve using the Set Number=xxxx command. If there are fewer  points in the actual shape, the shape is assumed to repeat. The PVSystem  model uses this TShape to determine the Pmpp from the Pmpp vs T curve.  Units must agree with the Pmpp vs T curve.
-    %    Tyearly - Temperature shape to use for yearly simulations. Must be previously defined  as a TShape object. If this is not specified, the Daily dispatch shape, if  any, is repeated during Yearly solution modes. The PVSystem element uses  this TShape to determine the Pmpp from the Pmpp vs T curve. Units must  agree with the Pmpp vs T curve.
+    %    daily - Name of the dispatch shape to use for daily simulations. Must be previously  defined as a Loadshape object of 24 hrs, typically. In the default dispatch  mode, the PVSystem element uses this loadshape to trigger State changes. (API Extension)
+    %    duty - Name of the load shape to use for duty cycle dispatch simulations such as  for solar ramp rate studies. Must be previously defined as a Loadshape  object. Typically would have time intervals of 1-5 seconds. (API Extension)
+    %    yearly - Dispatch shape to use for yearly simulations. Must be previously defined  as a Loadshape object. If this is not specified, the Daily dispatch shape,  if any, is repeated during Yearly solution modes. In the default dispatch  mode, the PVSystem element uses this loadshape to trigger State changes. (API Extension)
+    %    Tdaily - Temperature shape to use for daily simulations. Must be previously defined  as a TShape object of 24 hrs, typically. The PVSystem element uses this  TShape to determine the Pmpp from the Pmpp vs T curve. Units must agree  with the Pmpp vs T curve. (API Extension)
+    %    Tduty - Temperature shape to use for duty cycle dispatch simulations such as for  solar ramp rate studies. Must be previously defined as a TShape object.  Typically would have time intervals of 1-5 seconds. Designate the number  of points to solve using the Set Number=xxxx command. If there are fewer  points in the actual shape, the shape is assumed to repeat. The PVSystem  model uses this TShape to determine the Pmpp from the Pmpp vs T curve.  Units must agree with the Pmpp vs T curve. (API Extension)
+    %    Tyearly - Temperature shape to use for yearly simulations. Must be previously defined  as a TShape object. If this is not specified, the Daily dispatch shape, if  any, is repeated during Yearly solution modes. The PVSystem element uses  this TShape to determine the Pmpp from the Pmpp vs T curve. Units must  agree with the Pmpp vs T curve. (API Extension)
     %    IrradianceNow - Returns the current irradiance value for the active PVSystem. Use it to   know what's the current irradiance value for the PV during a simulation.
     %    Pmpp - Gets/sets the rated max power of the PV array for 1.0 kW/sq-m irradiance   and a user-selected array temperature of the active PVSystem.
+    %    Sensor - Name of the sensor monitoring this element.
 
     properties
         AllNames
@@ -46,6 +47,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         Tyearly
         IrradianceNow
         Pmpp
+        Sensor
     end
 
     methods (Access = public)
@@ -155,7 +157,11 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         end
 
         function result = get.daily(obj)
-            % Name of the loadshape for a daily PVSystem profile.
+            % Name of the dispatch shape to use for daily simulations. Must be previously
+            % defined as a Loadshape object of 24 hrs, typically. In the default dispatch
+            % mode, the PVSystem element uses this loadshape to trigger State changes.        
+            % 
+            % (API Extension)
             result = calllib(obj.libname, 'ctx_PVSystems_Get_daily', obj.dssctx);
             obj.CheckForError();
         end
@@ -168,6 +174,8 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
             % Name of the load shape to use for duty cycle dispatch simulations such as
             % for solar ramp rate studies. Must be previously defined as a Loadshape
             % object. Typically would have time intervals of 1-5 seconds.
+            % 
+            % (API Extension)
             result = calllib(obj.libname, 'ctx_PVSystems_Get_duty', obj.dssctx);
             obj.CheckForError();
         end
@@ -181,6 +189,8 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
             % as a Loadshape object. If this is not specified, the Daily dispatch shape,
             % if any, is repeated during Yearly solution modes. In the default dispatch
             % mode, the PVSystem element uses this loadshape to trigger State changes.
+            % 
+            % (API Extension)
             result = calllib(obj.libname, 'ctx_PVSystems_Get_yearly', obj.dssctx);
             obj.CheckForError();
         end
@@ -194,6 +204,8 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
             % as a TShape object of 24 hrs, typically. The PVSystem element uses this
             % TShape to determine the Pmpp from the Pmpp vs T curve. Units must agree
             % with the Pmpp vs T curve.
+            % 
+            % (API Extension)
             result = calllib(obj.libname, 'ctx_PVSystems_Get_Tdaily', obj.dssctx);
             obj.CheckForError();
         end
@@ -210,6 +222,8 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
             % points in the actual shape, the shape is assumed to repeat. The PVSystem
             % model uses this TShape to determine the Pmpp from the Pmpp vs T curve.
             % Units must agree with the Pmpp vs T curve.
+            % 
+            % (API Extension)
             result = calllib(obj.libname, 'ctx_PVSystems_Get_Tduty', obj.dssctx);
             obj.CheckForError();
         end
@@ -224,6 +238,8 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
             % any, is repeated during Yearly solution modes. The PVSystem element uses
             % this TShape to determine the Pmpp from the Pmpp vs T curve. Units must
             % agree with the Pmpp vs T curve.
+            % 
+            % (API Extension)
             result = calllib(obj.libname, 'ctx_PVSystems_Get_Tyearly', obj.dssctx);
             obj.CheckForError();
         end
@@ -247,6 +263,12 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         end
         function obj = set.Pmpp(obj, Value)
             calllib(obj.libname, 'ctx_PVSystems_Set_Pmpp', obj.dssctx, Value);
+            obj.CheckForError();
+        end
+
+        function result = get.Sensor(obj)
+            % Name of the sensor monitoring this element.
+            result = calllib(obj.libname, 'ctx_PVSystems_Get_Sensor', obj.dssctx);
             obj.CheckForError();
         end
     end

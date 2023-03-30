@@ -7,7 +7,7 @@ function [methodinfo,structs,enuminfo,ThunkLibName]=dss_capi
     % and values, without any complex structure. 
     % Tested on Windows, Linux and macOS.
     
-    ival={cell(1,1789)};
+    ival={cell(1,1799)};
     structs=[];enuminfo=[];fcnNum=1;
     fcns = struct('name',ival,'calltype',ival,'LHS',ival,'RHS',ival,'alias',ival,'thunkname', ival);
 
@@ -3590,24 +3590,25 @@ function [methodinfo,structs,enuminfo,ThunkLibName]=dss_capi
     fcns.thunkname{fcnNum}='voiduint64cstringThunk';fcns.name{fcnNum}='ctx_ZIP_Extract_GR'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint64', 'cstring'};fcnNum=fcnNum+1;
     % void ctx_ZIP_Close ( uint64_t ctx ); 
     fcns.thunkname{fcnNum}='voiduint64Thunk';fcns.name{fcnNum}='ctx_ZIP_Close'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint64'};fcnNum=fcnNum+1;
-    enuminfo.BatchOperation=struct('BatchOperation_Set',0,'BatchOperation_Multiply',1,'BatchOperation_Increment',2);
-    enuminfo.StorageStates=struct('StorageStates_Charging',-1,'StorageStates_Idling',0,'StorageStates_Discharging',1);
-    enuminfo.DSSMessageType=struct('DSSMessageType_Error',-1,'DSSMessageType_General',0,'DSSMessageType_Info',1,'DSSMessageType_Help',2,'DSSMessageType_Progress',3,'DSSMessageType_ProgressCaption',4,'DSSMessageType_ProgressFormCaption',5,'DSSMessageType_ProgressPercent',6,'DSSMessageType_FireOffEditor',7);
-    enuminfo.SolveModes=struct('SolveModes_SnapShot',0,'SolveModes_Daily',1,'SolveModes_Yearly',2,'SolveModes_Monte1',3,'SolveModes_LD1',4,'SolveModes_PeakDay',5,'SolveModes_DutyCycle',6,'SolveModes_Direct',7,'SolveModes_MonteFault',8,'SolveModes_FaultStudy',9,'SolveModes_Monte2',10,'SolveModes_Monte3',11,'SolveModes_LD2',12,'SolveModes_AutoAdd',13,'SolveModes_Dynamic',14,'SolveModes_Harmonic',15);
-    enuminfo.AutoAddTypes=struct('AutoAddTypes_AddGen',1,'AutoAddTypes_AddCap',2);
-    enuminfo.CktModels=struct('CktModels_Multiphase',0,'CktModels_PositiveSeq',1);
-    enuminfo.GeneratorStatus=struct('GeneratorStatus_Variable',0,'GeneratorStatus_Fixed',1);
-    enuminfo.MonitorModes=struct('MonitorModes_VI',0,'MonitorModes_Power',1,'MonitorModes_Taps',2,'MonitorModes_States',3,'MonitorModes_Sequence',16,'MonitorModes_Magnitude',32,'MonitorModes_PosOnly',64);
-    enuminfo.LineUnits=struct('LineUnits_none',0,'LineUnits_Miles',1,'LineUnits_kFt',2,'LineUnits_km',3,'LineUnits_meter',4,'LineUnits_ft',5,'LineUnits_inch',6,'LineUnits_cm',7,'LineUnits_mm',8,'LineUnits_Maxnum',9);
-    enuminfo.SolutionLoadModels=struct('SolutionLoadModels_PowerFlow',1,'SolutionLoadModels_Admittance',2);
-    enuminfo.SolverOptions=struct('SolverOptions_ReuseNothing',0,'SolverOptions_ReuseCompressedMatrix',1,'SolverOptions_ReuseSymbolicFactorization',2,'SolverOptions_ReuseNumericFactorization',3,'SolverOptions_AlwaysResetYPrimInvalid',268435456);
-    enuminfo.ActionCodes=struct('ActionCodes_none',0,'ActionCodes_Open',1,'ActionCodes_Close',2,'ActionCodes_Reset',3,'ActionCodes_Lock',4,'ActionCodes_Unlock',5,'ActionCodes_TapUp',6,'ActionCodes_TapDown',7);
-    enuminfo.RandomModes=struct('RandomModes_Gaussian',1,'RandomModes_Uniform',2,'RandomModes_LogNormal',3);
-    enuminfo.LoadModels=struct('LoadModels_ConstPQ',1,'LoadModels_ConstZ',2,'LoadModels_Motor',3,'LoadModels_CVR',4,'LoadModels_ConstI',5,'LoadModels_ConstPFixedQ',6,'LoadModels_ConstPFixedX',7,'LoadModels_ZIPV',8);
-    enuminfo.ControlModes=struct('ControlModes_Static',0,'ControlModes_Event',1,'ControlModes_Time',2,'ControlModes_Multirate',3,'ControlModes_ControlOff',-1);
-    enuminfo.CapControlModes=struct('CapControlModes_Current',0,'CapControlModes_Voltage',1,'CapControlModes_KVAR',2,'CapControlModes_Time',3,'CapControlModes_PF',4);
-    enuminfo.YMatrixModes=struct('YMatrixModes_SeriesOnly',1,'YMatrixModes_WholeMatrix',2);
-    enuminfo.DSSJSONFlags=struct('DSSJSONFlags_Full',1,'DSSJSONFlags_SkipRedundant',2,'DSSJSONFlags_EnumAsInt',4,'DSSJSONFlags_FullNames',8,'DSSJSONFlags_Pretty',16,'DSSJSONFlags_ExcludeDisabled',32,'DSSJSONFlags_State',64,'DSSJSONFlags_Debug',128);
-    enuminfo.LoadStatus=struct('LoadStatus_Variable',0,'LoadStatus_Fixed',1,'LoadStatus_Exempt',2);
-    enuminfo.SolutionAlgorithms=struct('SolutionAlgorithms_NormalSolve',0,'SolutionAlgorithms_NewtonSolve',1);
+    % uint32_t DSS_Get_CompatFlagsNew ( void ); 
+    fcns.thunkname{fcnNum}='uint32voidThunk';fcns.name{fcnNum}='DSS_Get_CompatFlags'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='uint32'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+    % void DSS_Set_CompatFlags ( uint32_t flags ); 
+    fcns.thunkname{fcnNum}='voiduint32Thunk';fcns.name{fcnNum}='DSS_Set_CompatFlags'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint32'};fcnNum=fcnNum+1;
+    % uint16_t DSS_Get_EnableArrayDimensions ( void ); 
+    fcns.thunkname{fcnNum}='uint16voidThunk';fcns.name{fcnNum}='DSS_Get_EnableArrayDimensions'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='uint16'; fcns.RHS{fcnNum}=[];fcnNum=fcnNum+1;
+    % void DSS_Set_EnableArrayDimensions ( uint16_t value ); 
+    fcns.thunkname{fcnNum}='voiduint16Thunk';fcns.name{fcnNum}='DSS_Set_EnableArrayDimensions'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint32'};fcnNum=fcnNum+1;
+    % void ctx_CktElement_Set_VariableName ( uint64_t ctx , const char * Value ); 
+    fcns.thunkname{fcnNum}='voiduint64cstringThunk';fcns.name{fcnNum}='CktElement_Set_VariableName'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint64', 'cstring'};fcnNum=fcnNum+1;
+    % char * ctx_CktElement_Get_VariableName ( uint64_t ctx ); 
+    fcns.thunkname{fcnNum}='cstringuint64Thunk';fcns.name{fcnNum}='ctx_CktElement_Get_VariableName'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='cstring'; fcns.RHS{fcnNum}={'uint64'};fcnNum=fcnNum+1;
+    % void ctx_CktElement_Set_VariableValue ( uint64_t ctx , double Value ); 
+    fcns.thunkname{fcnNum}='voiduint64doubleThunk';fcns.name{fcnNum}='ctx_CktElement_Set_VariableValue'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint64', 'double'};fcnNum=fcnNum+1;
+    % double ctx_CktElement_Get_VariableValue ( uint64_t ctx ); 
+    fcns.thunkname{fcnNum}='doubleuint64Thunk';fcns.name{fcnNum}='ctx_CktElement_Get_VariableValue'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='double'; fcns.RHS{fcnNum}={'uint64'};fcnNum=fcnNum+1;
+    % void ctx_CktElement_Set_VariableIdx ( int64_t ctx , int32_t Value ); 
+    fcns.thunkname{fcnNum}='voiduint64int32Thunk';fcns.name{fcnNum}='ctx_CktElement_Set_VariableIdx'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}=[]; fcns.RHS{fcnNum}={'uint64', 'int32'};fcnNum=fcnNum+1;
+    % int32_t ctx_CktElement_Get_VariableIdx ( uint64_t ctx ); 
+    fcns.thunkname{fcnNum}='int32uint64Thunk';fcns.name{fcnNum}='ctx_CktElement_Get_VariableIdx'; fcns.calltype{fcnNum}='cdecl'; fcns.LHS{fcnNum}='int32'; fcns.RHS{fcnNum}={'uint64'};fcnNum=fcnNum+1;
+
     methodinfo=fcns;

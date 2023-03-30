@@ -19,10 +19,13 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
     %    Shots - Number of shots to lockout (fast + delayed)
     %    SwitchedObj - Full name of the circuit element that is being switched by the Recloser.
     %    SwitchedTerm - Terminal number of the controlled device being switched by the Recloser
+    %    State - Get/Set present state of recloser.   If set to open (ActionCodes.Open=1), open recloser's controlled element and lock out the recloser.   If set to close (ActionCodes.Close=2), close recloser's controlled element and resets recloser to first operation.
+    %    NormalState - Get/set normal state (ActionCodes.Open=1, ActionCodes.Close=2) of the recloser.
     % 
     % Methods:
     %    Close - 
     %    Open - 
+    %    Reset - Reset recloser to normal state.   If open, lock out the recloser.   If closed, resets recloser to first operation.
 
     properties
         AllNames
@@ -42,6 +45,8 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
         Shots
         SwitchedObj
         SwitchedTerm
+        State
+        NormalState
     end
 
     methods (Access = public)
@@ -56,6 +61,14 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
 
         function obj = Open(obj)
             calllib(obj.libname, 'ctx_Reclosers_Open', obj.dssctx);
+            obj.CheckForError();
+        end
+
+        function obj = Reset(obj)
+            % Reset recloser to normal state. 
+            % If open, lock out the recloser. 
+            % If closed, resets recloser to first operation.
+            calllib(obj.libname, 'ctx_Reclosers_Reset', obj.dssctx);
             obj.CheckForError();
         end
 
@@ -205,6 +218,28 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
         end
         function obj = set.SwitchedTerm(obj, Value)
             calllib(obj.libname, 'ctx_Reclosers_Set_SwitchedTerm', obj.dssctx, Value);
+            obj.CheckForError();
+        end
+
+        function result = get.State(obj)
+            % Get/Set present state of recloser. 
+            % If set to open (ActionCodes.Open=1), open recloser's controlled element and lock out the recloser. 
+            % If set to close (ActionCodes.Close=2), close recloser's controlled element and resets recloser to first operation.
+            result = calllib(obj.libname, 'ctx_Reclosers_Get_State', obj.dssctx);
+            obj.CheckForError();
+        end
+        function obj = set.State(obj, Value)
+            calllib(obj.libname, 'ctx_Reclosers_Set_State', obj.dssctx, Value);
+            obj.CheckForError();
+        end
+
+        function result = get.NormalState(obj)
+            % Get/set normal state (ActionCodes.Open=1, ActionCodes.Close=2) of the recloser.
+            result = calllib(obj.libname, 'ctx_Reclosers_Get_NormalState', obj.dssctx);
+            obj.CheckForError();
+        end
+        function obj = set.NormalState(obj, Value)
+            calllib(obj.libname, 'ctx_Reclosers_Set_NormalState', obj.dssctx, Value);
             obj.CheckForError();
         end
     end

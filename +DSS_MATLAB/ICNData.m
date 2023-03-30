@@ -149,7 +149,7 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
         end
 
         function result = get.GMRUnits(obj)
-            result = calllib(obj.libname, 'ctx_CNData_Get_GMRUnits', obj.dssctx);
+            result = DSS_MATLAB.LineUnits(calllib(obj.libname, 'ctx_CNData_Get_GMRUnits', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.GMRUnits(obj, Value)
@@ -167,7 +167,7 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
         end
 
         function result = get.RadiusUnits(obj)
-            result = calllib(obj.libname, 'ctx_CNData_Get_RadiusUnits', obj.dssctx);
+            result = DSS_MATLAB.LineUnits(calllib(obj.libname, 'ctx_CNData_Get_RadiusUnits', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.RadiusUnits(obj, Value)
@@ -176,7 +176,7 @@ classdef (CaseInsensitiveProperties) ICNData < DSS_MATLAB.Base
         end
 
         function result = get.ResistanceUnits(obj)
-            result = calllib(obj.libname, 'ctx_CNData_Get_ResistanceUnits', obj.dssctx);
+            result = DSS_MATLAB.LineUnits(calllib(obj.libname, 'ctx_CNData_Get_ResistanceUnits', obj.dssctx));
             obj.CheckForError();
         end
         function obj = set.ResistanceUnits(obj, Value)

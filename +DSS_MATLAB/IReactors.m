@@ -271,10 +271,10 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
             % Alternative way of defining R and X properties. Enter a 2-element array representing R +jX in ohms.
             calllib(obj.libname, 'ctx_Reactors_Get_Z_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
         function obj = set.Z(obj, Value)
-            calllib(obj.libname, 'ctx_Reactors_Set_Z', obj.dssctx, Value, numel(Value));
+            obj.apiutil.set_complex128_simple('ctx_Reactors_Set_Z', Value);
             obj.CheckForError();
         end
 
@@ -288,10 +288,10 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
             % Side Effect: Sets Z2 and Z0 to same values unless they were previously defined.
             calllib(obj.libname, 'ctx_Reactors_Get_Z1_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
         function obj = set.Z1(obj, Value)
-            calllib(obj.libname, 'ctx_Reactors_Set_Z1', obj.dssctx, Value, numel(Value));
+            obj.apiutil.set_complex128_simple('ctx_Reactors_Set_Z1', Value);
             obj.CheckForError();
         end
 
@@ -303,10 +303,10 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
             % Note: Z2 defaults to Z1 if it is not specifically defined. If Z2 is not equal to Z1, the impedance matrix is asymmetrical.
             calllib(obj.libname, 'ctx_Reactors_Get_Z2_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
         function obj = set.Z2(obj, Value)
-            calllib(obj.libname, 'ctx_Reactors_Set_Z2', obj.dssctx, Value, numel(Value));
+            obj.apiutil.set_complex128_simple('ctx_Reactors_Set_Z2', Value);
             obj.CheckForError();
         end
 
@@ -318,10 +318,10 @@ classdef (CaseInsensitiveProperties) IReactors < DSS_MATLAB.Base
             % Note: Z0 defaults to Z1 if it is not specifically defined.
             calllib(obj.libname, 'ctx_Reactors_Get_Z0_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_simple();
         end
         function obj = set.Z0(obj, Value)
-            calllib(obj.libname, 'ctx_Reactors_Set_Z0', obj.dssctx, Value, numel(Value));
+            obj.apiutil.set_complex128_simple('ctx_Reactors_Set_Z0', Value);
             obj.CheckForError();
         end
     end

@@ -18,21 +18,21 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
     %    TotalMiles - Total miles of line from this element to the end of the zone. For recloser siting algorithm.
     %    Totalcustomers - Total number of customers from this branch to the end of the zone
     %    pctPermanent - Get/Set percent of faults that are permanent (require repair). Otherwise, fault is assumed to be transient/temporary.
-    %    AllNames - Array of strings consisting of all PD element names.    (API Extension)
-    %    AllCurrents - Complex array of currents for all conductors, all terminals, for each PD element.    (API Extension)
-    %    AllCurrentsMagAng - Complex array (magnitude and angle format) of currents for all conductors, all terminals, for each PD element.    (API Extension)
-    %    AllCplxSeqCurrents - Complex double array of Sequence Currents for all conductors of all terminals, for each PD elements.    (API Extension)
-    %    AllSeqCurrents - Double array of the symmetrical component currents into each 3-phase terminal, for each PD element.    (API Extension)
-    %    AllPowers - Complex array of powers into each conductor of each terminal, for each PD element.    (API Extension)
-    %    AllSeqPowers - Double array of sequence powers into each 3-phase teminal, for each PD element    (API Extension)
-    %    AllNumPhases - Integer array listing the number of phases of all PD elements    (API Extension)
-    %    AllNumConductors - Integer array listing the number of conductors of all PD elements    (API Extension)
-    %    AllNumTerminals - Integer array listing the number of terminals of all PD elements    (API Extension)
+    %    AllNames - Array of strings consisting of all PD element names. (API Extension)
+    %    AllCurrents - Complex array of currents for all conductors, all terminals, for each PD element. (API Extension)
+    %    AllCurrentsMagAng - Complex array (magnitude and angle format) of currents for all conductors, all terminals, for each PD element. (API Extension)
+    %    AllCplxSeqCurrents - Complex double array of Sequence Currents for all conductors of all terminals, for each PD elements. (API Extension)
+    %    AllSeqCurrents - Double array of the symmetrical component currents (magnitudes only) into each 3-phase terminal, for each PD element. (API Extension)
+    %    AllPowers - Complex array of powers into each conductor of each terminal, for each PD element. (API Extension)
+    %    AllSeqPowers - Complex array of sequence powers into each 3-phase teminal, for each PD element (API Extension)
+    %    AllNumPhases - Integer array listing the number of phases of all PD elements (API Extension)
+    %    AllNumConductors - Integer array listing the number of conductors of all PD elements (API Extension)
+    %    AllNumTerminals - Integer array listing the number of terminals of all PD elements (API Extension)
     % 
     % Methods:
-    %    AllMaxCurrents - Array of doubles with the maximum current across the conductors, for each PD   element.    By default, only the *first terminal* is used for the maximum current, matching  the behavior of the "export capacity" command. Pass `true` to   force the analysis to all terminals.    See also:   https://sourceforge.net/p/electricdss/discussion/beginners/thread/da5b93ca/    (API Extension)
-    %    AllPctNorm - Array of doubles with the maximum current across the conductors as a percentage   of the Normal Ampere Rating, for each PD element.    By default, only the *first terminal* is used for the maximum current, matching  the behavior of the "export capacity" command. Pass `true` to   force the analysis to all terminals.    See also:   https://sourceforge.net/p/electricdss/discussion/beginners/thread/da5b93ca/    (API Extension)
-    %    AllPctEmerg - Array of doubles with the maximum current across the conductors as a percentage  of the Emergency Ampere Rating, for each PD element.    By default, only the *first terminal* is used for the maximum current, matching  the behavior of the "export capacity" command. Pass `true` to   force the analysis to all terminals.    See also:   https://sourceforge.net/p/electricdss/discussion/beginners/thread/da5b93ca/    (API Extension)
+    %    AllMaxCurrents - Array of doubles with the maximum current across the conductors, for each PD   element.    By default, only the *first terminal* is used for the maximum current, matching  the behavior of the "export capacity" command. Pass `true` to   force the analysis to all terminals.    See also:   https://sourceforge.net/p/electricdss/discussion/beginners/thread/da5b93ca/ (API Extension)
+    %    AllPctNorm - Array of doubles with the maximum current across the conductors as a percentage   of the Normal Ampere Rating, for each PD element.    By default, only the *first terminal* is used for the maximum current, matching  the behavior of the "export capacity" command. Pass `true` to   force the analysis to all terminals.    See also:   https://sourceforge.net/p/electricdss/discussion/beginners/thread/da5b93ca/ (API Extension)
+    %    AllPctEmerg - Array of doubles with the maximum current across the conductors as a percentage  of the Emergency Ampere Rating, for each PD element.    By default, only the *first terminal* is used for the maximum current, matching  the behavior of the "export capacity" command. Pass `true` to   force the analysis to all terminals.    See also:   https://sourceforge.net/p/electricdss/discussion/beginners/thread/da5b93ca/ (API Extension)
 
     properties
         AccumulatedL
@@ -268,7 +268,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % (API Extension)
             calllib(obj.libname, 'ctx_PDElements_Get_AllCurrents_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.AllCurrentsMagAng(obj)
@@ -277,7 +277,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % (API Extension)
             calllib(obj.libname, 'ctx_PDElements_Get_AllCurrentsMagAng_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.AllCplxSeqCurrents(obj)
@@ -286,11 +286,11 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % (API Extension)
             calllib(obj.libname, 'ctx_PDElements_Get_AllCplxSeqCurrents_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.AllSeqCurrents(obj)
-            % Double array of the symmetrical component currents into each 3-phase terminal, for each PD element.
+            % Double array of the symmetrical component currents (magnitudes only) into each 3-phase terminal, for each PD element.
             % 
             % (API Extension)
             calllib(obj.libname, 'ctx_PDElements_Get_AllSeqCurrents_GR', obj.dssctx);
@@ -304,16 +304,16 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
             % (API Extension)
             calllib(obj.libname, 'ctx_PDElements_Get_AllPowers_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.AllSeqPowers(obj)
-            % Double array of sequence powers into each 3-phase teminal, for each PD element
+            % Complex array of sequence powers into each 3-phase teminal, for each PD element
             % 
             % (API Extension)
             calllib(obj.libname, 'ctx_PDElements_Get_AllSeqPowers_GR', obj.dssctx);
             obj.CheckForError();
-            result = obj.apiutil.get_float64_gr_array();
+            result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.AllNumPhases(obj)

@@ -38,21 +38,21 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
         end
 
         function result = Matrix(obj, ExpectedOrder)
-            % (read-only) Use this property to parse a Matrix token in OpenDSS format.  Returns square matrix of order specified. Order same as default Fortran order: column by column.
+            % Use this property to parse a Matrix token in OpenDSS format.  Returns square matrix of order specified. Order same as default Fortran order: column by column.
             calllib(obj.libname, 'ctx_Parser_Get_Matrix_GR', obj.dssctx, ExpectedOrder);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = SymMatrix(obj, ExpectedOrder)
-            % (read-only) Use this property to parse a matrix token specified in lower triangle form. Symmetry is forced.
+            % Use this property to parse a matrix token specified in lower triangle form. Symmetry is forced.
             calllib(obj.libname, 'ctx_Parser_Get_SymMatrix_GR', obj.dssctx, ExpectedOrder);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = Vector(obj, ExpectedSize)
-            % (read-only) Returns token as array of doubles. For parsing quoted array syntax.
+            % Returns token as array of doubles. For parsing quoted array syntax.
             calllib(obj.libname, 'ctx_Parser_Get_Vector_GR', obj.dssctx, ExpectedSize);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
@@ -97,7 +97,7 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
         end
 
         function result = get.DblValue(obj)
-            % (read-only) Return next parameter as a double.
+            % Return next parameter as a double.
             result = calllib(obj.libname, 'ctx_Parser_Get_DblValue', obj.dssctx);
             obj.CheckForError();
         end
@@ -123,19 +123,19 @@ classdef (CaseInsensitiveProperties) IParser < DSS_MATLAB.Base
         end
 
         function result = get.IntValue(obj)
-            % (read-only) Return next parameter as a long integer.
+            % Return next parameter as a long integer.
             result = calllib(obj.libname, 'ctx_Parser_Get_IntValue', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NextParam(obj)
-            % (read-only) Get next token and return tag name (before = sign) if any. See AutoIncrement.
+            % Get next token and return tag name (before = sign) if any. See AutoIncrement.
             result = calllib(obj.libname, 'ctx_Parser_Get_NextParam', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.StrValue(obj)
-            % (read-only) Return next parameter as a string
+            % Return next parameter as a string
             result = calllib(obj.libname, 'ctx_Parser_Get_StrValue', obj.dssctx);
             obj.CheckForError();
         end

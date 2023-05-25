@@ -78,14 +78,14 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
         end
 
         function result = get.ActorProgress(obj)
-            % (read-only) Gets the progress of all existing actors in pct
+            % Gets the progress of all existing actors in pct
             calllib(obj.libname, 'ctx_Parallel_Get_ActorProgress_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
         end
 
         function result = get.ActorStatus(obj)
-            % (read-only) Gets the status of each actor
+            % Gets the status of each actor
             calllib(obj.libname, 'ctx_Parallel_Get_ActorStatus_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
@@ -103,19 +103,19 @@ classdef (CaseInsensitiveProperties) IParallel < DSS_MATLAB.Base
         end
 
         function result = get.NumCPUs(obj)
-            % (read-only) Delivers the number of CPUs on the current PC
+            % Delivers the number of CPUs on the current PC
             result = calllib(obj.libname, 'ctx_Parallel_Get_NumCPUs', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumCores(obj)
-            % (read-only) Delivers the number of Cores of the local PC
+            % Delivers the number of Cores of the local PC
             result = calllib(obj.libname, 'ctx_Parallel_Get_NumCores', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumOfActors(obj)
-            % (read-only) Gets the number of Actors created
+            % Gets the number of Actors created
             result = calllib(obj.libname, 'ctx_Parallel_Get_NumOfActors', obj.dssctx);
             obj.CheckForError();
         end

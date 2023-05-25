@@ -230,13 +230,13 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
         end
 
         function result = get.NumCust(obj)
-            % (read-only) Number of customers on this line section.
+            % Number of customers on this line section.
             result = calllib(obj.libname, 'ctx_Lines_Get_NumCust', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Parent(obj)
-            % (read-only) Sets Parent of the active Line to be the active line. Returns 0 if no parent or action fails.
+            % Sets Parent of the active Line to be the active line. Returns 0 if no parent or action fails.
             result = calllib(obj.libname, 'ctx_Lines_Get_Parent', obj.dssctx);
             obj.CheckForError();
         end
@@ -313,7 +313,7 @@ classdef (CaseInsensitiveProperties) ILines < DSS_MATLAB.Base
         end
 
         function result = get.TotalCust(obj)
-            % (read-only) Total Number of customers served from this line section.
+            % Total Number of customers served from this line section.
             result = calllib(obj.libname, 'ctx_Lines_Get_TotalCust', obj.dssctx);
             obj.CheckForError();
         end

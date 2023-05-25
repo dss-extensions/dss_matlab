@@ -2,7 +2,7 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
     % IBus: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    Coorddefined - False=0 else True. Indicates whether a coordinate has been defined for this bus
+    %    Coorddefined - Indicates whether a coordinate has been defined for this bus
     %    CplxSeqVoltages - Complex Double array of Sequence Voltages (0, 1, 2) at this Bus.
     %    Cust_Duration - Accumulated customer outage durations
     %    Cust_Interrupts - Annual number of customer-interruptions from this bus
@@ -99,183 +99,183 @@ classdef (CaseInsensitiveProperties) IBus < DSS_MATLAB.Base
     methods
 
         function result = get.Coorddefined(obj)
-            % (read-only) False=0 else True. Indicates whether a coordinate has been defined for this bus
+            % Indicates whether a coordinate has been defined for this bus
             result = (calllib(obj.libname, 'ctx_Bus_Get_Coorddefined', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
 
         function result = get.CplxSeqVoltages(obj)
-            % (read-only) Complex Double array of Sequence Voltages (0, 1, 2) at this Bus.
+            % Complex Double array of Sequence Voltages (0, 1, 2) at this Bus.
             calllib(obj.libname, 'ctx_Bus_Get_CplxSeqVoltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Cust_Duration(obj)
-            % (read-only) Accumulated customer outage durations
+            % Accumulated customer outage durations
             result = calllib(obj.libname, 'ctx_Bus_Get_Cust_Duration', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Cust_Interrupts(obj)
-            % (read-only) Annual number of customer-interruptions from this bus
+            % Annual number of customer-interruptions from this bus
             result = calllib(obj.libname, 'ctx_Bus_Get_Cust_Interrupts', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Distance(obj)
-            % (read-only) Distance from energymeter (if non-zero)
+            % Distance from energymeter (if non-zero)
             result = calllib(obj.libname, 'ctx_Bus_Get_Distance', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Int_Duration(obj)
-            % (read-only) Average interruption duration, hr.
+            % Average interruption duration, hr.
             result = calllib(obj.libname, 'ctx_Bus_Get_Int_Duration', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Isc(obj)
-            % (read-only) Short circuit currents at bus; Complex Array.
+            % Short circuit currents at bus; Complex Array.
             calllib(obj.libname, 'ctx_Bus_Get_Isc_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Lambda(obj)
-            % (read-only) Accumulated failure rate downstream from this bus; faults per year
+            % Accumulated failure rate downstream from this bus; faults per year
             result = calllib(obj.libname, 'ctx_Bus_Get_Lambda', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.N_Customers(obj)
-            % (read-only) Total numbers of customers served downline from this bus
+            % Total numbers of customers served downline from this bus
             result = calllib(obj.libname, 'ctx_Bus_Get_N_Customers', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.N_interrupts(obj)
-            % (read-only) Number of interruptions this bus per year
+            % Number of interruptions this bus per year
             result = calllib(obj.libname, 'ctx_Bus_Get_N_interrupts', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Name(obj)
-            % (read-only) Name of Bus
+            % Name of Bus
             result = calllib(obj.libname, 'ctx_Bus_Get_Name', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Nodes(obj)
-            % (read-only) Integer Array of Node Numbers defined at the bus in same order as the voltages.
+            % Integer Array of Node Numbers defined at the bus in same order as the voltages.
             calllib(obj.libname, 'ctx_Bus_Get_Nodes_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
         end
 
         function result = get.NumNodes(obj)
-            % (read-only) Number of Nodes this bus.
+            % Number of Nodes this bus.
             result = calllib(obj.libname, 'ctx_Bus_Get_NumNodes', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.SectionID(obj)
-            % (read-only) Integer ID of the feeder section in which this bus is located.
+            % Integer ID of the feeder section in which this bus is located.
             result = calllib(obj.libname, 'ctx_Bus_Get_SectionID', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.SeqVoltages(obj)
-            % (read-only) Double Array of sequence voltages at this bus. Magnitudes only.
+            % Double Array of sequence voltages at this bus. Magnitudes only.
             calllib(obj.libname, 'ctx_Bus_Get_SeqVoltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.TotalMiles(obj)
-            % (read-only) Total length of line downline from this bus, in miles. For recloser siting algorithm.
+            % Total length of line downline from this bus, in miles. For recloser siting algorithm.
             result = calllib(obj.libname, 'ctx_Bus_Get_TotalMiles', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.VLL(obj)
-            % (read-only) For 2- and 3-phase buses, returns array of complex numbers represetin L-L voltages in volts. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only first 3.
+            % For 2- and 3-phase buses, returns array of complex numbers represetin L-L voltages in volts. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only first 3.
             calllib(obj.libname, 'ctx_Bus_Get_VLL_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.VMagAngle(obj)
-            % (read-only) Array of doubles containing voltages in Magnitude (VLN), angle (degrees)
+            % Array of doubles containing voltages in Magnitude (VLN), angle (degrees)
             calllib(obj.libname, 'ctx_Bus_Get_VMagAngle_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Voc(obj)
-            % (read-only) Open circuit voltage; Complex array.
+            % Open circuit voltage; Complex array.
             calllib(obj.libname, 'ctx_Bus_Get_Voc_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Voltages(obj)
-            % (read-only) Complex array of voltages at this bus.
+            % Complex array of voltages at this bus.
             calllib(obj.libname, 'ctx_Bus_Get_Voltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.YscMatrix(obj)
-            % (read-only) Complex array of Ysc matrix at bus. Column by column.
+            % Complex array of Ysc matrix at bus. Column by column.
             calllib(obj.libname, 'ctx_Bus_Get_YscMatrix_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Zsc0(obj)
-            % (read-only) Complex Zero-Sequence short circuit impedance at bus.
+            % Complex Zero-Sequence short circuit impedance at bus.
             calllib(obj.libname, 'ctx_Bus_Get_Zsc0_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_simple();
         end
 
         function result = get.Zsc1(obj)
-            % (read-only) Complex Positive-Sequence short circuit impedance at bus.
+            % Complex Positive-Sequence short circuit impedance at bus.
             calllib(obj.libname, 'ctx_Bus_Get_Zsc1_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_simple();
         end
 
         function result = get.ZscMatrix(obj)
-            % (read-only) Complex array of Zsc matrix at bus. Column by column.
+            % Complex array of Zsc matrix at bus. Column by column.
             calllib(obj.libname, 'ctx_Bus_Get_ZscMatrix_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.kVBase(obj)
-            % (read-only) Base voltage at bus in kV
+            % Base voltage at bus in kV
             result = calllib(obj.libname, 'ctx_Bus_Get_kVBase', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.puVLL(obj)
-            % (read-only) Returns Complex array of pu L-L voltages for 2- and 3-phase buses. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only 3 phases.
+            % Returns Complex array of pu L-L voltages for 2- and 3-phase buses. Returns -1.0 for 1-phase bus. If more than 3 phases, returns only 3 phases.
             calllib(obj.libname, 'ctx_Bus_Get_puVLL_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.puVmagAngle(obj)
-            % (read-only) Array of doubles containing voltage magnitude, angle (degrees) pairs in per unit
+            % Array of doubles containing voltage magnitude, angle (degrees) pairs in per unit
             calllib(obj.libname, 'ctx_Bus_Get_puVmagAngle_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.puVoltages(obj)
-            % (read-only) Complex Array of pu voltages at the bus.
+            % Complex Array of pu voltages at the bus.
             calllib(obj.libname, 'ctx_Bus_Get_puVoltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();

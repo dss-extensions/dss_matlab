@@ -2,7 +2,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
     % ISettings: DSS MATLAB interface class to DSS C-API
     % 
     % Properties:
-    %    AllowDuplicates - {True | False*} Designates whether to allow duplicate names of objects    **NOTE**: for DSS Extensions, we are considering removing this option in a future   release since it has performance impacts even when not used.
+    %    AllowDuplicates - {True | False*} Designates whether to allow duplicate names of objects    **NOTE**: for DSS-Extensions, we are considering removing this option in a future   release since it has performance impacts even when not used.
     %    AutoBusList - List of Buses or (File=xxxx) syntax for the AutoAdd solution mode.
     %    CktModel - {dssMultiphase (0) * | dssPositiveSeq (1) } Indicate if the circuit model is positive sequence.
     %    ControlTrace - {True | False*} Denotes whether to trace the control actions to a file.
@@ -57,7 +57,7 @@ classdef (CaseInsensitiveProperties) ISettings < DSS_MATLAB.Base
         function result = get.AllowDuplicates(obj)
             % {True | False*} Designates whether to allow duplicate names of objects
             % 
-            % **NOTE**: for DSS Extensions, we are considering removing this option in a future 
+            % **NOTE**: for DSS-Extensions, we are considering removing this option in a future 
             % release since it has performance impacts even when not used.
             result = (calllib(obj.libname, 'ctx_Settings_Get_AllowDuplicates', obj.dssctx) ~= 0);
             obj.CheckForError();

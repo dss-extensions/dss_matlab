@@ -68,37 +68,37 @@ classdef (CaseInsensitiveProperties) ICtrlQueue < DSS_MATLAB.Base
     methods
 
         function result = get.ActionCode(obj)
-            % (read-only) Code for the active action. Long integer code to tell the control device what to do
+            % Code for the active action. Long integer code to tell the control device what to do
             result = calllib(obj.libname, 'ctx_CtrlQueue_Get_ActionCode', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.DeviceHandle(obj)
-            % (read-only) Handle (User defined) to device that must act on the pending action.
+            % Handle (User defined) to device that must act on the pending action.
             result = calllib(obj.libname, 'ctx_CtrlQueue_Get_DeviceHandle', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumActions(obj)
-            % (read-only) Number of Actions on the current actionlist (that have been popped off the control queue by CheckControlActions)
+            % Number of Actions on the current actionlist (that have been popped off the control queue by CheckControlActions)
             result = calllib(obj.libname, 'ctx_CtrlQueue_Get_NumActions', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.PopAction(obj)
-            % (read-only) Pops next action off the action list and makes it the active action. Returns zero if none.
+            % Pops next action off the action list and makes it the active action. Returns zero if none.
             result = calllib(obj.libname, 'ctx_CtrlQueue_Get_PopAction', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Queue(obj)
-            % (read-only) Array of strings containing the entire queue in CSV format
+            % Array of strings containing the entire queue in CSV format
             result = obj.apiutil.get_string_array('ctx_CtrlQueue_Get_Queue');
             obj.CheckForError();
         end
 
         function result = get.QueueSize(obj)
-            % (read-only) Number of items on the OpenDSS control Queue
+            % Number of items on the OpenDSS control Queue
             result = calllib(obj.libname, 'ctx_CtrlQueue_Get_QueueSize', obj.dssctx);
             obj.CheckForError();
         end

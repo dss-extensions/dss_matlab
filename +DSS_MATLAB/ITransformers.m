@@ -272,21 +272,21 @@ classdef (CaseInsensitiveProperties) ITransformers < DSS_MATLAB.Base
         end
 
         function result = get.WdgVoltages(obj)
-            % (read-only) Complex array of voltages for active winding
+            % Complex array of voltages for active winding
             calllib(obj.libname, 'ctx_Transformers_Get_WdgVoltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.WdgCurrents(obj)
-            % (read-only) All Winding currents (ph1, wdg1, wdg2,... ph2, wdg1, wdg2 ...)
+            % All Winding currents (ph1, wdg1, wdg2,... ph2, wdg1, wdg2 ...)
             calllib(obj.libname, 'ctx_Transformers_Get_WdgCurrents_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.strWdgCurrents(obj)
-            % (read-only) All winding currents in CSV string form like the WdgCurrents property
+            % All winding currents in CSV string form like the WdgCurrents property
             result = calllib(obj.libname, 'ctx_Transformers_Get_strWdgCurrents', obj.dssctx);
             obj.CheckForError();
         end

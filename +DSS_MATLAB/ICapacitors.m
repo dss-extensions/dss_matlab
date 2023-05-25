@@ -104,7 +104,7 @@ classdef (CaseInsensitiveProperties) ICapacitors < DSS_MATLAB.Base
 
 
         function result = get.AvailableSteps(obj)
-            % (read-only) Number of Steps available in cap bank to be switched ON.
+            % Number of Steps available in cap bank to be switched ON.
             result = calllib(obj.libname, 'ctx_Capacitors_Get_AvailableSteps', obj.dssctx);
             obj.CheckForError();
         end

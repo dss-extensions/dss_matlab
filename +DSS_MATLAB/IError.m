@@ -23,12 +23,12 @@ classdef (CaseInsensitiveProperties) IError < DSS_MATLAB.Base
     methods
 
         function result = get.Description(obj)
-            % (read-only) Description of error for last operation
+            % Description of error for last operation
             result = calllib(obj.libname, 'ctx_Error_Get_Description', obj.dssctx);
         end
 
         function result = get.Number(obj)
-            % (read-only) Error Number (returns current value and then resets to zero)
+            % Error Number (returns current value and then resets to zero)
             result = calllib(obj.libname, 'ctx_Error_Get_Number', obj.dssctx);
         end
 
@@ -55,7 +55,7 @@ classdef (CaseInsensitiveProperties) IError < DSS_MATLAB.Base
             % Extended errors use the Error interface to provide a more clear message
             % and should help users, especially new users, to find usage issues earlier.
             % 
-            % At Python level, an exception is raised when an error is detected through
+            % At MATLAB level, an exception is raised when an error is detected through
             % the Error interface.
             % 
             % The current default state is ON. For compatibility, the user can turn it

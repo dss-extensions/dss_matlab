@@ -40,7 +40,7 @@ classdef (CaseInsensitiveProperties) IText < DSS_MATLAB.Base
         end
 
         function result = get.Result(obj)
-            % (read-only) Result string for the last command.
+            % Result string for the last command.
             result = calllib(obj.libname, 'ctx_Text_Get_Result', obj.dssctx);
             obj.CheckForError();
         end

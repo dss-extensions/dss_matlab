@@ -8,7 +8,7 @@ classdef (CaseInsensitiveProperties) IDSSElement < DSS_MATLAB.Base
     %    NumProperties - Number of Properties for the active DSS object.
     % 
     % Methods:
-    %    ToJSON - Returns the properties of the active DSS object as a JSON-encoded string.    The `options` parameter contains bit-flags to toggle specific features.  See `Obj_ToJSON` (C-API) for more, or `DSSObj.to_json` in MATLAB. (API Extension)
+    %    ToJSON - Returns the properties of the active DSS object as a JSON-encoded string.    The `options` parameter contains bit-flags to toggle specific features.  See `Obj_ToJSON` (C-API) for more. (API Extension)
 
     properties
         Properties
@@ -27,7 +27,7 @@ classdef (CaseInsensitiveProperties) IDSSElement < DSS_MATLAB.Base
             % Returns the properties of the active DSS object as a JSON-encoded string.
             % 
             % The `options` parameter contains bit-flags to toggle specific features.
-            % See `Obj_ToJSON` (C-API) for more, or `DSSObj.to_json` in MATLAB.
+            % See `Obj_ToJSON` (C-API) for more
             % 
             % (API Extension)
             if ~exist('options', 'var')
@@ -41,19 +41,19 @@ classdef (CaseInsensitiveProperties) IDSSElement < DSS_MATLAB.Base
     methods
 
         function result = get.AllPropertyNames(obj)
-            % (read-only) Array of strings containing the names of all properties for the active DSS object.
+            % Array of strings containing the names of all properties for the active DSS object.
             result = obj.apiutil.get_string_array('ctx_DSSElement_Get_AllPropertyNames');
             obj.CheckForError();
         end
 
         function result = get.Name(obj)
-            % (read-only) Full Name of Active DSS Object (general element or circuit element).
+            % Full Name of Active DSS Object (general element or circuit element).
             result = calllib(obj.libname, 'ctx_DSSElement_Get_Name', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumProperties(obj)
-            % (read-only) Number of Properties for the active DSS object.
+            % Number of Properties for the active DSS object.
             result = calllib(obj.libname, 'ctx_DSSElement_Get_NumProperties', obj.dssctx);
             obj.CheckForError();
         end

@@ -146,13 +146,13 @@ classdef (CaseInsensitiveProperties) IGenerators < DSS_MATLAB.Base
         end
 
         function result = get.RegisterNames(obj)
-            % (read-only) Array of Names of all generator energy meter registers
+            % Array of Names of all generator energy meter registers
             result = obj.apiutil.get_string_array('ctx_Generators_Get_RegisterNames');
             obj.CheckForError();
         end
 
         function result = get.RegisterValues(obj)
-            % (read-only) Array of valus in generator energy meter registers.
+            % Array of valus in generator energy meter registers.
             calllib(obj.libname, 'ctx_Generators_Get_RegisterValues_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();

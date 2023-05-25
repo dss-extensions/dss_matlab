@@ -135,13 +135,13 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
     methods
 
         function result = get.AccumulatedL(obj)
-            % (read-only) accummulated failure rate for this branch on downline
+            % accummulated failure rate for this branch on downline
             result = calllib(obj.libname, 'ctx_PDElements_Get_AccumulatedL', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Count(obj)
-            % (read-only) Number of PD elements (including disabled elements)
+            % Number of PD elements (including disabled elements)
             result = calllib(obj.libname, 'ctx_PDElements_Get_Count', obj.dssctx);
             obj.CheckForError();
         end
@@ -180,7 +180,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
         end
 
         function result = get.Lambda(obj)
-            % (read-only) Failure rate for this branch. Faults per year including length of line.
+            % Failure rate for this branch. Faults per year including length of line.
             result = calllib(obj.libname, 'ctx_PDElements_Get_Lambda', obj.dssctx);
             obj.CheckForError();
         end
@@ -204,7 +204,7 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
         end
 
         function result = get.Numcustomers(obj)
-            % (read-only) Number of customers, this branch
+            % Number of customers, this branch
             result = calllib(obj.libname, 'ctx_PDElements_Get_Numcustomers', obj.dssctx);
             obj.CheckForError();
         end
@@ -227,19 +227,19 @@ classdef (CaseInsensitiveProperties) IPDElements < DSS_MATLAB.Base
         end
 
         function result = get.SectionID(obj)
-            % (read-only) Integer ID of the feeder section that this PDElement branch is part of
+            % Integer ID of the feeder section that this PDElement branch is part of
             result = calllib(obj.libname, 'ctx_PDElements_Get_SectionID', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.TotalMiles(obj)
-            % (read-only) Total miles of line from this element to the end of the zone. For recloser siting algorithm.
+            % Total miles of line from this element to the end of the zone. For recloser siting algorithm.
             result = calllib(obj.libname, 'ctx_PDElements_Get_TotalMiles', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Totalcustomers(obj)
-            % (read-only) Total number of customers from this branch to the end of the zone
+            % Total number of customers from this branch to the end of the zone
             result = calllib(obj.libname, 'ctx_PDElements_Get_Totalcustomers', obj.dssctx);
             obj.CheckForError();
         end

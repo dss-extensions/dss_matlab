@@ -294,7 +294,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.EventLog(obj)
-            % (read-only) Array of strings containing the Event Log
+            % Array of strings containing the Event Log
             result = obj.apiutil.get_string_array('ctx_Solution_Get_EventLog');
             obj.CheckForError();
         end
@@ -360,7 +360,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.Iterations(obj)
-            % (read-only) Number of iterations taken for last solution. (Same as Totaliterations)
+            % Number of iterations taken for last solution. (Same as Totaliterations)
             result = calllib(obj.libname, 'ctx_Solution_Get_Iterations', obj.dssctx);
             obj.CheckForError();
         end
@@ -436,13 +436,13 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.ModeID(obj)
-            % (read-only) ID (text) of the present solution mode
+            % ID (text) of the present solution mode
             result = calllib(obj.libname, 'ctx_Solution_Get_ModeID', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.MostIterationsDone(obj)
-            % (read-only) Max number of iterations required to converge at any control iteration of the most recent solution.
+            % Max number of iterations required to converge at any control iteration of the most recent solution.
             result = calllib(obj.libname, 'ctx_Solution_Get_MostIterationsDone', obj.dssctx);
             obj.CheckForError();
         end
@@ -458,7 +458,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.Process_Time(obj)
-            % (read-only) Gets the time required to perform the latest solution (Read only)
+            % Gets the time required to perform the latest solution (Read only)
             result = calllib(obj.libname, 'ctx_Solution_Get_Process_Time', obj.dssctx);
             obj.CheckForError();
         end
@@ -494,13 +494,13 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.SystemYChanged(obj)
-            % (read-only) Flag that indicates if elements of the System Y have been changed by recent activity.
+            % Flag that indicates if elements of the System Y have been changed by recent activity.
             result = (calllib(obj.libname, 'ctx_Solution_Get_SystemYChanged', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
 
         function result = get.Time_of_Step(obj)
-            % (read-only) Get the solution process time + sample time for time step
+            % Get the solution process time + sample time for time step
             result = calllib(obj.libname, 'ctx_Solution_Get_Time_of_Step', obj.dssctx);
             obj.CheckForError();
         end
@@ -526,7 +526,7 @@ classdef (CaseInsensitiveProperties) ISolution < DSS_MATLAB.Base
         end
 
         function result = get.Totaliterations(obj)
-            % (read-only) Total iterations including control iterations for most recent solution.
+            % Total iterations including control iterations for most recent solution.
             result = calllib(obj.libname, 'ctx_Solution_Get_Totaliterations', obj.dssctx);
             obj.CheckForError();
         end

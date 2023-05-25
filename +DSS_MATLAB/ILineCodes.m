@@ -135,7 +135,7 @@ classdef (CaseInsensitiveProperties) ILineCodes < DSS_MATLAB.Base
         end
 
         function result = get.IsZ1Z0(obj)
-            % (read-only) Flag denoting whether impedance data were entered in symmetrical components
+            % Flag denoting whether impedance data were entered in symmetrical components
             result = (calllib(obj.libname, 'ctx_LineCodes_Get_IsZ1Z0', obj.dssctx) ~= 0);
             obj.CheckForError();
         end

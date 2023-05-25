@@ -13,7 +13,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
     %    RegisterNames - Array of PVSYSTEM energy meter register names
     %    RegisterValues - Array of doubles containing values in PVSystem registers.
     %    kVArated - Get/set Rated kVA of the PVSystem
-    %    kW - get kW output
+    %    kW - Get kW output
     %    kvar - Get/set kvar output value
     %    daily - Name of the dispatch shape to use for daily simulations. Must be previously  defined as a Loadshape object of 24 hrs, typically. In the default dispatch  mode, the PVSystem element uses this loadshape to trigger State changes. (API Extension)
     %    duty - Name of the load shape to use for duty cycle dispatch simulations such as  for solar ramp rate studies. Must be previously defined as a Loadshape  object. Typically would have time intervals of 1-5 seconds. (API Extension)
@@ -118,13 +118,13 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         end
 
         function result = get.RegisterNames(obj)
-            % (read-only) Array of PVSYSTEM energy meter register names
+            % Array of PVSYSTEM energy meter register names
             result = obj.apiutil.get_string_array('ctx_PVSystems_Get_RegisterNames');
             obj.CheckForError();
         end
 
         function result = get.RegisterValues(obj)
-            % (read-only) Array of doubles containing values in PVSystem registers.
+            % Array of doubles containing values in PVSystem registers.
             calllib(obj.libname, 'ctx_PVSystems_Get_RegisterValues_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
@@ -141,7 +141,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         end
 
         function result = get.kW(obj)
-            % (read-only) get kW output
+            % Get kW output
             result = calllib(obj.libname, 'ctx_PVSystems_Get_kW', obj.dssctx);
             obj.CheckForError();
         end
@@ -159,7 +159,7 @@ classdef (CaseInsensitiveProperties) IPVSystems < DSS_MATLAB.Base
         function result = get.daily(obj)
             % Name of the dispatch shape to use for daily simulations. Must be previously
             % defined as a Loadshape object of 24 hrs, typically. In the default dispatch
-            % mode, the PVSystem element uses this loadshape to trigger State changes.        
+            % mode, the PVSystem element uses this loadshape to trigger State changes.
             % 
             % (API Extension)
             result = calllib(obj.libname, 'ctx_PVSystems_Get_daily', obj.dssctx);

@@ -6,8 +6,8 @@ on:
   push:
 
 env:
-    DSS_CAPI_VERSION: '0.13.1'
-    DSS_MATLAB_VERSION: '0.13.1'
+    DSS_CAPI_VERSION: '0.13.2'
+    DSS_MATLAB_VERSION: '0.13.2'
 
 jobs:
   linux_x64:
@@ -88,7 +88,7 @@ jobs:
           ls -l
           cd ..
       - name: 'Upload artifacts'
-        uses: "actions/upload-artifact@v2"
+        uses: "actions/upload-artifact@v3"
         with:
           name: 'packages'
           path: '${{ github.workspace }}/dss_matlab/release'
@@ -127,7 +127,7 @@ jobs:
           ls -l
           cd ..
       - name: 'Upload artifacts'
-        uses: "actions/upload-artifact@v2"
+        uses: "actions/upload-artifact@v3"
         with:
           name: 'packages'
           path: '${{ github.workspace }}/dss_matlab/release'

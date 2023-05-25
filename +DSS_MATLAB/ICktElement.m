@@ -3,8 +3,8 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     % 
     % Properties:
     %    AllPropertyNames - Array containing all property names of the active device.
-    %    AllVariableNames - Array of strings listing all the published variable names, if a PCElement. Otherwise, null string.
-    %    AllVariableValues - Array of doubles. Values of state variables of active element if PC element.
+    %    AllVariableNames - Array of strings listing all the published state variable names.  Valid only for PCElements.
+    %    AllVariableValues - Array of doubles. Values of state variables of active element if PC element.  Valid only for PCElements.
     %    BusNames - Array of strings. Get  Bus definitions to which each terminal is connected.
     %    CplxSeqCurrents - Complex double array of Sequence Currents for all conductors of all terminals of active circuit element.
     %    CplxSeqVoltages - Complex double array of Sequence Voltage for all terminals of active circuit element.
@@ -30,8 +30,8 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     %    NumTerminals - Number of Terminals this Circuit Element
     %    OCPDevIndex - Index into Controller list of OCP Device controlling this CktElement
     %    OCPDevType - 0=None; 1=Fuse; 2=Recloser; 3=Relay;  Type of OCP controller device
-    %    PhaseLosses - Complex array of losses by phase
-    %    Powers - Complex array of powers into each conductor of each terminal
+    %    PhaseLosses - Complex array of losses (kVA) by phase
+    %    Powers - Complex array of powers (kVA) into each conductor of each terminal
     %    Residuals - Residual currents for each terminal: (magnitude, angle in degrees)
     %    SeqCurrents - Double array of symmetrical component currents (magnitudes only) into each 3-phase terminal
     %    SeqPowers - Complex array of sequence powers (kW, kvar) into each 3-phase teminal
@@ -40,7 +40,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     %    VoltagesMagAng - Voltages at each conductor in magnitude, angle form as array of doubles.
     %    Yprim - YPrim matrix, column order, complex numbers
     %    IsIsolated - Returns true if the current active element is isolated.  Note that this only fetches the current value. See also the Topology interface. (API Extension)
-    %    TotalPowers - Returns the total powers (complex) at ALL terminals of the active circuit element.
+    %    TotalPowers - Returns an array with the total powers (complex, kVA) at ALL terminals of the active circuit element.
     %    NodeRef - Array of integers, a copy of the internal NodeRef of the CktElement.
     % 
     % Methods:
@@ -113,13 +113,13 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         end
 
         function result = Controller(obj, idx)
-            % (read-only) Full name of the i-th controller attached to this element. Ex: str = Controller(2).  See NumControls to determine valid index range
+            % Full name of the i-th controller attached to this element. Ex: str = Controller(2).  See NumControls to determine valid index range
             result = calllib(obj.libname, 'ctx_CktElement_Get_Controller', obj.dssctx, idx);
             obj.CheckForError();
         end
 
         function result = Variable(obj, MyVarName)
-            % (read-only) Returns (value, Code). For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
+            % Returns (value, Code). For PCElement, get the value of a variable by name. If Code>0 Then no variable by this name or not a PCelement.
             Code = libpointer('int32Ptr', [0]);
             result = calllib(obj.libname, 'ctx_CktElement_Get_Variable', obj.dssctx, MyVarName, Code);
             obj.CheckForError();
@@ -127,7 +127,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         end
 
         function result = Variablei(obj, Idx)
-            % (read-only) Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
+            % Returns (value, Code). For PCElement, get the value of a variable by integer index. If Code>0 Then no variable by this index or not a PCelement.
             Code = libpointer('int32Ptr', [0]);
             result = calllib(obj.libname, 'ctx_CktElement_Get_Variablei', obj.dssctx, Idx, Code);
             obj.CheckForError();
@@ -174,19 +174,21 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
     methods
 
         function result = get.AllPropertyNames(obj)
-            % (read-only) Array containing all property names of the active device.
+            % Array containing all property names of the active device.
             result = obj.apiutil.get_string_array('ctx_CktElement_Get_AllPropertyNames');
             obj.CheckForError();
         end
 
         function result = get.AllVariableNames(obj)
-            % (read-only) Array of strings listing all the published variable names, if a PCElement. Otherwise, null string.
+            % Array of strings listing all the published state variable names.
+            % Valid only for PCElements.
             result = obj.apiutil.get_string_array('ctx_CktElement_Get_AllVariableNames');
             obj.CheckForError();
         end
 
         function result = get.AllVariableValues(obj)
-            % (read-only) Array of doubles. Values of state variables of active element if PC element.
+            % Array of doubles. Values of state variables of active element if PC element.
+            % Valid only for PCElements.
             calllib(obj.libname, 'ctx_CktElement_Get_AllVariableValues_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
@@ -203,28 +205,28 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         end
 
         function result = get.CplxSeqCurrents(obj)
-            % (read-only) Complex double array of Sequence Currents for all conductors of all terminals of active circuit element.
+            % Complex double array of Sequence Currents for all conductors of all terminals of active circuit element.
             calllib(obj.libname, 'ctx_CktElement_Get_CplxSeqCurrents_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.CplxSeqVoltages(obj)
-            % (read-only) Complex double array of Sequence Voltage for all terminals of active circuit element.
+            % Complex double array of Sequence Voltage for all terminals of active circuit element.
             calllib(obj.libname, 'ctx_CktElement_Get_CplxSeqVoltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Currents(obj)
-            % (read-only) Complex array of currents into each conductor of each terminal
+            % Complex array of currents into each conductor of each terminal
             calllib(obj.libname, 'ctx_CktElement_Get_Currents_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.CurrentsMagAng(obj)
-            % (read-only) Currents in magnitude, angle (degrees) format as a array of doubles.
+            % Currents in magnitude, angle (degrees) format as a array of doubles.
             calllib(obj.libname, 'ctx_CktElement_Get_CurrentsMagAng_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
@@ -261,56 +263,56 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         end
 
         function result = get.EnergyMeter(obj)
-            % (read-only) Name of the Energy Meter this element is assigned to.
+            % Name of the Energy Meter this element is assigned to.
             result = calllib(obj.libname, 'ctx_CktElement_Get_EnergyMeter', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.GUID(obj)
-            % (read-only) globally unique identifier for this object
+            % globally unique identifier for this object
             result = calllib(obj.libname, 'ctx_CktElement_Get_GUID', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.Handle(obj)
-            % (read-only) Pointer to this object
+            % Pointer to this object
             result = calllib(obj.libname, 'ctx_CktElement_Get_Handle', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.HasOCPDevice(obj)
-            % (read-only) True if a recloser, relay, or fuse controlling this ckt element. OCP = Overcurrent Protection
+            % True if a recloser, relay, or fuse controlling this ckt element. OCP = Overcurrent Protection
             result = (calllib(obj.libname, 'ctx_CktElement_Get_HasOCPDevice', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
 
         function result = get.HasSwitchControl(obj)
-            % (read-only) This element has a SwtControl attached.
+            % This element has a SwtControl attached.
             result = (calllib(obj.libname, 'ctx_CktElement_Get_HasSwitchControl', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
 
         function result = get.HasVoltControl(obj)
-            % (read-only) This element has a CapControl or RegControl attached.
+            % This element has a CapControl or RegControl attached.
             result = (calllib(obj.libname, 'ctx_CktElement_Get_HasVoltControl', obj.dssctx) ~= 0);
             obj.CheckForError();
         end
 
         function result = get.Losses(obj)
-            % (read-only) Total losses in the element: two-element double array (complex), in VA (watts, vars)
+            % Total losses in the element: two-element double array (complex), in VA (watts, vars)
             calllib(obj.libname, 'ctx_CktElement_Get_Losses_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_simple();
         end
 
         function result = get.Name(obj)
-            % (read-only) Full Name of Active Circuit Element
+            % Full Name of Active Circuit Element
             result = calllib(obj.libname, 'ctx_CktElement_Get_Name', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NodeOrder(obj)
-            % (read-only) Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal.
+            % Array of integer containing the node numbers (representing phases, for example) for each conductor of each terminal.
             calllib(obj.libname, 'ctx_CktElement_Get_NodeOrder_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_int32_gr_array();
@@ -327,7 +329,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         end
 
         function result = get.NumConductors(obj)
-            % (read-only) Number of Conductors per Terminal
+            % Number of Conductors per Terminal
             result = calllib(obj.libname, 'ctx_CktElement_Get_NumConductors', obj.dssctx);
             obj.CheckForError();
         end
@@ -340,25 +342,25 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         end
 
         function result = get.NumPhases(obj)
-            % (read-only) Number of Phases
+            % Number of Phases
             result = calllib(obj.libname, 'ctx_CktElement_Get_NumPhases', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumProperties(obj)
-            % (read-only) Number of Properties this Circuit Element.
+            % Number of Properties this Circuit Element.
             result = calllib(obj.libname, 'ctx_CktElement_Get_NumProperties', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.NumTerminals(obj)
-            % (read-only) Number of Terminals this Circuit Element
+            % Number of Terminals this Circuit Element
             result = calllib(obj.libname, 'ctx_CktElement_Get_NumTerminals', obj.dssctx);
             obj.CheckForError();
         end
 
         function result = get.OCPDevIndex(obj)
-            % (read-only) Index into Controller list of OCP Device controlling this CktElement
+            % Index into Controller list of OCP Device controlling this CktElement
             result = calllib(obj.libname, 'ctx_CktElement_Get_OCPDevIndex', obj.dssctx);
             obj.CheckForError();
         end
@@ -370,63 +372,63 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         end
 
         function result = get.PhaseLosses(obj)
-            % (read-only) Complex array of losses by phase
+            % Complex array of losses (kVA) by phase
             calllib(obj.libname, 'ctx_CktElement_Get_PhaseLosses_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Powers(obj)
-            % (read-only) Complex array of powers into each conductor of each terminal
+            % Complex array of powers (kVA) into each conductor of each terminal
             calllib(obj.libname, 'ctx_CktElement_Get_Powers_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.Residuals(obj)
-            % (read-only) Residual currents for each terminal: (magnitude, angle in degrees)
+            % Residual currents for each terminal: (magnitude, angle in degrees)
             calllib(obj.libname, 'ctx_CktElement_Get_Residuals_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SeqCurrents(obj)
-            % (read-only) Double array of symmetrical component currents (magnitudes only) into each 3-phase terminal
+            % Double array of symmetrical component currents (magnitudes only) into each 3-phase terminal
             calllib(obj.libname, 'ctx_CktElement_Get_SeqCurrents_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.SeqPowers(obj)
-            % (read-only) Complex array of sequence powers (kW, kvar) into each 3-phase teminal
+            % Complex array of sequence powers (kW, kvar) into each 3-phase teminal
             calllib(obj.libname, 'ctx_CktElement_Get_SeqPowers_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.SeqVoltages(obj)
-            % (read-only) Double array of symmetrical component voltages (magnitudes only) at each 3-phase terminal
+            % Double array of symmetrical component voltages (magnitudes only) at each 3-phase terminal
             calllib(obj.libname, 'ctx_CktElement_Get_SeqVoltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Voltages(obj)
-            % (read-only) Complex array of voltages at terminals
+            % Complex array of voltages at terminals
             calllib(obj.libname, 'ctx_CktElement_Get_Voltages_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = get.VoltagesMagAng(obj)
-            % (read-only) Voltages at each conductor in magnitude, angle form as array of doubles.
+            % Voltages at each conductor in magnitude, angle form as array of doubles.
             calllib(obj.libname, 'ctx_CktElement_Get_VoltagesMagAng_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.Yprim(obj)
-            % (read-only) YPrim matrix, column order, complex numbers
+            % YPrim matrix, column order, complex numbers
             calllib(obj.libname, 'ctx_CktElement_Get_Yprim_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
@@ -442,7 +444,7 @@ classdef (CaseInsensitiveProperties) ICktElement < DSS_MATLAB.Base
         end
 
         function result = get.TotalPowers(obj)
-            % Returns the total powers (complex) at ALL terminals of the active circuit element.
+            % Returns an array with the total powers (complex, kVA) at ALL terminals of the active circuit element.
             calllib(obj.libname, 'ctx_CktElement_Get_TotalPowers_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();

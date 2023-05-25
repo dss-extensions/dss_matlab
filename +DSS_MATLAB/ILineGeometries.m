@@ -50,28 +50,28 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
         end
 
         function result = Rmatrix(obj, Frequency, Length, Units)
-            % (read-only) Resistance matrix, ohms
+            % Resistance matrix, ohms
             calllib(obj.libname, 'ctx_LineGeometries_Get_Rmatrix_GR', obj.dssctx, Frequency, Length, Units);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = Xmatrix(obj, Frequency, Length, Units)
-            % (read-only) Reactance matrix, ohms
+            % Reactance matrix, ohms
             calllib(obj.libname, 'ctx_LineGeometries_Get_Xmatrix_GR', obj.dssctx, Frequency, Length, Units);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = Zmatrix(obj, Frequency, Length, Units)
-            % (read-only) Complex impedance matrix, ohms
+            % Complex impedance matrix, ohms
             calllib(obj.libname, 'ctx_LineGeometries_Get_Zmatrix_GR', obj.dssctx, Frequency, Length, Units);
             obj.CheckForError();
             result = obj.apiutil.get_complex128_gr_array();
         end
 
         function result = Cmatrix(obj, Frequency, Length, Units)
-            % (read-only) Capacitance matrix, nF
+            % Capacitance matrix, nF
             calllib(obj.libname, 'ctx_LineGeometries_Get_Cmatrix_GR', obj.dssctx, Frequency, Length, Units);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
@@ -120,7 +120,7 @@ classdef (CaseInsensitiveProperties) ILineGeometries < DSS_MATLAB.Base
 
 
         function result = get.Conductors(obj)
-            % (read-only) Array of strings with names of all conductors in the active LineGeometry object
+            % Array of strings with names of all conductors in the active LineGeometry object
             result = obj.apiutil.get_string_array('ctx_LineGeometries_Get_Conductors');
             obj.CheckForError();
         end

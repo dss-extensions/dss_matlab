@@ -185,7 +185,7 @@ classdef (CaseInsensitiveProperties) IReclosers < DSS_MATLAB.Base
         end
 
         function result = get.RecloseIntervals(obj)
-            % (read-only) Array of Doubles: reclose intervals, s, between shots.
+            % Array of Doubles: reclose intervals, s, between shots.
             calllib(obj.libname, 'ctx_Reclosers_Get_RecloseIntervals_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();

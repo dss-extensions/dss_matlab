@@ -147,7 +147,7 @@ classdef (CaseInsensitiveProperties) IFuses < DSS_MATLAB.Base
         end
 
         function result = get.NumPhases(obj)
-            % (read-only) Number of phases, this fuse.
+            % Number of phases, this fuse.
             result = calllib(obj.libname, 'ctx_Fuses_Get_NumPhases', obj.dssctx);
             obj.CheckForError();
         end

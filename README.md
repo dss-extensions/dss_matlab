@@ -1,4 +1,4 @@
-# DSS MATLAB: a multi-platform MATLAB package for DSS C-API, an unofficial implementation of EPRI's OpenDSS
+# DSS MATLAB: a multi-platform MATLAB package for DSS C-API, an alternative implementation of EPRI's OpenDSS
 
 ---
 
@@ -23,10 +23,10 @@ Related projects:
 - [`OpenDSSDirect.jl`](http://github.com/dss-extensions/OpenDSSDirect.jl): Julia bindings to DSS C-API (originally based on the DCSL/OpenDSSDirect.DLL).
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
 
-Version 0.13.0, released on 2023-03, covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project currently uses the [DSS C-API library version 0.13.0](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md#version-0130), based on OpenDSS revision 3595 (few commits after OpenDSS v9.6.1.1).
+Currently, this package covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project currently uses the [DSS C-API library version 0.13.x](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md).
 
 
-## Highlights from 0.13.0
+## Highlights from 0.13.x
 
 Port updates from DSS-Python 0.13, integrating our base library, DSS C-API 0.13. Specific to DSS_MATLAB:
 

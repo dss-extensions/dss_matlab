@@ -5,6 +5,7 @@ classdef(Enumeration) DSSCompatFlags < int32
     %    NoSolverFloatChecks(0x00000001)
     %    BadPrecision(0x00000002)
     %    InvControl9611(0x00000004)
+    %    SaveCalcVoltageBases(0x00000008)
     %
     % Descriptions:
     %
@@ -24,11 +25,17 @@ classdef(Enumeration) DSSCompatFlags < int32
     %   InvControl9611:
     %       Toggle some InvControl behavior introduced in OpenDSS 9.6.1.1. It could be a regression 
     %       but needs further investigation, so we added this flag in the time being.        
-
-
+    %
+    %   SaveCalcVoltageBases:
+    %       When using "save circuit", the official OpenDSS always includes the "CalcVoltageBases" command in the
+    %       saved script. We found that it is not always a good idea, so we removed the command (leaving it commented).
+    %       Use this flag to enable the command in the saved script.
+    %
+    
     enumeration
         NoSolverFloatChecks(0x00000001)
         BadPrecision(0x00000002)
         InvControl9611(0x00000004)
+        SaveCalcVoltageBases(0x00000008)
     end
 end

@@ -106,6 +106,21 @@ If you want more code to play with, you can use the MATLAB examples from the off
 
 **As a general advice (valid for the official COM version and DSS_MATLAB), avoid using the `get` function without parameters on OpenDSS classes. Some properties like `First` and `Next` used for iteration of elements change the current active element and can lead to misleading data!**
 
+### Some documentation?
+
+Remember that this package is meant to be a drop-in replacement for the official COM implementation, consequently the official documents/help already covers a lot. Conversely, a lot of our documentation can be used with the official OpenDSS implementation (just ignore anything marked "API Extension").
+
+1. The basic MATLAB `help` command can be used to get a list of functions and properties available in the objects. 
+2. The DSS-Python reference can be useful for discoverability, e.g. [The DSS instance](https://dss-extensions.org/dss_python/#the-dss-instance). [DSS Sharp](https://dss-extensions.org/dss_sharp/) reference is also an alternative.
+3. We have an online document listing most DSS properties and commands at [DSS-Extensions: OpenDSS Commands and Properties](https://dss-extensions.org/dss_properties.html).
+4. This official OpenDSS COM lists the official API contents: [OpenDSSComDoc.pdf](https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/Version8/Distrib/Doc/OpenDSSComDoc.pdf?format=raw)
+5. There is another official document in a less accessible format that can be used for those still learning the basics, but remember we offer a wider range of features: [official OpenDSS_COM.chm on SourceForge](https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/Version8/Distrib/x64/OpenDSS_COM.chm?format=raw). This includes some basic examples of usage.
+
+This last one is a CHM file (Winhelp, compressed HTML files), Windows supports it natively.  
+On Linux, there are multiple CHM readers, such as KchmViewer — check your package manager or store for more.  
+On macOS, [this fork of iCHM](https://github.com/vit9696/iChm/releases/latest) works, and there are some alternatives in the Apple App Store.  
+Wine also comes with a CHM reader.
+
 ## Known differences and history
 
 We maintain a list of important differences between the official COM implementation and DSS C-API at:

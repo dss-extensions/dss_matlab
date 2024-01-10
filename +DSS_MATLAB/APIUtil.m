@@ -152,7 +152,7 @@ classdef APIUtil < handle
         function result = get_int32_gr_array(obj)
             data = calllib(obj.libname, 'ctx_DSS_GR_DataPtr_PInteger', obj.dssctx);
             cnt = obj.CountPtr_PInteger.Value;
-            setdatatype(data, 'int32Ptr', 1, cnt);
+            setdatatype(data, 'int32Ptr', 1, cnt(1));
             result = data.Value;
             if obj.allow_complex && (cnt(4) ~= 0)
                 % If the last element is filled, we have a matrix.  Otherwise, the 

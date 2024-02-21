@@ -16,15 +16,23 @@ A new repository to coordinate documentation and other shared features across al
 
 Related projects: 
 - [`OpenDSS`](https://sourceforge.net/projects/electricdss/): The main OpenDSS project, maintained by EPRI. We track the changes there and port accordingly, with a few exceptions.
-- [`DSS C-API`](http://github.com/dss-extensions/dss_capi): Custom OpenDSS C-API library, which also includes some patches.
+- [`DSS C-API`](http://github.com/dss-extensions/dss_capi): Custom OpenDSS C-API library (a.k.a. AltDSS), which also includes customize code and extra features, maintaining very good compatibility.
 - [dss.hpp](https://dss-extensions.org/dss_capi/): header-only library for C++, hosted within DSS C-API (`include/` directory). Allows using DSS C-API more comfortably from C++, abstract memory management and low-level details such as API conventions of the DSS C-API library.
 - [`DSS-Python`](http://github.com/dss-extensions/dss_python): Python bindings that mimics the official COM interface (property-style access to items). Very similar to DSS_MATLAB, but for Python. Some new and experimental features are tested there first (for example, plotting integration).
 - [`OpenDSSDirect.py`](http://github.com/dss-extensions/OpenDSSDirect.py): Function-style bindings and useful tools  (originally based on the DCSL/OpenDSSDirect.DLL).
 - [`OpenDSSDirect.jl`](http://github.com/dss-extensions/OpenDSSDirect.jl): Julia bindings to DSS C-API (originally based on the DCSL/OpenDSSDirect.DLL).
 - [`DSS Sharp`](http://github.com/dss-extensions/dss_sharp/): .NET assembly to use the native DLL, mimics the COM object as used in .NET.
+- [`AltDSS-Rust`] and [`AltDSS-Go`] are new projects targeting Rust and Go programming languages.
 
 Currently, this package covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project currently uses the [DSS C-API library version 0.13.x](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md).
 
+## Highlights from 0.14.1
+
+Upgrades the engine to AltDSS/DSS C-API 0.14.1. There are some important bugfixes, a few changes ported from the official OpenDSS, and a lot of new features in our engine.
+
+This first update only updates the engine. Some new functions still need to be exposed to the MATLAB level, notably `Circuit_Save`.
+
+[See also the AltDSS/DSS C-API 0.14.1 notes.](https://github.com/dss-extensions/dss_capi/releases/tag/0.14.1)
 
 ## Highlights from 0.13.x
 

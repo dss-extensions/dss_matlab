@@ -6,8 +6,8 @@ on:
   push:
 
 env:
-    DSS_CAPI_VERSION: '0.14.1'
-    DSS_MATLAB_VERSION: '0.14.1'
+    DSS_CAPI_VERSION: '0.14.3'
+    DSS_MATLAB_VERSION: '0.14.3'
 
 jobs:
   linux_x64:

@@ -26,13 +26,13 @@ Related projects:
 
 Currently, this package covers most of the COM functions and classes, besides some extensions from DSS C-API. If you find a missing function or unexpected behavior, please open an issue on GitHub to both help us track and hopefully fix it, and also inform other users. This project currently uses the [DSS C-API library version 0.13.x](https://github.com/dss-extensions/dss_capi/blob/master/docs/changelog.md).
 
-## Highlights from 0.14.1
+## Highlights from 0.14.x
 
-Upgrades the engine to AltDSS/DSS C-API 0.14.1. There are some important bugfixes, a few changes ported from the official OpenDSS, and a lot of new features in our engine.
+Upgrades the engine to AltDSS/DSS C-API 0.14.x. There are some important bugfixes, a few changes ported from the official OpenDSS, and a lot of new features in our engine.
 
 This first update only updates the engine. Some new functions still need to be exposed to the MATLAB level, notably `Circuit_Save`.
 
-[See also the AltDSS/DSS C-API 0.14.1 notes.](https://github.com/dss-extensions/dss_capi/releases/tag/0.14.1)
+[See also the AltDSS/DSS C-API release notes.](https://github.com/dss-extensions/dss_capi/releases/tag/0.14.3)
 
 ## Highlights from 0.13.x
 

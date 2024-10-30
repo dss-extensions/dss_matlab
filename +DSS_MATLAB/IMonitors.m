@@ -63,14 +63,14 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
                 result = 0;
                 return
             end
-            calllib('ctx_Monitors_Get_Channel_GR', obj.dssctx, Index);
+            calllib(obj.libname, 'ctx_Monitors_Get_Channel_GR', obj.dssctx, Index);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = AsMatrix(obj)
             % Matrix of the active monitor, containing the hour vector, seconds vector, and all channels (index 3 = channel 1)
-            calllib('ctx_Monitors_Get_ByteStream_GR', obj.dssctx);
+            calllib(obj.libname, 'ctx_Monitors_Get_ByteStream_GR', obj.dssctx);
             obj.CheckForError();
             buffer = obj.apiutil.get_int8_gr_array();
             if (numel(buffer) <= 1)
@@ -80,7 +80,7 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
             record_size = typecast(buffer, 'int32');
             record_size = record_size(3) + 2;
             data = typecast(buffer(273:end), 'single');
-            data = reshape(data, [int32(data.size() / record_size), record_size]);
+            data = reshape(data, [record_size, size(data, 2) / record_size]);
             result = data;
         end
 
@@ -227,14 +227,14 @@ classdef (CaseInsensitiveProperties) IMonitors < DSS_MATLAB.Base
 
         function result = get.dblFreq(obj)
             % (read-only) Array of doubles containing frequency values for harmonics mode solutions; Empty for time mode solutions (use dblHour)
-            calllib('ctx_Monitors_Get_dblFreq_GR', obj.dssctx);
+            calllib(obj.libname, 'ctx_Monitors_Get_dblFreq_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
 
         function result = get.dblHour(obj)
             % (read-only) Array of doubles containgin time value in hours for time-sampled monitor values; Empty if frequency-sampled values for harmonics solution  (see dblFreq)
-            calllib('ctx_Monitors_Get_dblHour_GR', obj.dssctx);
+            calllib(obj.libname, 'ctx_Monitors_Get_dblHour_GR', obj.dssctx);
             obj.CheckForError();
             result = obj.apiutil.get_float64_gr_array();
         end
